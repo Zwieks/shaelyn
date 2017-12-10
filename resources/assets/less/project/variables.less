@@ -1,0 +1,188 @@
+///
+///                                          <xeee..                             
+///                                      ueeeeeu..^"*$e.                         
+///                               ur d$$$$$$$$$$$$$$Nu "*Nu                      
+///                             d$$$ "$$$$$$$$$$$$$$$$$$e."$c                    
+///                         u$$c   ""   ^"^**$$$$$$$$$$$$$b.^R:                  
+///                       z$$#"""           `!?$$$$$$$$$$$$$N.^                  
+///                     .$P                   ~!R$$$$$$$$$$$$$b                  
+///                    x$F                 **$b. '"R).$$$$$$$$$$                 
+///                   J^"                           #$$$$$$$$$$$$.               
+///                  z$e                      ..      "**$$$$$$$$$               
+///                 :$P           .        .$$$$$b.    ..  "  #$$$$              
+///                 $$            L          ^*$$$$b   "      4$$$$L             
+///               4$$            ^u    .e$$$$e."*$$$N.       @$$$$$             
+///                $$E            d$$$$$$$$$$$$$$L "$$$$$  mu $$$$$$F            
+///                $$&            $$$$$$$$$$$$$$$$N   "#* * ?$$$$$$$N            
+///                $$F            '$$$$$$$$$$$$$$$$$bec...z$ $$$$$$$$            
+///               '$$F             `$$$$$$$$$$$$$$$$$$$$$$$$ '$$$$E"$            
+///                $$                  ^""""""`       ^"*$$$& 9$$$$N             
+///                k  u$                                  "$$. "$$P r            
+///                4$$$$L                                   "$. eeeR             
+///                 $$$$$k                                   '$e. .@             
+///                 3$$$$$b                                   '$$$$              
+///                  $$$$$$                                    3$$"              
+///                   $$$$$  dc                                4$F               
+///                    RF** <$$                                J"                
+///                     #bue$$$LJ$$$Nc.                        "                 
+///                     ^$$$$$$$$$$$$$r                                         
+///                        `"*$$$$$$$$$                                          
+///
+///
+
+/* Grid settings */
+@columnWidth:               7.5rem;
+@columnsTotal:              12;
+@gutterWidth:               2.4rem;
+
+/* Framework settings */
+@asideLeftColumns:          3; // Set this to '0' when there is no left column
+@asideRightColumns:         4; // Set this to '0' when there is no right column
+
+/* Dimensions settings */
+@siteWidth:                 ((@columnsTotal + 1) * @gutterWidth) + (@columnsTotal * @columnWidth);
+@maxWidth:                  152.4rem;
+@minWidth:                  98.4rem; // For a minimum horizontal resolution of 1024px
+@spacing:                   2.4rem;
+@headerHeight:              @spacing*3.75; // Only for desktop
+@footerHeight:              @spacing*6.5;
+@previewRatio:              3/4; // Used for image overview blocks (overview-* image ratio) TODO: Check all upload gateways
+
+// Styling
+@shadow:                    0 @spacing/7 @spacing/2 rgba(0,0,0,.125);
+@borderRadius:              0;
+@box-shadow:                0 0 3px #aaa;
+
+/* Animations */
+@animSpeed:                 .15s;
+@slowAnimSpeed:             @animSpeed*2;
+
+@tableBorder:               @lightGrey;
+@tableHeadBg:               lighten(@lightGrey, 10%);
+@bodyBackground:            #fff;
+@contentBackground:         #fff;
+@previewRatio:              2/3; // Used for image overview blocks (overview-* image ratio)
+@fixedHeader:               true;
+
+/* Typography */
+@baseFont:                 	'Open Sans', sans-serif;
+@baseFontSize:              1.5rem;
+@smallBaseFontSize:         1.3rem;
+@baseLineHeight:            unit(@baseFontSize); // No unit! So it scales with the font-size
+@baseHeading:               'Arial', @baseFont;
+@baseHeadingLineHeight:     @baseLineHeight*0.8;
+@largeHeadingSize:          4.5rem;
+@MediumLargeHeadingSize:    3.2rem;
+@mediumHeadingSize:         2.4rem;
+@mediumSmallHeadingSize:    2.1rem;
+@MediumSmallHeadingSize:    1.6rem;
+@smallHeadingSize:          1.8rem;
+@smallerHeadingSize:        1.4rem;
+@XSmallHeadingSize:         1.3rem;
+@smallestHeadingSize:       1.2rem;
+@rootFontSize:              62.5%; // Makes 1rem => 10px
+@iconFont:                  'tastymatch';
+@smallFontSize:             @baseFontSize*0.875;
+@smallestFontSize:          @baseFontSize*0.8;
+@fontLight:                 300;
+@fontNormal:                normal;
+@fontBold:                  bold;
+@fontBolder:                bolder;
+
+/* Color settings */
+@black:                     #000;
+@lighterBlack:              #3e3e3e;
+@white:                     #fff;
+@antraciet:					#656565;
+@lightBlue:                 #2e87b3;
+@smoothPurple:              #5d62ca;
+@smoothBlue:                #5dadca;
+@smoothGreen:               #2b8a66;
+@smoothOrane:               #f7b824;
+@textColor:                 #333;
+@primColor:                 #E3262E;
+@secColor:                  blue;
+@grey:                      #464447;
+@middleGrey:                #e0e0e0;
+@lightGrey:                 #f8f8f8;
+@lighterGrey:               #d8d8d8;
+@lightRgbGrey:              #d8d8d8;
+@darkGrey:					#282a2b;
+@darkGreyTrans:			    rgba(40, 42, 43, 0.95);
+@errorColor:                #f00;
+@successColor:              green;
+@placeHolderColor:          @lighterGrey;
+@timelineColor:             #d2d2d3;
+
+
+@autoCompleteItemColor:     #4c4b4c;
+@autoCompleteItemHoverColor:#5d5d5d;
+// NOTE! Extend or add colors like this:
+// @primColorDarker:        darken(@primColor, 10%);
+// @primColorLighter:       lighten(@primColor, 10%);
+// @terColor:               green;
+// @quadColor:              pink;
+
+/* Social media colors */
+@facebookColor:				#3b5998;
+
+/* Form styling */
+@inputHeight:               @spacing*1.5;
+@inputRadius:               @borderRadius;
+@inputBg:                   #fff;
+@inputShadow:               none;
+@inputPadding:              @spacing/2;
+@radioCheckboxSize:         @spacing/2;
+@inputPadding:              @spacing/2;
+@borderWidth:               1px; // Always use px
+@borderColor:		        #e5e5e5;
+@borderColorMenuTop:		#57544e;
+@borderColorMenuBottom:		#312e2a;
+@focusColor:                @textColor;
+
+/* Responsive */
+@responsive:                true; // When set to false, variables below are not used and website behaves mot-responsive. TODO: Change the viewport meta tag in basicpage > view.tpl
+@navBreakPoint:             ~"(max-width: 1023px)";
+@responsiveHeaderHeight:    @spacing*3; // Is set when @navBreakPoints is reached on .page-header
+@hamburgerHeight:           @spacing*2; // Is set when @navBreakPoints is reached on .page-header@hamburgerHeight:           @spacing*2;
+@hamburgerBackground:       transparent; // Background color of the hamburger icon
+@hamburgerLinesHeight:      0.4rem; // The height of each hamburger line
+@hamburgerLinesColor:       @white; // The color of the 3 lines in the hamburger icon
+@hamburger:                 left; // Options: left, right, top or overlay
+@hamburgerText:             false; // Set to 'true to show hamburger text 'menu'
+@hamburgerColor:            @primColor;
+@navShadow: 	            0; // Only for @hamburger = left or right
+@navWidth:                  24rem; // Only for @hamburger = left or right
+@navOverlayColor:           rgba(0,0,0,0.25); // Not for @hamburger = overlay
+@navSpeed:                  @slowAnimSpeed; // The slide-in speed of the transition of the sliding responsive navigation
+@navBg:                     @grey; // The background color of the responsive navigation
+
+/* Breakpoints */
+@bp-Desktop:                ~"screen and (min-width: 1024px)";
+@bp-TabletL:                ~"screen and (max-width: 1023px)";
+@bp-TabletLM:               ~"screen and (max-width: 900px)";
+@bp-TabletM:                ~"screen and (max-width: 896px)";
+@bp-TabletS:                ~"screen and (max-width: 768px)";
+@bp-MobileL:                ~"screen and (max-width: 640px)";
+@bp-MobileM:                ~"screen and (max-width: 480px)";
+@bp-MobileSM:               ~"screen and (max-width: 388px)";
+@bp-MobileS:                ~"screen and (max-width: 320px)";
+
+/* Functionalities */
+@fixedHeader:               true; // Gives the .page-header a position: fixed
+@animatingFormLabels:       true;
+@breadcrumb:                true;
+@icons:                     true;
+@submenu:                   true;
+@userproducts:              true;
+@stickyFooter:              true; // The sticky footer doesn't work in IE11
+
+/* Modules */
+@moduleLogin:               false;
+@moduleLanguage:            false;
+@moduleCookies:             true;
+@moduleFlex:                true;
+@moduleForms:               true;
+@moduleSearch:              true;
+@moduleMaps:                true;
+@moduleYoutube:             true;

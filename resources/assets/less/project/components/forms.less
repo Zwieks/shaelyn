@@ -1,0 +1,469 @@
+
+
+
+/*
+ *  Basis custom form styling
+ */
+
+.webbeheer-formulier{
+	@media @bp-TabletM{
+		margin-bottom: @spacing;
+	}
+}
+
+[type=text],
+[type=email],
+[type=tel],
+[type=password],
+[type=number],
+[type=search],
+[type=date],
+[type=datetime],
+[type=datetime-local],
+[type=month],
+[type=time],
+[type=week],
+[type=url],
+.form-input-date{
+	.flex-grow(1);
+	width: auto;
+}
+
+legend{
+	font-weight: 500;
+	font-size: 2.8rem;
+}
+
+// select arrow
+.style-select:before {
+	content: '▾';
+	font-size: 14px;
+}
+
+// multiple select
+select[multiple] {
+	max-height: @spacing*5;
+}
+
+// textarea
+textarea {
+	height: @spacing*5;
+}
+
+// form tooltip
+.form-tooltip[data-title] {
+	background: @grey;
+	cursor: help;
+	font-size: 1rem;
+	color: #fff;
+}
+
+.form-input-date{
+	#PersonForm_date_of_birth{
+		.flex-grow(1);
+
+		@media @bp-MobileSM{
+			.flex-grow(initial);
+			width: 100%;
+		}
+
+		.style-select{
+			@media @bp-MobileSM{
+				width: 100%;
+				max-width: 100%;
+				margin: @spacing/4 0 0 0;
+			}
+		}
+
+		select{
+			width: 100%;
+		}
+	}
+}
+
+/* end general webbeheer form */
+form ul,
+form ol {
+	margin: 0;
+}
+
+.velden {
+	> li {
+		.displayflex;
+		.flex-wrap(wrap);
+		margin-bottom: @spacing/2;
+		position: relative;
+		clear: both;
+		width: 80%;
+
+		@media @bp-TabletM{
+			width: 100%;
+		}
+
+		// Remove clearfix because of flexbox solution
+		&:after {
+			display: none;
+		}
+
+		&.form-input-heading{
+			h2{
+				margin-bottom: @spacing/2;
+			}
+		}
+
+		&.separator{
+			.displayflex(inline-flex);
+			width: 100%;
+			height:1px;
+			background: @borderColor;
+			margin:@spacing 0 @spacing*1.5 0;
+		}
+	}
+
+	.buttons{
+		@media @bp-TabletM{
+			text-align: right;
+		}
+	}
+
+	// The main label
+	label {
+		display: block;
+		width: @spacing*6;
+		font-size: @smallerHeadingSize;
+		font-weight: @fontBold;
+		margin-bottom: @spacing/4;
+		padding-right: @spacing*1.5; // Make space for the tooltip
+
+		// Star for required fields
+		em {
+			margin-left: @spacing/6;
+			color: @errorColor;
+			font-style: normal;
+		}
+	}
+
+	.checkbox{
+		label{
+			cursor: pointer;
+		}
+	}
+
+	.help-block{
+		color: @errorColor;
+		font-size: @smallestHeadingSize;
+		width: 100%;
+	}
+
+	.multiple-wrapper{
+		position: relative;
+
+		li{
+			display: inline-block;
+			width: auto;
+
+			.input-error{
+				position: absolute;
+				width:100%;
+				bottom: @spacing*1.2;
+			}
+		}
+
+		label{
+			cursor: pointer;
+			width: auto;
+		}
+	}
+}
+
+.detail-summary{
+	margin-bottom:0;
+
+	input{
+		width: 100%;
+		border: none;
+		font-size: @smallestHeadingSize;
+		padding: 0;
+    	min-height: auto;
+		height:@spacing;
+	}
+}
+
+.api-error{
+	display: none;
+}
+
+.kvkwrapper{
+	display: block;
+	width: 100%;
+}
+
+#js-typechange{
+	display: none;
+}
+
+.description-text{
+	font-style: italic;
+	font-weight: normal;
+	margin-bottom: @spacing/2;
+}
+
+
+.uploader {
+	position:relative;
+	overflow:hidden;
+	width:300px;
+	height:350px;
+	background:#f3f3f3;
+	border:2px dashed #e8e8e8;
+}
+
+#filePhoto{
+	position:absolute;
+	width:300px;
+	height:400px;
+	top:-50px;
+	left:0;
+	z-index:2;
+	opacity:0;
+	cursor:pointer;
+}
+
+.uploader img{
+	position:absolute;
+	width:302px;
+	height:352px;
+	top:-1px;
+	left:-1px;
+	z-index:1;
+	border:none;
+}
+
+.detailpage{
+	li{
+		width: 100%;
+		padding-left: @spacing/2;
+		margin:0!important;
+		border:2px solid @white;
+
+		&:after{
+			.centerY;
+			right:0;
+			font-family:@iconFont;
+			content: "X";
+		}
+
+		&:before{
+			.centerY;
+			left:0;
+			font-size: 15px;
+		}
+
+		&:hover,
+		&:focus{
+			border:2px dashed rgba(0,0,0,0.4);
+			cursor: pointer;
+		}
+
+		&.form-label{
+			span{
+				font-weight: bold;
+			}
+		}
+	}
+
+	label{
+
+	}
+
+	input{
+		border:none;
+		min-height: @spacing;
+		width: 100%;
+
+		&.smallbox{
+			width: @spacing*3;
+			border: @borderWidth solid @borderColor;
+			min-height: @inputHeight;
+			padding: 0;
+			text-align: center;
+		}
+
+		&.date{
+			width: @spacing*4;
+		}
+
+		&.text{
+			width: 100%;
+			text-align: left;
+			padding: 0 @spacing/2;
+			margin-bottom: @spacing/2;
+		}
+	}
+
+	.multiple-wrapper{
+		margin-bottom: @spacing/2;
+
+		label{
+			font-weight: normal;
+		}
+
+		&.fix-sizes{
+			.displayflex;
+			.flex-wrap(wrap);
+			margin: 0 -@spacing/2;
+
+			div{
+				width: 100%/2;
+				padding: 0 @spacing/2;
+
+				.subitem{
+					padding-left: @spacing;
+				}
+			}
+		}
+	}
+}
+
+.detailpage-title{
+	margin-bottom:@spacing/2;
+
+	input{
+		&:extend(h2 all);
+		margin-bottom: 0;
+		font-weight: 900;
+	}
+
+	li,
+	input{
+		padding:0;
+	}
+}
+
+.detailpage-menu{
+	margin-bottom: @spacing/2;
+}
+
+.add-menu-wrapper{
+	.displayflex;
+	.justify-content(center);
+
+	background: @smoothPurple;
+	cursor: pointer;
+}
+
+.add-menuitem{
+	width: auto;
+	position: relative;
+	font-size: @smallestHeadingSize;
+	color:@white;
+	padding: @spacing/4 @spacing;
+
+	&:before{
+		.centerY;
+		left:0;
+	}
+}
+
+.remove-menuitem{
+	.centerY;
+	right:-24px;
+	color:@errorColor;
+
+	&:before{
+		font-size: 18px;
+	}
+}
+
+.form-separator{
+	padding: 0 @spacing/2;
+}
+
+.form-indication{
+	padding: 0;
+}
+
+.modal-form{
+	label{
+		width:100%;
+	}
+}
+
+.foodstand-additional-stand-info{
+	margin-bottom: @spacing;
+
+	&:last-child{
+		margin-bottom: 0;
+	}
+}
+
+.detailpage-additionaldetails{
+
+	label{
+		padding: 0 @spacing/1.5;
+	}
+
+	li{
+		padding-left: 0;
+
+		&:hover,
+		&:focus{
+			border: 2px solid @white;
+			cursor: default;
+		}
+
+		&:after{
+			content:'';
+		}
+	}
+
+	.form-input-checkbox{
+		padding-left: 0;
+
+		&.dropdown{
+			position: relative;
+			width: 100%;
+
+			&:before{
+				.centerY;
+				top: 10px;
+				right: 0;
+				left: auto;
+				color: @primColor;
+				font-size: 16px;
+			}
+
+			label{
+				font-size: @smallestHeadingSize;
+			}
+		}
+	}
+
+	.submenu-wrapper{
+		.transition;
+
+		height: 0;
+		position: relative;
+		visibility: hidden;
+		opacity: 0;
+
+		label{
+			font-size: @smallestHeadingSize;
+			font-weight: 900;
+		}
+
+		&.active{
+			.transition;
+			height: 100%;
+			visibility:  visible;
+			opacity: 1;
+		}
+	}
+
+	.animating-label{
+		label[for]{
+			top: 0.2rem;
+		}
+	}
+}
+/* end general webbeheer form */

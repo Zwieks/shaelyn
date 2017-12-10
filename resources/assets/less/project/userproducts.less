@@ -1,0 +1,45 @@
+.userproducts-item{
+	position: relative;
+	color:@grey;
+	padding:0;
+	font-size:@smallestHeadingSize;
+	display: block;
+	width: 100%;
+
+	&:hover,
+	&:focus{
+		color:@primColor;
+	}
+
+	&:before{
+		.centerY;
+		left:0;
+		top:8px;
+	}
+}
+
+.userproducts-items{
+	margin-bottom: @spacing/1.75;
+	padding:0 @spacing/2;
+
+
+	.image-wrapper{
+		margin-bottom: 0;
+	}
+}
+
+.page-userproducts{
+	margin-right: -@spacing/2;
+	margin-left: -@spacing/2;
+	
+
+	h2,
+	h3{
+		text-align: center;
+	}
+
+	p{
+		font-size: @smallestHeadingSize;
+		text-align: center;
+	}
+}

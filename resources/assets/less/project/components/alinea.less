@@ -1,0 +1,40 @@
+.article-content-container{
+	padding:0 @spacing/2;
+
+	@media @bp-TabletM{
+		padding:0;
+	}
+}
+
+.comp-alinea {
+	&.intro {
+		&,
+		* {
+			font-weight: @fontBold;
+		}
+	}
+
+	h2 {
+		font-size: @baseFontSize;
+		font-weight: bold;
+		margin: 0;
+	}
+
+	ul {
+		list-style: disc outside;
+		padding-left: @spacing*0.75;
+	}
+
+	ol {
+		list-style: decimal outside;
+		padding-left: @spacing*0.75;
+	}
+
+	li {
+		padding-left: @spacing*0.25;
+	}
+
+	blockquote {
+		&:extend(.comp-quote all);
+	}
+}

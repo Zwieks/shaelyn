@@ -1,0 +1,129 @@
+.page-content {
+	padding-top:@spacing*1.5;
+	background: @white;
+}
+
+.has-bgimage{
+	.page-content{
+		margin-top: -@spacing;
+	}
+
+	&.component-Event,
+	&.component-Entertainer,
+	&.component-Foodstand{
+		.page-content{
+			margin-top: 0;
+		}
+
+		.details-wrapper{
+			margin-top: -@spacing*2;
+		}
+	}
+}
+
+.component-foodstand{
+	.page-content{
+		margin-top: @spacing;
+	}
+}
+
+.logedin{
+	.page-wrapper{
+		.displayflex;
+	}
+
+	.page-middle{
+		margin-top: -@spacing;
+	}
+
+	.page-content{
+		height:100%;
+	}
+
+	.page-right,
+	.page-left{
+		background: @lightGrey;
+		margin-top: -@spacing*1.5;
+	}
+
+	.page-left{
+		width: @spacing*6.5;
+		padding:0;
+		margin-left: @spacing/2;
+		margin-right: 0;
+	}
+
+	.page-right{
+		width: 18%;
+		margin-right: @spacing/2;
+	}
+}
+
+// Make the framework responsive
+@media @bp-TabletM {
+	// Make the middle slightly bigger
+	.page-middle {
+		.flex-order(1);
+		min-width: 100% - percentage((@asideLeftColumns + 1) / @columnsTotal);
+	}
+
+	// Make the left slightly smaller
+	.page-left {
+		.flex-order(2);
+		width: percentage((@asideLeftColumns + 1) / @columnsTotal);
+	}
+
+	.page-right {
+		.flex-order(3);
+		width: 100%;
+
+		// Make the components 50% wide
+		> * {
+			width: calc(50% ~'-' @gutterWidth/2);
+			float: left;
+
+			&:nth-child(odd) {
+				clear: both;
+				margin-right: @gutterWidth;
+			}
+		}
+	}
+}
+
+@media @bp-MobileL {
+	.page-left {
+		width: 100%;
+
+		// Make the components 50% wide
+		> * {
+			width: calc(50% ~'-' @gutterWidth/2);
+			float: left;
+
+			&:nth-child(odd) {
+				clear: both;
+				margin-right: @gutterWidth;
+			}
+		}
+	}
+}
+
+// Make all components in the sidebar 100% wide
+@media @bp-MobileM {
+	.page-left,
+	.page-right {
+		> * {
+			width: 100%;
+			float: none;
+
+			&:nth-child(odd) {
+				clear: both;
+				margin-right: 0;
+			}
+		}
+	}
+
+	.inner {
+		padding-left: @gutterWidth/2;
+		padding-right: @gutterWidth/2;
+	}
+}

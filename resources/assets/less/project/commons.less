@@ -1,0 +1,71 @@
+// Place your styling here for elements that appear on multiple places in the website.
+.date {
+}
+
+.arz-gradient {
+	.gradient(linear; rgba(0,0,0,.7), transparent);
+}
+
+.seo-title{
+	display: none;
+}
+
+.compblock{
+	border-bottom: 1px solid @borderColor;
+
+	&:last-child{
+		border-bottom: 0;
+	}
+}
+
+.sidebar-title{
+	color:@lighterBlack;
+	font-size:@smallerHeadingSize;
+	text-align: center;
+	background: @middleGrey;
+	padding: @spacing/2;
+	font-weight:bold;
+	margin-bottom: @spacing/4;
+}
+
+.foodstand-menu-items,
+.detailpage-items{
+	li{
+		position: relative;
+		padding-left: @spacing;
+
+		&:before{
+			.centerY;
+			font-family: @iconFont;
+			content:'Y';
+			left:0;
+			top: 11px;
+			font-size: 9px;
+			color:@smoothPurple;
+		}
+	}
+
+	br{
+		margin-bottom: 0!important;
+	}
+}
+
+html[lang='nl']{
+	.comp-login{
+		.social-login{
+			&:before{
+				content:'of';
+			}
+		}	
+	}
+}
+
+html[lang='en']{
+	.comp-login{
+		.social-login{
+			&:before{
+				content:'or';
+			}
+		}	
+	}
+}

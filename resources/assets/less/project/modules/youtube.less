@@ -1,0 +1,95 @@
+// This styling works with 'js/jquery.youtube.js'
+.comp-youtube {
+	iframe {
+		.transition(@slowAnimSpeed ease-in-out);
+	}
+
+	.youtube-overlay {
+		background: @navOverlayColor;
+		color: #fff;
+
+		// @TODO: Vergeet niet te Youtube button te stylen.
+		&:before {
+			.border-radius(50%);
+			.box-shadow(0 0 0 2px #fff);
+			content: '►';
+			background: red;
+			text-align: center;
+			font-size: 21px; // In pixels because of IE
+			width: unit(@spacing*2*10, px); // In pixels because of IE
+			line-height: unit(@spacing*2*10, px); // In pixels because of IE
+			margin: -@spacing 0 0 -@spacing; // Nagative half the width and height
+			padding-left: 2px; // Slight centering fix
+
+			// Smaller play button on smaller screens
+			@media @bp-MobileL {
+				width: unit(@spacing*1.5*10, px); // In pixels because of IE
+				line-height: unit(@spacing*1.5*10, px); // In pixels because of IE
+				margin: -@spacing*0.75 0 0 -@spacing*0.75; // Nagative half the width and height
+			}
+		}
+	}
+
+	h2 {
+		.transition-duration(@slowAnimSpeed/2);
+		color: #fff;
+		padding: @spacing;
+	}
+
+	img {
+		.transition(@slowAnimSpeed ease-in-out);
+	}
+
+	&:hover,
+	&:focus {
+		.youtube-overlay {
+			background: transparent;
+
+			&:before {
+				.scale(1.05);
+			}
+		}
+
+		h2 {
+			.translateY(100%);
+			opacity: 0;
+		}
+	}
+}
+
+.youtube-playbtn{
+	position: relative;
+
+	&:before{
+		.center;
+		content:'5';
+		font-family: @iconFont;
+		z-index: 3;
+		display: block;
+		color:@white;
+		font-size: 24px;
+		width: 48px;
+    	height: 48px;
+    	line-height: 44px;
+    	text-align: center;
+    	background: rgba(43, 138, 102,0.5);
+    	border: 2px solid rgba(255,255,255,0.5);
+	}
+}
+
+.ytp-thumbnail-overlay{
+	.transition();
+	background: rgba(0,0,0,0.3);
+	position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    opacity: 1;
+
+    &:hover,
+    &:focus{
+    	opacity: 0;
+    }
+}

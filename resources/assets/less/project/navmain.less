@@ -1,0 +1,159 @@
+.page-mainmenu {
+    .level-1-item {
+
+        &:not(:first-child) {
+            margin-left: @spacing*1.5;
+        }
+
+        > a,
+        .mainmenu {
+            .displayflex;
+            .align-items(center);
+            height: @headerHeight;
+            padding-top: @spacing;
+            color:@textColor;
+            font-size: @smallerHeadingSize;
+            font-weight: 600;
+            cursor: pointer;
+
+            &:before{
+                .center;
+                top:@spacing*1.5;
+                font-size: 20px;
+            }
+
+            &:hover,
+            &:focus{
+                span{
+                   color:@primColor;                
+                }
+            }
+
+            @media @navBreakPoint {
+                height: @responsiveHeaderHeight;
+            }
+        }
+
+        .mainmenu-title{
+            margin-left: @spacing;
+        }
+
+        // active menu item
+        &.active > a {
+            color:@primColor;
+        }
+
+        // open subnavigation
+        &.hover,
+        &:hover,
+        &:focus {
+            .level-2 {
+                opacity: 1;
+                visibility: visible;
+            }
+        }
+    }
+
+    // arrow to show subnav
+    .subnav > a:after,
+    .subnav > .mainmenu:after {
+        content: '▾';
+        padding-left: @spacing/4;
+    }
+
+    .level-2 {
+        .box-shadow();
+        right: -90%;
+        left: auto;
+        opacity: 0;
+        width: @spacing*8;
+        min-width: 100%; // makes it have the width of it's parent item
+        visibility: hidden;
+        background: @white;
+        padding:0 @spacing;
+    }
+
+    .level-2-item{
+        border-bottom: 1px solid @borderColor;
+
+        &:last-child{
+            border-bottom: none;
+        }
+
+    }
+
+    .level-2-item > a {
+        padding: @spacing/2 0;
+        color:@textColor;
+        font-size: @XSmallHeadingSize;
+        position: relative;
+        padding-left: @spacing;
+
+        &:before{
+            .centerX;
+            left:0;
+        }
+
+        &:hover,
+        &:focus{
+            color:@primColor;
+        }
+    }
+}
+
+.logedin{
+    .page-mainmenu{
+        .flex-grow(1);
+        overflow: visible;
+    }
+
+    .mobilemenu{
+         display: none;
+
+        @media @bp-TabletL{
+            display: block;
+        }
+    }
+
+    .usermenu{
+        @media @bp-TabletL{
+            display: none;
+        }
+    }
+
+    .level-1{
+        .justify-content(flex-end);
+        position: relative;
+    }
+
+    .level-1-item{
+        a,
+        .mainmenu{
+            &:after{
+                font-size: 21px;
+            }
+        }
+    }
+
+    .search{
+        .center;
+        border-left: 8px solid #e3262e;
+    }
+    
+    #js-search-trigger{
+        position: relative;
+
+        &:before{
+            .centerY;
+            right:12px;
+        }
+
+        span{
+            display: none;
+        }
+    }
+
+    .page-searchbox{
+        margin-left: 0;
+    }
+}

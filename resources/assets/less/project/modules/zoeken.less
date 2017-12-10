@@ -1,0 +1,144 @@
+// Search form (in header.tpl)
+.search{
+    .displayflex;
+    .align-items(center);
+}
+
+.ajax-search-wrapper,
+.autocomplete{
+    .transition();
+    opacity: 0;
+    visibility: hidden;
+    position: absolute;
+    top: 100%;
+    right:0;
+    width: 50%;
+    max-height: 15vh;
+
+    ::-webkit-scrollbar {
+        width: 12px;
+    }
+
+    ::-webkit-scrollbar-track {
+        -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+        border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        border-radius: 10px;
+        -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
+    }
+}
+
+.ajax-search-wrapper{
+    min-height: 100vh;
+    width: 100%;
+}
+
+.autocomplete{
+    width: 100%;
+    z-index: 2;
+    max-height: 50vh;
+}
+
+.ajax-search-item{
+    background: @darkGreyTrans;
+    padding:@spacing/2;
+    color:@white;
+
+    .autocomplete-content{
+        padding:0;
+    }
+}
+
+.open-search {
+    .page-mainmenu {
+        overflow: visible;
+    }
+
+    .ajax-search-wrapper{
+        opacity: 1;
+        visibility: visible;
+        width: 100%;
+    }
+}
+
+.open-autocomplete{
+     .autocomplete{
+        opacity: 1;
+        visibility: visible;
+    }
+}
+
+#search-bar{
+    width: @spacing*13;
+}
+
+.page-searchbox {
+    .displayflex;
+    .align-items(center);
+    .justify-content(center);
+    margin-left: @spacing;
+    max-width: none;
+    border:1px solid @borderColor;
+
+    // Search input field
+    input {
+        border:none;
+    }
+
+    // Search submit button
+    button {
+        background: transparent;
+
+        &:before{
+            color:@textColor;
+        }
+    }
+}
+
+// Search result (on search results page)
+.search-result-url {
+    color: @grey;
+    font-size: @smallFontSize;
+    margin-bottom: @spacing/2;
+
+    li:not(:first-child):before {
+        content: '›';
+        padding: 0 @spacing/4;
+    }
+}
+
+// Simple pager (on search results page)
+.search-pager {
+    .pager-prev > *:before {
+        content: '‹';
+    }
+
+    .pager-next > *:before {
+        content: '›';
+    }
+}
+
+// Marked text (on search results page)
+.highlighted {
+    background: fadein(yellow, -50%);
+}
+
+.search-intro{
+    margin-top: -@spacing/2;
+    margin-bottom: @spacing/2;
+    position: relative;
+    padding: @spacing*2 0;
+    z-index: 0;
+
+    &:after{
+        .centerX;
+        content:'';
+        width: 100vw;
+        height: 100%;
+        top:0;
+        z-index:-1;
+        background: @lightGrey;
+    }
+}

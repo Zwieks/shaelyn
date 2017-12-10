@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 15.1.0, SVG Export Plug-In  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd" [
+	<!ENTITY ns_flows "http://ns.adobe.com/Flows/1.0/">
+]>
+<svg version="1.1"
+	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:a="http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/"
+	 x="0px" y="0px" width="182px" height="55px" viewBox="8.5 4 182 55" enable-background="new 8.5 4 182 55" xml:space="preserve">
+
+<style>
+	@font-face {
+	    font-family: "Open Sans";
+	    src: url('https://fonts.googleapis.com/css?family=Open+Sans:400,700,300,600');
+	}
+</style>
+
+<rect fill="#FFFFFF" width="197.75" height="63.75"/>
+<circle fill="#E3262E" cx="35.539" cy="31.999" r="25.071"/>
+<path fill="#FFFFFF" d="M33.074,15.52v8.342h-1.627V15.52h-1.703v8.342h-1.627V15.52h-1.704v8.342v3.146
+	c0,0,1.063,2.037,2.715,2.918v1.079v0.448c-0.589,2.789-1.5,8.961-0.009,15.939c0,0,0.317,0.557,0.817,0.875
+	c0.028,0.018,0.054,0.033,0.08,0.049c0.065,0.035,0.133,0.068,0.203,0.094c0.05,0.02,0.1,0.027,0.149,0.037
+	c0.033,0.01,0.065,0.018,0.101,0.021c0.043,0.004,0.086,0.004,0.128,0.004s0.085,0,0.128-0.004c0.034-0.004,0.067-0.012,0.1-0.021
+	c0.05-0.01,0.099-0.018,0.15-0.037c0.07-0.025,0.137-0.059,0.202-0.094c0.026-0.016,0.053-0.031,0.08-0.049
+	c0.5-0.318,0.817-0.875,0.817-0.875c1.491-6.979,0.58-13.15-0.009-15.939v-0.448v-1.065c0.859-0.458,1.773-1.361,2.714-2.932v-3.146
+	V15.52H33.074z"/>
+<path fill="#FFFFFF" d="M42.354,15.52h-1.83l-0.041,18.063l0,0v14.026c1.57,1.959,2.944,0,2.944,0
+	c2.02-7.57-0.373-13.972-0.392-14.022C51.795,22.807,42.354,15.52,42.354,15.52z"/>
+<text transform="matrix(1 0 0 1 66.0044 37.4883)" fill="#010101" font-family="'Open Sans'" font-weight="700" font-size="40.2302">TASTY</text>
+<text transform="matrix(1 0 0 1 87.6685 57.0713)"><tspan x="0" y="0" fill="#E3262E" font-family="'Open Sans'" font-weight="700" font-size="20.6285">MATCH</tspan><tspan x="74.556" y="0" fill="#010101" font-family="'Open Sans'" font-weight="700" font-size="20.6285">.nl</tspan></text>
+</svg>
