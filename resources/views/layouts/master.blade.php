@@ -8,7 +8,8 @@
         @include('pages.basicpage.head-socials')
 
         <link rel="stylesheet" href="{{ URL::asset('css/site.css') }}" type="text/css" media="screen">
-        <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700,300,600' rel='stylesheet' type='text/css'>
+        <link href="https://fonts.googleapis.com/css?family=Montserrat:400,600,700,800,900" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Pacifico" rel="stylesheet">
         
         <title>@yield('title')</title>
     </head>
@@ -18,6 +19,8 @@
 
         <!-- Responsive navigation trigger -->
         <input type="checkbox" id="js-nav-trigger" class="nav-trigger">
+
+        @include('includes.header')
 
         <div class="page-website-wrapper">
             @include('pages.basicpage.wrapper')

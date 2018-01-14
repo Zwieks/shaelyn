@@ -9,8 +9,3 @@
 
 {{-- Metadata content --}}
 @section('description', 'Homepage')
-
-{{-- Include Scripts --}}
-@section('script')
-
-@stop

@@ -1,0 +1,44 @@
+.particles-animation-wrapper {
+	.centerX;
+	position: relative;
+	width: 100vw;
+	background: #000;
+	margin-top: -(@headerHeight + @spacing * 1.5);
+	height: 70vh;
+	background: url(/img/color-bg-blue-star.jpg) no-repeat top;
+	background-size: cover;
+}
+
+.particles-animation {
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+}
+
+.particles-content-wrapper {
+	.center;
+	.displayflex;
+	.flex-wrap(wrap);
+	.justify-content(center);
+	.flex-direction(column);
+	text-align: center;
+	width: 100vw / 2;
+	height: auto;
+
+	img {
+		.align-self(center);
+		width: @spacing*3;
+		opacity: 1;
+	}
+
+	h2 {
+		font-size: @largeHeadingSize*1.3;
+		margin: 0 0 @spacing*2;
+	}
+
+	p {
+		color: @lightGrey;
+	}
+}

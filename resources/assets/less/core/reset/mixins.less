@@ -77,6 +77,22 @@
             transition-duration: @value;
 }
 
+// Transition property
+.transition-property(@property: all) {
+    -moz-transition-property: @property;
+       -webkit-transition-property: @property;
+        transition-property: @property;
+}
+
+// Transition timing
+.transition-timing(@timing: ease-in-out) {
+  -webkit-transition-timing-function: @timing;
+    -moz-transition-timing-function: @timing;
+      -o-transition-timing-function: @timing;
+        -ms-transition-timing-function: @timing;
+          transition-timing-function: @timing;
+}
+
 // Drop shadow
 .box-shadow(@boxShadow: @shadow) {
   -webkit-box-shadow: @boxShadow;

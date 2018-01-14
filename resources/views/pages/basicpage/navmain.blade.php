@@ -75,27 +75,41 @@
 			</li>
 		@else
 			<li class="home level-1-item {{(current_page('/')) ? 'active' : current_page()}}">
-				<a href="/" itemprop="url" data-icon="o">
+				<a href="/" itemprop="url" data-icon="a">
 					<span itemprop="name">{{ Lang::get('menus.home') }}</span>
 				</a>
 				<meta itemprop="position" content="1">
 			</li>
 
-			<li class="level-1-item {{(current_page(Lang::get('menus.about-url'))) ? 'active' : current_page()}}">
-				<a href="{{ Lang::get('menus.about-url') }}" itemprop="url" data-icon="c">
-					<span itemprop="name">{{ Lang::get('menus.about') }}</span>
+			<li class="level-1-item {{(current_page(Lang::get('menus.download-url'))) ? 'active' : current_page()}}">
+				<a href="{{ Lang::get('menus.download-url') }}" itemprop="url" data-icon="f">
+					<span itemprop="name">{{ Lang::get('menus.download') }}</span>
 				</a>
 				<meta itemprop="position" content="2">
 			</li>
 
+			<li class="level-1-item {{(current_page(Lang::get('menus.highlighs'))) ? 'active' : current_page()}}">
+				<a href="{{ Lang::get('menus.highlighs-url') }}" itemprop="url" data-icon="l">
+					<span itemprop="name">{{ Lang::get('menus.highlighs') }}</span>
+				</a>
+				<meta itemprop="position" content="2">
+			</li>
+
+			<li class="level-1-item {{(current_page(Lang::get('menus.roadmap'))) ? 'active' : current_page()}}">
+				<a href="{{ Lang::get('menus.roadmap-url') }}" itemprop="url" data-icon="i">
+					<span itemprop="name">{{ Lang::get('menus.roadmap') }}</span>
+				</a>
+				<meta itemprop="position" content="2">
+			</li>
+
+
 			<li class="level-1-item {{(current_page(Lang::get('menus.contact'))) ? 'active' : current_page()}}">
-				<a href="{{ Lang::get('menus.contact-url') }}" itemprop="url" data-icon="e">
+				<a href="{{ Lang::get('menus.contact-url') }}" itemprop="url" data-icon="j">
 					<span itemprop="name">{{ Lang::get('menus.contact') }}</span>
 				</a>
 				<meta itemprop="position" content="2">
 			</li>
-
-			<li class="level-1-item {{(current_page(Lang::get('menus.register'))) ? 'active' : current_page( Lang::get('menus.contact'))}}">
+<!-- 			<li class="level-1-item {{(current_page(Lang::get('menus.register'))) ? 'active' : current_page( Lang::get('menus.contact'))}}">
 				<a href="{{ Lang::get('menus.register-url') }}" itemprop="url" data-icon="a">
 					<span itemprop="name">{{ Lang::get('menus.register') }}</span>
 				</a>
@@ -114,7 +128,7 @@
 					<span itemprop="name">{{ Lang::get('menus.login') }}</span>
 				</a>
 				<meta itemprop="position" content="2">
-			</li>
+			</li> -->
 		@endif	
 
 <!-- 		{symbol 'hoofdmenu'}

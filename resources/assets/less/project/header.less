@@ -1,11 +1,10 @@
 /* header */
 .page-header {
-    .box-shadow(@shadow);
     width: 100%;
     z-index: 100;
     top: 0;
     left: 0;
-    background: #fff;
+    background: transparent;
 
     & when (@fixedHeader = true) {
         position: fixed;
@@ -15,6 +14,7 @@
         .displayflex;
         .justify-content(space-between);
         .align-items(center);
+        .transition;
         height: @headerHeight;
 
         @media @navBreakPoint {
@@ -29,6 +29,14 @@
 
 /* tiny header (set with jquery.header.js) */
 .tiny-header .page-header {
+    .box-shadow(@shadow);
+    background: @darkGreenTrans;
+    height: 6rem;
+
+    .inner {
+            .transition;
+        height: 6rem;        
+    }
     // @TODO: Als er een verkleinde header is (op scroll), deze dan hier opmaken.
     // @TODO: Als er geen verkleinde header is, deze regels verwijderen en de Javascript verwijderen.
 }
@@ -41,9 +49,25 @@
     height: @headerHeight;
     padding: @spacing 0;
 
+    a {
+        .displayflex;
+        .justify-content(center);
+        .align-items(center);
+        height: 100%;
+    }
+
     img {
         max-width: none;
+        display: inline-block;
         height: 100%;
+        width: 2.8rem;
     }
 }
 /* end logo  */
+
+.logo-text {
+    font-family: @secondaryFont;
+    margin-left: 1rem;
+    font-size: 2rem;
+    color: #fff;
+}

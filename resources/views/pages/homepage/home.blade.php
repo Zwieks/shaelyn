@@ -1,16 +1,18 @@
 <!-- {{$debugpath}} -->
 <div class="home-wrapper">
+	{{--Render Introduction --}}
+	@include('pages.homepage.templates.intro')
 
-	<p>NOT loggedin</p>
-	<section class='component parallax-wrapper inviewelement slideintop'>
-		<p>element1</p>
-	</section>	
+	{{--Render Get the App --}}
+	@include('pages.homepage.templates.getapp')
 
-	<section class='component parallax-wrapper inviewelement slideinleft'>
-		<p>element1</p>
-	</section>	
+	{{--Render Get the App --}}
+	@include('pages.homepage.templates.highlights')
 
-	<section class='component parallax-wrapper inviewelement slideinright'>
+	{{--Render Roadmap --}}
+	@include('pages.homepage.templates.roadmap')
+
+<!-- 	<section class='component parallax-wrapper inviewelement slideinright'>
 		<p>element1</p>
 	</section>	
 
@@ -52,5 +54,5 @@
 		<div  style="background:green; min-height:19rem;" class="parallax-wrapper inviewelement slideintop">
 
 		</div>	
-	</section>			
-</div>	
+	</section>	 -->		
+</div>
