@@ -3,6 +3,7 @@
 return [
     'name' => 'Shaelyn',
     'title' => 'Shaelyn the social feeds app',
+    'url' => 'shaelyn.io',
     'keywords' => '',
     'slogan' => 'Get your feeds up!',
     'logotitle' => 'Go to homepage',

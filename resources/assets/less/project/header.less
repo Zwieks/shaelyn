@@ -17,9 +17,14 @@
         .transition;
         height: @headerHeight;
 
+        @media @bp-Large {
+            padding: 0 @spacing;
+        }
+
         @media @navBreakPoint {
             .justify-content(center);
             height: @responsiveHeaderHeight;
+            background: @darkGreenTrans;
         }
     }
 }

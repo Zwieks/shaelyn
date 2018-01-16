@@ -116,6 +116,7 @@
 @timelineColor:             #d2d2d3;
 @darkGreen:					#101f2e;
 @darkGreenTrans:			rgba(16, 31, 46, 0.98);
+@darkerGreen:				#0e1b28;
 
 
 @autoCompleteItemColor:     #4c4b4c;
@@ -140,28 +141,29 @@
 @borderWidth:               1px; // Always use px
 @borderColor:		        #e5e5e5;
 @borderColorMenuTop:		#57544e;
-@borderColorMenuBottom:		#312e2a;
+@borderColorMenuBottom:		#0b141d;
 @focusColor:                @textColor;
 
 /* Responsive */
 @responsive:                true; // When set to false, variables below are not used and website behaves mot-responsive. TODO: Change the viewport meta tag in basicpage > view.tpl
 @navBreakPoint:             ~"(max-width: 1023px)";
-@responsiveHeaderHeight:    @spacing*3; // Is set when @navBreakPoints is reached on .page-header
+@responsiveHeaderHeight:    @spacing*2; // Is set when @navBreakPoints is reached on .page-header
 @hamburgerHeight:           @spacing*2; // Is set when @navBreakPoints is reached on .page-header@hamburgerHeight:           @spacing*2;
 @hamburgerBackground:       transparent; // Background color of the hamburger icon
 @hamburgerLinesHeight:      0.4rem; // The height of each hamburger line
 @hamburgerLinesColor:       @white; // The color of the 3 lines in the hamburger icon
 @hamburger:                 left; // Options: left, right, top or overlay
 @hamburgerText:             false; // Set to 'true to show hamburger text 'menu'
-@hamburgerColor:            @primColor;
+@hamburgerColor:            @white;
 @navShadow: 	            0; // Only for @hamburger = left or right
 @navWidth:                  24rem; // Only for @hamburger = left or right
-@navOverlayColor:           rgba(0,0,0,0.25); // Not for @hamburger = overlay
+@navOverlayColor:           rgba(0,0,0,0.5); // Not for @hamburger = overlay
 @navSpeed:                  @slowAnimSpeed; // The slide-in speed of the transition of the sliding responsive navigation
-@navBg:                     @grey; // The background color of the responsive navigation
+@navBg:                     @darkGreen; // The background color of the responsive navigation
 
 /* Breakpoints */
 @bp-Desktop:                ~"screen and (min-width: 1024px)";
+@bp-Large:                	~"screen and (max-width: 1250px)";
 @bp-TabletL:                ~"screen and (max-width: 1023px)";
 @bp-TabletLM:               ~"screen and (max-width: 900px)";
 @bp-TabletM:                ~"screen and (max-width: 896px)";

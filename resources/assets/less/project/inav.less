@@ -22,7 +22,7 @@
 		&,
 		&:before,
 		&:after {
-			background: #000;
+			background: @primColor;
 		}
 	}
 
@@ -91,8 +91,7 @@
 	> ul > li {
 		> a {
 			padding: @spacing/1.5 @spacing/2 @spacing/1.5 @spacing*2.5;
-			font-size: @smallerHeadingSize;
-			border-top: 1px solid @borderColorMenuTop;		
+			font-size: @smallerHeadingSize;;		
    			border-bottom: 1px solid @borderColorMenuBottom;
 
 			&:before{
