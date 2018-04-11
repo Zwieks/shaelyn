@@ -9005,8 +9005,44 @@ form ol {
   }
 }
 .transparent .modal-content {
+  -webkit-box-shadow: none;
+  box-shadow: none;
   background: transparent;
   color: #fff;
+}
+.transparent .modal-content .modal-header,
+.transparent .modal-content .modal-body {
+  border: none;
+  text-align: center;
+}
+.transparent .modal-content .modal-close {
+  color: #fff;
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+.transparent .modal-content .modal-close:before {
+  font-size: 25px;
+}
+.transparent .modal-content .modal-close:hover,
+.transparent .modal-content .modal-close:focus {
+  color: #8240f7;
+}
+.transparent .modal-content .velden li {
+  margin: 0 auto 1.2rem;
+}
+.transparent .modal-content .image-wrapper figure {
+  padding-top: 24rem;
+}
+.transparent .modal-content .image-wrapper img {
+  height: 100%;
+}
+.transparent .modal-content .modal-footer {
+  -moz-justify-content: center;
+  -ms-justify-content: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
 }
 .modal-backdrop {
   position: fixed;
@@ -9021,7 +9057,7 @@ form ol {
   opacity: 0;
 }
 .modal-backdrop.in {
-  opacity: 0.8;
+  opacity: 0.9;
 }
 .modal-header {
   display: -webkit-box;
@@ -9042,6 +9078,7 @@ form ol {
   padding-bottom: 1.2rem;
   margin-bottom: 1.2rem;
   border-bottom: 1px solid #e5e5e5;
+  text-transform: uppercase;
 }
 .modal-close {
   -webkit-align-self: flex-start;

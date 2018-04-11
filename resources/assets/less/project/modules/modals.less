@@ -29,7 +29,7 @@
 //** Modal backdrop background color
 @modal-backdrop-bg:           #000;
 //** Modal backdrop opacity
-@modal-backdrop-opacity:      .8;
+@modal-backdrop-opacity:      .9;
 //** Modal header border color
 @modal-header-border-color:   #e5e5e5;
 //** Modal footer border color
@@ -177,8 +177,51 @@
   }
 
   .transparent & {
+    .box-shadow(none);
     background: transparent;
     color: @white;
+
+    .modal-header,
+    .modal-body {
+      border: none;
+      text-align: center;
+    }
+
+    .modal-close {
+      color: @white;
+      position: absolute;
+      top: 0;
+      right: 0;
+
+      &:before {
+        font-size: 25px;
+      }
+
+      &:hover,
+      &:focus {
+        color: @primColor;
+      }
+    }
+
+    .velden {
+      li {
+            margin: 0 auto @spacing/2;
+      }
+    }
+
+    .image-wrapper {
+      figure {
+        padding-top: @spacing*10;
+      }
+
+      img {
+        height: 100%;
+      }
+    }
+
+    .modal-footer {
+      .justify-content(center);
+    }
   }
 }
 
@@ -213,6 +256,8 @@
   padding-bottom:@spacing/2;
   margin-bottom:@spacing/2;
   border-bottom: 1px solid @modal-header-border-color;
+
+  text-transform: uppercase;
 }
 
 // Close icon
