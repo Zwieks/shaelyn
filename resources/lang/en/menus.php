@@ -34,8 +34,8 @@ return [
     'download'       => 'Download',
     'download-url'   => '/download',
 
-    'highlighs'       => 'Highlighs',
-    'highlighs-url'   => '/highlighs',
+    'highlights'       => 'Highlights',
+    'highlights-url'   => '/highlights',
 
     'roadmap'       => 'Roadmap',
     'roadmap-url'   => '/roadmap',

@@ -88,9 +88,9 @@
 				<meta itemprop="position" content="2">
 			</li>
 
-			<li class="level-1-item {{(current_page(Lang::get('menus.highlighs'))) ? 'active' : current_page()}}">
-				<a href="{{ Lang::get('menus.highlighs-url') }}" itemprop="url" data-icon="l">
-					<span itemprop="name">{{ Lang::get('menus.highlighs') }}</span>
+			<li class="level-1-item {{(current_page(Lang::get('menus.highlights'))) ? 'active' : current_page()}}">
+				<a href="{{ Lang::get('menus.highlights-url') }}" itemprop="url" data-icon="l">
+					<span itemprop="name">{{ Lang::get('menus.highlights') }}</span>
 				</a>
 				<meta itemprop="position" content="2">
 			</li>
@@ -109,6 +109,13 @@
 				</a>
 				<meta itemprop="position" content="2">
 			</li>
+
+			<li class="level-1-item {{(current_page(Lang::get('menus.login'))) ? 'active' : current_page()}}" data-toggle='modal' data-target='#modal-login'>
+				<div href="{{ Lang::get('menus.login-url') }}" itemprop="url" class="hasimage">
+					<img src="{{ asset('img/user.svg') }}" alt=""/>
+				</div>
+				<meta itemprop="position" content="2">
+			</li>
 <!-- 			<li class="level-1-item {{(current_page(Lang::get('menus.register'))) ? 'active' : current_page( Lang::get('menus.contact'))}}">
 				<a href="{{ Lang::get('menus.register-url') }}" itemprop="url" data-icon="a">
 					<span itemprop="name">{{ Lang::get('menus.register') }}</span>
@@ -119,13 +126,6 @@
 			<li class="level-1-item {{(current_page(Lang::get('menus.blog'))) ? 'active' : current_page()}}">
 				<a href="{{ Lang::get('menus.blog-url') }}" itemprop="url" data-icon="b">
 					<span itemprop="name">{{ Lang::get('menus.blog') }}</span>
-				</a>
-				<meta itemprop="position" content="2">
-			</li>	
-
-			<li class="level-1-item {{(current_page(Lang::get('menus.login'))) ? 'active' : current_page()}}">
-				<a href="{{ Lang::get('menus.login-url') }}" itemprop="url" data-icon="n">
-					<span itemprop="name">{{ Lang::get('menus.login') }}</span>
 				</a>
 				<meta itemprop="position" content="2">
 			</li> -->

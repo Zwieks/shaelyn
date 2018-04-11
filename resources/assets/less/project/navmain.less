@@ -1,6 +1,24 @@
 .page-mainmenu {
     .level-1-item {
 
+        img {
+            height: 100%;
+            width: @spacing*1.7;
+        }
+
+        .hasimage {
+            .transition;
+            padding-top: 0;
+            height: 100%;
+
+            &:hover,
+            &:focus {
+                .transition;
+                .scale(1.1);
+                cursor: pointer;
+            }
+        }
+
         &:not(:first-child) {
             margin-left: @spacing*1.5;
         }

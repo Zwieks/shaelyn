@@ -151,5 +151,8 @@
 			new iNav(this, options).init();
 		});
 	}
+	$.fn.clearNav = function() {
+		$('#js-nav-trigger').prop('checked', false);
+	};
 
 })(jQuery);

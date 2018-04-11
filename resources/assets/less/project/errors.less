@@ -1,0 +1,130 @@
+.component-error {
+    .page-header {
+        background: @darkGreen;
+
+        .inner {
+            .justify-content(center);
+        }
+    }
+    
+    .page-mainmenu {
+        display: none;
+    }
+
+    .page-content {
+        @media @bp-MobileL {
+            padding-top: @spacing/2;
+        } 
+    }
+
+    .error-title {
+        font-size: @spacing*3;
+        margin: 0;
+    }
+
+    .error-subtitle {
+        font-size: @mediumSmallHeadingSize;
+    }
+
+    .error-content {
+        font-size: @smallHeadingSize;
+        margin: 0 0 @spacing/4;
+    }
+
+    .error-indication {
+        font-size: @smallerHeadingSize;
+        display: block;
+        margin-bottom: @spacing/2;
+    }
+
+    .page-wrapper {
+        position: relative;
+        min-height: calc(100vh ~'-' @headerHeight ~'-' @footerHeight);
+
+        .inner {
+            .center;
+        }
+    }
+
+    .error-wrapper{
+        .displayflex;
+        .align-items(flex-start);
+        .justify-content(center);
+        .flex-wrap(wrap);
+        margin: 0 @spacing/2;
+
+        a {
+            display: inline-block;
+            font-weight: 600;
+            position: relative;
+            height: @spacing*1.5;
+
+            &:after {
+                .transition;
+                .center;
+                content: '';
+                background: @primColor;
+                height: 3px;
+                opacity: 0;
+                bottom:0;
+                visibility: hidden;
+                width: 0%;
+            }
+
+            &:hover,
+            &:focus {
+                &:after {
+                    .transition;
+                    width: 100%;
+                    opacity: 1;
+                    visibility: visible;
+                }
+            }
+        }
+
+        figure {
+            position: relative;
+            padding-top: @spacing*10;
+        }
+
+        .image-wrapper,
+        .content-wrapper {
+            width: 50%;
+
+            @media @bp-MobileL {
+                width: 100%;
+            }  
+        }
+
+        .image-wrapper {
+            position: relative;
+            padding-top: @spacing*10;
+            max-height: @spacing*10;
+
+            img {
+                .centerY;
+                left: @spacing/2;
+                width: auto;
+                height:100%;
+
+                @media @bp-MobileL {
+                    .center;
+                }    
+            }
+        }
+
+        .content-wrapper {
+            padding: @spacing/2;
+            text-align: center;
+
+            @media @bp-MobileL {
+                margin-bottom: @spacing;
+            }    
+        }
+
+        @media @bp-MobileL {
+            .flex-direction(column);
+            .align-items(center);
+        }
+    }
+}

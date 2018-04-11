@@ -25,3 +25,68 @@ jQuery(window).on('load', function(){
 	jQuery(window).analyticsTracker();
 
 });
+
+function scrollToAnchor(aid){
+    var aTag = $("a[name='"+ aid +"']");
+    $('html,body').animate({scrollTop: aTag.offset().top},'slow');
+}
+
+jQuery(document).ready(function(){
+	var offset = 250;	 
+	var duration = 300;
+
+	//TEMPORARY NAVIGATION
+	$('#js-mainmenu a, #js-nav-wrapper a').click(function(event) {
+		event.preventDefault();
+
+		var component = $(this).attr('href').replace(/\//g, ''),
+			scrollpoint = '#'+component,
+			offset = 0,
+			headerHeight = $('.page-header').height() - 1;
+
+		//Check scrolling position
+		if(component != '') 
+			offset = $(scrollpoint).offset().top - headerHeight;
+
+		//Remove the active class and then add the class to the clicked item
+		$(this).parent().parent().children().removeClass('active');
+		$(this).parent().addClass('active');
+
+		//Animate
+		$('html, body').animate( { scrollTop: offset}, 750, 'swing');
+
+		//Close mobile menu if open
+		$('#js-nav-trigger').prop('checked', false);
+
+		return false;
+	});
+
+	//Check if there is a hash in the URL
+	if(window.location.hash) {
+		event.preventDefault();
+		var hash = window.location.hash;
+	}
+
+	 
+	if ($('#js-backtotop').length) {
+	    var scrollTrigger = 500, // px
+	        backToTop = function () {
+	            var scrollTop = $(window).scrollTop();
+	            if (scrollTop > scrollTrigger) {
+	                $('#js-backtotop').addClass('show');
+	            } else {
+	                $('#js-backtotop').removeClass('show');
+	            }
+	        };
+	    backToTop();
+	    $(window).on('scroll', function () {
+	        backToTop();
+	    });
+	    $('#js-backtotop').on('click', function (e) {
+	        e.preventDefault();
+	        $('html,body').animate({
+	            scrollTop: 0
+	        }, 700);
+	    });
+	}
+});

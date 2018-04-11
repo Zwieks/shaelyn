@@ -11,6 +11,13 @@
         <link href="https://fonts.googleapis.com/css?family=Montserrat:400,600,700,800,900" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css?family=Pacifico" rel="stylesheet">
         
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+        <link rel="manifest" href="/manifest.json">
+        <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#8240f7">
+        <meta name="theme-color" content="#ff0000">
+
         <title>@yield('title')</title>
     </head>
     <body @if (Request::path() === '/') itemscope itemtype="http://schema.org/WebSite"@endif class="component-@yield('type')@hasSection('heroimage') has-bgimage @endif @if(Auth::check())logedin @endif preload">
@@ -37,9 +44,21 @@
             <div class="nav-closer" id="js-nav-closer"></div>
         </div>
 
+        <a id='js-backtotop' href='#' data-icon='m' class='btn-to-top'></a>
+
         <!-- JAVASCRIPT -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
 
         @include('pages.basicpage.scripts')
+
+        @include('includes.firebase.init')
+
+        @hasSection('page-scripts')
+            @yield('page-scripts')
+        @endif
+
+        @hasSection('modal')
+            @yield('modal')
+        @endif  
     </body>
 </html>

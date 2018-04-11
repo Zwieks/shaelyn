@@ -16,7 +16,7 @@ return [
         [
             'image' => "mark-orange",
             'icon' => "c",
-            'month' => "January",
+            'month' => "February",
             'year' => "2018",
             'title' => "Pilot release",
             'description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed consequat sapien turpis. Duis sed ex in orci vulputate pellentesque. Mauris sollicitudin nibh in laoreet dapibus.',
@@ -25,7 +25,7 @@ return [
         [
             'image' => "mark-red",
             'icon' => "d",
-            'month' => "February",
+            'month' => "March",
             'year' => "2018",
             'title' => "Beta release",
             'description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed consequat sapien turpis. Duis sed ex in orci vulputate pellentesque. Mauris sollicitudin nibh in laoreet dapibus.',
@@ -34,7 +34,7 @@ return [
         [
             'image' => "mark-blue",
             'icon' => "e",
-            'month' => "March",
+            'month' => "April",
             'year' => "2018",
             'title' => "Final release",
             'description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed consequat sapien turpis. Duis sed ex in orci vulputate pellentesque. Mauris sollicitudin nibh in laoreet dapibus.',
@@ -43,7 +43,7 @@ return [
         [
             'image' => "mark-darkgreen",
             'icon' => "f",
-            'month' => "April",
+            'month' => "May",
             'year' => "2018",
             'title' => "First 1000+ downloads",
             'description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed consequat sapien turpis. Duis sed ex in orci vulputate pellentesque. Mauris sollicitudin nibh in laoreet dapibus.',

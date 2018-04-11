@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace Shaelyn;
 
 use Illuminate\Database\Eloquent\Model;
 

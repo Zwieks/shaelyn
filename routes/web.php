@@ -17,3 +17,15 @@ Auth::routes();
 // Homepage
 Route::get('/', ['uses' => 'UserController@index', 'as' => 'users']);
 Route::get('/home', ['uses' => 'UserController@index', 'as' => 'users']);
+
+// Download
+Route::get('/download', 'DownloadController@anchor');
+
+// Contact
+Route::get('/contact', 'ContactController@anchor');
+
+// Highlights
+Route::get('/highlights', 'HighlightsController@anchor');
+
+// Roadmap
+Route::get('/roadmap', 'RoadmapController@anchor');

@@ -1,7 +1,6 @@
 & when (@responsive = true) {
     body,
     html {
-        overflow-x: hidden;
         -ms-touch-action: manipulation; // Disables click delay
         touch-action: manipulation; // Disables click delay
     }
@@ -9,10 +8,12 @@
 
 html {
     .box-sizing(border-box);
+    margin-left: calc(100vw ~'-' 100%);
 }
 
 body {
     background: @bodyBackground;
+    overflow-x: hidden;
 
     & when (@responsive = true) {
         & when (@fixedHeader = true) {

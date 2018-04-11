@@ -5,13 +5,17 @@
 	background: #000;
 	margin-top: -(@headerHeight + @spacing * 1.5);
 	min-height: 50rem;
-	height: 70vh;
+	height: 50vh;
 	background: url(/img/color-bg-blue-star.jpg) no-repeat top;
 	background-size: cover;
 
 	@media @bp-MobileL {
 		height: 60vh;
 		min-height: 0;
+	}
+
+	@media @bp-MobileM {
+		min-height: 39rem;
 	}
 }
 
@@ -33,10 +37,31 @@
 	text-align: center;
 	width: 100vw / 2;
 	height: auto;
+	z-index: 2;
 
-	img {
+	@media @bp-TabletL {
+		padding-top: @spacing*2;
+	}
+
+	@media @bp-MobileL {
+		width: 100%;
+		height: 100%;
+		padding: @spacing*3 @spacing 0;
+	}
+
+	@media @bp-MobileM {
+		.justify-content(center);
+	    .flex-direction(row);
+	    .transform(none);
+		padding-bottom: @spacing;
+	    left: 0;
+	    top: 0;
+	}
+
+	img,
+	svg {
 		.align-self(center);
-		width: @spacing*3;
+		width: @spacing*8;
 		opacity: 1;
 
 		@media @bp-TabletL {
@@ -45,8 +70,12 @@
 		}
 
 		@media @bp-MobileM {
-			width: @spacing*3;
+			width: @spacing*4;
 		}	
+	}
+
+	svg {
+		height: auto;
 	}
 
 	h2 {
@@ -65,16 +94,12 @@
 		@media @bp-TabletL {
 			.flex-order(1);
 			margin-bottom: @spacing;
+			margin-top: @spacing;
 		}
-	}
 
-	@media @bp-TabletL {
-		padding-top: @spacing*2;
-	}
-
-	@media @bp-MobileL {
-		width: 100%;
-		height: 100%;
-		padding: @spacing*3 @spacing 0;
+		@media @bp-MobileM {
+			margin-top: @spacing*1.5;
+			margin-bottom: @spacing/2;
+		}	
 	}
 }

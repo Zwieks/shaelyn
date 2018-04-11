@@ -1,5 +1,5 @@
 <!-- {{$debugpath}} -->
-<div class='component-full empty comp-highlights'>
+<div class='component-full empty comp-highlights' id="highlights">
 	<div class="inner parallax-wrapper inviewelement slideinleft">
 		<section class="highlights-intro">
 			<h2>Get Shaelyn today</h2>
