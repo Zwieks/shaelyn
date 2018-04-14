@@ -19,6 +19,8 @@ class FirebaseController extends Controller
         $database = $firebase->getDatabase();
 
         $auth = $firebase->getAuth();
-        var_dump($auth->onAuthStateChanged());
+
+        //Return the view
+       	return view('auth.home');
     }
 }
