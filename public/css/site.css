@@ -9015,6 +9015,12 @@ form ol {
   border: none;
   text-align: center;
 }
+.transparent .modal-content .modal-header {
+  margin-bottom: 2.4rem;
+}
+.transparent .modal-content .modal-title {
+  font-weight: 600;
+}
 .transparent .modal-content .modal-close {
   color: #fff;
   position: absolute;
@@ -9030,6 +9036,12 @@ form ol {
 }
 .transparent .modal-content .velden li {
   margin: 0 auto 1.2rem;
+}
+.transparent .modal-content .velden input {
+  min-height: 4.8rem;
+}
+.transparent .modal-content .image-wrapper {
+  margin-bottom: 4.8rem;
 }
 .transparent .modal-content .image-wrapper figure {
   padding-top: 24rem;

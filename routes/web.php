@@ -15,8 +15,8 @@ Route::auth();
 Auth::routes();
 
 // Homepage
-Route::get('/', ['uses' => 'UserController@index', 'as' => 'users']);
-Route::get('/home', ['uses' => 'UserController@index', 'as' => 'users']);
+Route::get('/', ['uses' => 'FirebaseController@index', 'as' => 'users']);
+Route::get('/home', ['uses' => 'FirebaseController@index', 'as' => 'users']);
 
 // Download
 Route::get('/download', 'DownloadController@anchor');

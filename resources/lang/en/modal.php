@@ -5,5 +5,4 @@ return [
     'login' => [     
         'title' => 'Login here',    
     ],
-
 ];

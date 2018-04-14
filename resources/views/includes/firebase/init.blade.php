@@ -11,3 +11,4 @@
   };
   firebase.initializeApp(config);
 </script>
+<script type="text/javascript" src="{{ URL::asset('js/jquery.firebase.js') }}"></script>
