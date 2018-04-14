@@ -51,10 +51,12 @@
 
         @include('pages.basicpage.scripts')
 
-        @include('includes.firebase.init')
-
         @hasSection('page-scripts')
             @yield('page-scripts')
+        @endif
+
+        @hasSection('firebase')
+            @yield('firebase')
         @endif
 
         @hasSection('modal')

@@ -15,8 +15,8 @@ Route::auth();
 Auth::routes();
 
 // Homepage
-Route::get('/', ['uses' => 'FirebaseController@index', 'as' => 'users']);
-Route::get('/home', ['uses' => 'FirebaseController@index', 'as' => 'users']);
+Route::get('/', ['uses' => 'UserController@index', 'as' => 'users']);
+Route::get('/home', ['uses' => 'UserController@index', 'as' => 'users']);
 
 // Download
 Route::get('/download', 'DownloadController@anchor');
@@ -29,3 +29,11 @@ Route::get('/highlights', 'HighlightsController@anchor');
 
 // Roadmap
 Route::get('/roadmap', 'RoadmapController@anchor');
+
+// Auth
+Route::post('/auth/{uid}', 'FirebaseController@index');
+
+//USER ACCESS ONLY
+//Route::group(['middleware' => 'usersession'], function () {
+//	Route::get('/', 'UserController@loggedin');
+//});

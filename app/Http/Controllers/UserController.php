@@ -12,14 +12,26 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        if(Auth::user() == true){
-            //return view('auth.home-loggedin', compact('user','locations','user_items', 'most_viewed'));
+        if($request->session()->has('user.global')){
+            return view('auth.home-loggedin')
+                ->with('user', $request->session()->get('user.global'));
         }
         else{
             return view('auth.home');
         }
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function loggedin(Request $request)
+    {
+        return view('auth.home-loggedin')
+            ->with('user', $request->session()->get('user.global'));
     }
 
     /**

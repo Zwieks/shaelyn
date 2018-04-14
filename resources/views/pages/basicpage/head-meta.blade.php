@@ -9,3 +9,4 @@
 		
 <link rel="canonical" href="{{ Request::path() }}" />
 <meta name="robots" content="index, follow" /> 
+<meta name="csrf-token" content="{{ csrf_token() }}">

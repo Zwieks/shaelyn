@@ -12,12 +12,17 @@
 
 {{-- Include Content --}}
 @section('content')
-    @include('pages.homepage.view')
+    @include('pages.homepage.home')
 @stop
 
 {{-- Include Scripts --}}
 @section('page-scripts')
     @include('scripts.modal.modal-show-auth-init')
+@stop
+
+{{-- Include Firebase --}}
+@section('firebase')
+	@include('includes.firebase.init')
 @stop
 
 {{-- Include Modal --}}

@@ -2,7 +2,7 @@
 @extends('layouts.master')
 
 {{-- Page Title --}}
-@section('title', 'Welkom')
+@section('title', Lang::get('global.head-title'))
 
 {{-- Name of body class --}}
 @section('type','home ')
@@ -12,11 +12,11 @@
 
 {{-- Include Content --}}
 @section('content')
-    @include('pages.homepage.view')
+    @include('pages.homepage.loggedin.intro')
 @stop
 
 {{-- Include Scripts --}}
-@section('page-scripts')
-    @include('scripts.googlemaps-init')
-    @include('scripts.owlslider-init')
+@section('headeranimation')
+	<script type="text/javascript" src="{{ URL::asset('js/network-animation.js') }}"></script>
+	<script type="text/javascript" src="{{ URL::asset('js/network-animation-init.js') }}"></script>
 @stop

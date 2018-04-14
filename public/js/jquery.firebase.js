@@ -3,15 +3,36 @@ firebase.auth().onAuthStateChanged(function(user) {
     // User is signed in.
     var user = firebase.auth().currentUser;
     if(user != null){
-    	var email_id = user.uid;
+    	var email_id = user.email;
 
-    	alert("Welcome" + email_id);
+    	//alert("Welcome" + email_id);
+
+    	handleUserSession(user.uid);
     }
   } else {
     // No user is signed in.
-    alert('NO');
+    
   }
 });
+
+function handleUserSession(uid) {
+	var token = $('meta[name="csrf-token"]').attr('content'),
+		url = '/auth/'+uid,
+		data = {uid: uid};
+
+	$.ajax({
+		type: 'POST',
+		url: url,
+		headers: {'X-CSRF-TOKEN': token},
+		data: data,
+		datatype: 'JSON',
+		success: function (data) {
+			if(data.success == true) {
+				location.reload();
+			}
+		}
+	});
+}
 
 //This will sign-in the user
 function login() {
