@@ -1,5 +1,5 @@
 <!-- {{$debugpath}} -->
-{!! Form::open(['method' => 'post', 'class' => 'changed']) !!}
+{!! Form::open(['method' => 'post', 'class' => 'changed', 'id' => 'login-form']) !!}
     <meta name="csrf-token" content="{{ csrf_token() }}" />
     <fieldset>
         <ul class="velden">
