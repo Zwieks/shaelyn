@@ -7,6 +7,7 @@
 
 		<h2 class="logo-text">{{ $user->email }}</h2>
 		<p>{{ Lang::get('global.intro') }}</p>
+		<button type="button" class="btn btn-primary" id="js-logout">{{ Lang::get('buttons.logout') }}</button>
 	</div>
 	<div id="particles-js" class="particles-animation"></div>
 </div>

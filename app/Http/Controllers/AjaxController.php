@@ -3,6 +3,7 @@
 namespace Shaelyn\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Shaelyn\Sessions;
 
 class AjaxController extends Controller
 {
@@ -80,5 +81,18 @@ class AjaxController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    /**
+     * Destroys the session.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function resetSession(Request $request){
+        //Set User Data Session
+        Sessions::destroyAllSessions($request);
+
+        return response()->json(array('success' => true));
     }
 }

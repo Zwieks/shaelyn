@@ -90,3 +90,32 @@ jQuery(document).ready(function(){
 	    });
 	}
 });
+
+$(document).on("click","#js-logout",function() {
+	logout();
+});
+
+//This will sign-out the user
+function logout() {
+	firebase.auth().signOut().then(function() {
+	  	// Sign-out successful.
+		var token = $('meta[name="csrf-token"]').attr('content'),
+			url = '/ajax/resetSession',
+			data = '';
+
+		$.ajax({
+			type: 'POST',
+			url: url,
+			headers: {'X-CSRF-TOKEN': token},
+			data: data,
+			datatype: 'JSON',
+			success: function (data) {
+				if(data.success == true) {
+					location.reload();
+				}
+			}
+		});
+	}).catch(function(error) {
+	  // An error happened.
+	});
+}

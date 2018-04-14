@@ -52,16 +52,3 @@ function login() {
 $(document).on("click","#js-login",function() {
 	login();
 });
-
-$(document).on("click","#js-logout",function() {
-	signOut();
-});
-
-//This will sign-out the user
-function logout() {
-	firebase.auth().signOut().then(function() {
-	  // Sign-out successful.
-	}).catch(function(error) {
-	  // An error happened.
-	});
-}
