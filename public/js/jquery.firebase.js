@@ -28,13 +28,14 @@ function handleUserSession(uid) {
 		success: function (data) {
 			if(data.success == true) {
 				hideLoader();
-				$('.js-load-finish').addClass('active');
+				$('.js-load-finish, #js-loader').addClass('active');
+				$('.js-load').hide();
 
 				setTimeout(
 				  function() 
 				  {
 				    location.reload(); 
-				  }, 2000);
+				  }, 1000);
 			}
 		}
 	});
