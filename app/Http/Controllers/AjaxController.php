@@ -4,6 +4,7 @@ namespace Shaelyn\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Shaelyn\Sessions;
+use Cookie;
 
 class AjaxController extends Controller
 {
@@ -90,9 +91,6 @@ class AjaxController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function resetSession(Request $request){
-        //Set User Data Session
-        Sessions::destroyAllSessions($request);
-
-        return response()->json(array('success' => true));
+        return response()->json(array('success' => true))->cookie('user', '', 4500);
     }
 }

@@ -4,6 +4,11 @@ namespace Shaelyn\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Auth;
+use Cookie;
+use Kreait\Firebase\Firebase;
+use Kreait\Firebase\Factory;
+use Kreait\Firebase\ServiceAccount;
+use Kreait\Firebase\Database;
 
 class UserController extends Controller
 {
@@ -14,13 +19,33 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        if($request->session()->has('user.global')){
-            return view('auth.home-loggedin')
-                ->with('user', $request->session()->get('user.global'));
+        if($request->cookie('user') != ''){
+            $serviceAccount = ServiceAccount::fromJsonFile(__DIR__.'/shaelyn-487ff-firebase-adminsdk-4cyxu-5ab0802ed5.json');
+
+            $firebase = (new Factory)
+                ->withServiceAccount($serviceAccount)
+                ->create();
+
+            $database = $firebase->getDatabase();
+
+            $auth = $firebase->getAuth();
+
+            $uid = Cookie::get('user');
+
+            //Get the user info
+            $user = $auth->Getuser($uid);
+
+            return view('auth.home-loggedin')->with('posts', $user);
         }
         else{
-            return view('auth.home');
+            return response(view('auth.home'))->cookie('user', '', 4500);
         }
+    }
+
+    private function getUserInfo ($auth, $uid) {
+        $user = $auth->getUser($uid);
+
+        return $user;
     }
 
     /**

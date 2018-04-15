@@ -1,11 +1,10 @@
 firebase.auth().onAuthStateChanged(function(user) {
+	//logout();
   if (user) {
     // User is signed in.
     var user = firebase.auth().currentUser;
     if(user != null){
     	var email_id = user.email;
-
-    	//alert("Welcome" + email_id);
 
     	handleUserSession(user.uid);
     }
