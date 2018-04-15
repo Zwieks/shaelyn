@@ -7,8 +7,8 @@
         });
 
         //Click on the agenda item
-        $( "#modal-login" ).on('show.bs.modal', function(e){
-
+        $( "#modal-login" ).on('shown.bs.modal', function(){
+        	$('#email_field').focus();
         });
     });
 </script>
