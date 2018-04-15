@@ -9,7 +9,7 @@ class FirebaseController extends Controller
 {
     public function index(Request $request, $uid) {
 
-        if($request->hasCookie('user')) {
+        if($request->hasCookie('user') && $request->cookie('user') != '') {
             $cookie = cookie('user', $uid, 45000);
             return response()->json(array('success' => true))->cookie($cookie);
         }else {

@@ -91,6 +91,6 @@ class AjaxController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function resetSession(Request $request){
-        return response()->json(array('success' => true))->cookie('user', '', 4500);
+        return response()->json(array('success' => true));
     }
 }
