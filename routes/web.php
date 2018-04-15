@@ -34,7 +34,8 @@ Route::get('/roadmap', 'RoadmapController@anchor');
 Route::post('/auth/{uid}', 'FirebaseController@index');
 
 Route::post('/ajax/resetSession', 'ajaxController@resetSession');
+
 //USER ACCESS ONLY
-//Route::group(['middleware' => 'usersession'], function () {
+Route::group(['middleware' => 'usersession'], function () {
 //	Route::get('/', 'UserController@loggedin');
-//});
+});

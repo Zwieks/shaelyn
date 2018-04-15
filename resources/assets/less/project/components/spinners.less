@@ -1,0 +1,61 @@
+.login-spinnerwrapper {
+	.border-radius(50%);
+	.center;
+	.transition(0.8s);
+	height: @spacing*10;
+	width: @spacing*10;
+	background: @login-spinner-bg;
+	opacity: 0;
+	visibility: hidden;
+
+	&.active {
+		opacity: 1;
+		visibility: visible;
+	}
+
+	img {
+		width: 70%;
+		top: 0;
+    	left: @spacing*1.5;
+
+		&.outer {
+			.animation(spin 2s linear infinite);
+		}
+
+		&.center {
+			.animation(spin 1.5s linear infinite);
+		}
+
+		&.inner {
+			.animation(spin 1s linear infinite);
+		}
+
+		&.finish {
+			.transition(0.8s);
+			left: 13rem;
+    		top: 13rem;
+			opacity: 0;
+			visibility: hidden;
+
+			&.active {
+				opacity: 1;
+				visibility: visible;
+			}
+		}
+	}
+
+	.spinner {
+		position: relative;
+		height: @spacing*10;
+		width: @spacing*10; 
+	}
+}
+
+@keyframes spin {
+    0%	{
+    	.rotate(0deg);
+    }
+    100% {
+    	.rotate(360deg);
+    }
+}

@@ -28,10 +28,22 @@ function handleUserSession(uid) {
 		datatype: 'JSON',
 		success: function (data) {
 			if(data.success == true) {
-				location.reload();
+				hideLoader();
+				$('.js-load-finish').addClass('active');
+
+				setTimeout(
+				  function() 
+				  {
+				    location.reload(); 
+				  }, 2000);
 			}
 		}
 	});
+}
+
+function hideLoader() {
+	$('#js-loader, .js-load-finish').removeClass('active');
+	$('.js-load').show();
 }
 
 //This will sign-in the user
@@ -39,12 +51,14 @@ function login() {
 	var email = document.getElementById("email_field").value,
 		password = document.getElementById("password_field").value;
 
+
+	$('#js-loader').addClass('active'); 	
 	firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
 	  	// Handle Errors here.
 	  	var errorCode = error.code;
 	  	var errorMessage = error.message;
-
 	  	alert("Error : " + errorMessage);
+	  	hideLoader();
 	  	// ...
 	});
 }

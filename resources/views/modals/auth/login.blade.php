@@ -13,6 +13,15 @@
 		<figure>
 			<img src="{{ asset('img/padlock.svg') }}">
 		</figure>
+
+		<div class="login-spinnerwrapper" id ="js-loader">
+			<figure class="spinner">
+				<img class="outer js-load" src="{{ asset('img/load-outer.svg') }}">
+				<img class="center js-load" src="{{ asset('img/load-second.svg') }}">
+				<img class="inner js-load" src="{{ asset('img/load-inner.svg') }}">
+				<img class="finish js-load-finish" src="{{ asset('img/load-finish.svg') }}">
+			</figure>
+		</div>	
 	</div>
 	@include('forms.login')
 </div>

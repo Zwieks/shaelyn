@@ -3,7 +3,7 @@
 
         //Remove the input errors and empty all the input fields when the modal has been closed
         $('#modal-login').on('hidden.bs.modal', function () {
-
+        	hideLoader();
         });
 
         //Click on the agenda item
