@@ -2,7 +2,7 @@
 
 return [
     'title' => "Get involved",
-    'description' => "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed consequat sapien turpis. Duis sed ex in orci vulputate pellentesque. Mauris sollicitudin nibh in laoreet dapibus.",
+    'description' => "Want to follow our development and activities? Ask a question? You can!",
     'items' => [
          [
             'title' => 'Find us on Twitter',

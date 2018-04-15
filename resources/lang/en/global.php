@@ -17,7 +17,7 @@ return [
     'footercredits' => '© 2016 - realisation by '.config('app.name'),
     'seo-footertitle' => 'Secondary navigation',
 
-    'intro' => 'Nullam dictum mattis diam ac efficitur. Etiam non interdum nibh. Vivamus nec ex elit. Nunc eget pulvinar sem, et convallis dolor. Donec ac sollicitudin purus. Suspendisse mollis mauris sem, non cursus nulla faucibus ut. Pellentesque sed elit tortor. Donec imperdiet.',
+    'intro' => 'Get ready for the best note and list sharing app out there!',
 
     'head-title' => config('app.name').' - the social feeds app',
 ];
