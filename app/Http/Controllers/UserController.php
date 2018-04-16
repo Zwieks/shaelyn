@@ -35,7 +35,11 @@ class UserController extends Controller
             //Get the user info
             $user = $auth->Getuser($uid);
 
-            return view('auth.home-loggedin')->with('user', $user);
+            $reference = $database->getReference('Users/'.$uid);
+            $snapshot = $reference->getSnapshot();
+            $user_data = $snapshot->getValue();
+
+            return view('auth.home-loggedin')->with('user', $user_data);
         }
         else{
             return response(view('auth.home'))->cookie('user', '', 4500);
