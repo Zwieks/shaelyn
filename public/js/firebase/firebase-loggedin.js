@@ -35,6 +35,22 @@
 					image.src = snap.val().image
 		  		}
 		  	});
+
+
+			$('#firebase-username').on("input", function() {
+				var field = $(this).attr('field'),
+					dInput = this.value;
+
+			    UpdateField(user.uid, dInput, field);
+			});
+
+			function UpdateField(uid, content, field) {
+			  	// Write the new post's data.
+			  	var updates = {};
+			  	updates['Users/'+uid+'/'+field] = content;
+
+			  	return firebase.database().ref().update(updates);
+			}
 	  	}
 	});
 }());

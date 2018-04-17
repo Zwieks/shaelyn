@@ -6,7 +6,7 @@
 			<img  id="firebase-image" src="{{$user['thumb_image']}}" />
 		</figure>
 
-		<h2 id="firebase-username" class="logo-text">{{$user['name']}}</h2>	
+		<input class="ghost-input firebase-set" value="{{$user['name']}}" type="text" name="" field="name" id="firebase-username">
 
 		<button type="button" class="btn btn-primary" id="js-logout">{{ Lang::get('buttons.login') }}</button>
 	</div>
