@@ -19,4 +19,5 @@
 @section('headeranimation')
 	<script type="text/javascript" src="{{ URL::asset('js/network-animation.js') }}"></script>
 	<script type="text/javascript" src="{{ URL::asset('js/network-animation-init.js') }}"></script>
+	<script type="text/javascript" src="{{ URL::asset('js/firebase/firebase-loggedin.js') }}"></script>
 @stop
