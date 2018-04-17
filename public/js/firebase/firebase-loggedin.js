@@ -37,7 +37,7 @@
 		  	});
 
 
-			$('#firebase-username').on("input", function() {
+			$('.firebase-set').on("input", function() {
 				var field = $(this).attr('field'),
 					dInput = this.value;
 
