@@ -1,9 +1,8 @@
 <!-- {{$debugpath}} -->
 <script src="https://www.gstatic.com/firebasejs/4.12.1/firebase.js"></script>
 <script>
-(function() {
   // Initialize Firebase
-  const config = {
+  var config = {
     apiKey: "AIzaSyBIPCHDWClIz_8FeoqLwM5bEYzLkV0QSc0",
     authDomain: "shaelyn-487ff.firebaseapp.com",
     databaseURL: "https://shaelyn-487ff.firebaseio.com",
@@ -12,21 +11,6 @@
     messagingSenderId: "188207705889"
   };
   firebase.initializeApp(config);
-
-  const preObject = document.getElementById('objtect');
-
-		firebase.auth().onAuthStateChanged((user) => {
-		  	if (user) {
-		      	// Create references
-			  	const dbRefObject = firebase.database().ref().child('Users/'+user.uid);
-
-			  	// Sync object changes
-			  	dbRefObject.on('value', snap => {
-			  		document.getElementById('js-username').innerHTML = snap.val().name
-			  	});
-		  	}
-		});
-}());  
 </script>
 
 <script type="text/javascript" src="{{ URL::asset('js/jquery.browser.js') }}"></script>
