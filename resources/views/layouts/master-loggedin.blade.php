@@ -20,7 +20,7 @@
 
         <title>@yield('title')</title>
     </head>
-    <body @if (Request::path() === '/') itemscope itemtype="http://schema.org/WebSite"@endif class="component-@yield('type')@hasSection('heroimage') has-bgimage @endif @if(Auth::check())logedin @endif preload home-default">
+    <body @if (Request::path() === '/') itemscope itemtype="http://schema.org/WebSite"@endif class="component-@yield('type')@hasSection('heroimage') has-bgimage @endif preload" id="js-loggedin">
        <!--  heading for document outline  -->
         <h2 class="hide-from-layout">@yield('title')</h2>
 
@@ -39,9 +39,10 @@
         @endif
 
         <div class="page-mobile-nav-container">
-            <label class="nav-toggle" id="js-nav-toggle" for="js-nav-trigger"><span class="wrapper"><span></span></span><strong>{_ 'Menu'}</strong></label>
-            <div class="nav-wrapper" id="js-nav-wrapper"></div>
-            <div class="nav-closer" id="js-nav-closer"></div>
+            <label class="nav-toggle" id="js-nav-toggle" for="js-nav-trigger"><span class="wrapper"><span></span></span></label>
+            <div class="nav-wrapper" id="js-nav-wrapper">
+                @include('pages.homepage.loggedin.sidebar.layout')
+            </div>
         </div>
 
         <a id='js-backtotop' href='#' data-icon='m' class='btn-to-top'></a>

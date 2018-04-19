@@ -13,16 +13,6 @@
 	@media @navBreakPoint {
 		min-height: calc(100vh ~'-' @responsiveHeaderHeight);
 	}
-
-	.kirra-frontend-bar-enabled & {
-		@media (min-width: 768px) {
-			min-height: calc(100vh ~'-' @headerHeight ~'-' 36px); // 36px = height of the front-end-bar
-		}
-
-		@media (min-width: 768px) and @navBreakPoint {
-			min-height: calc(100vh ~'-' @responsiveHeaderHeight ~'-' 36px); // 36px = height of the front-end-bar
-		}
-	}
 }
 
 .nav-trigger {
@@ -190,7 +180,7 @@
 			visibility: visible;
 		}
 	}
-}
+}	
 
 
 
@@ -323,6 +313,7 @@
 			.translateY(0);
 		}
 	}
+
 }
 
 

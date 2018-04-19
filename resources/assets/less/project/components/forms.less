@@ -472,12 +472,48 @@ form ol {
     color: @white;
     font-size: @largeHeadingSize*1.3;
     font-family: @secondaryFont;
-	margin: 0 0 @spacing*2;
+	margin: 0;
 	line-height: normal;
     text-align: center;
     background: transparent;
     border: none;
     text-align: center;
     width: 100%;
+}
+
+.editable-firebase-wrapper {
+	position: relative;
+
+	&:hover,
+	&:focus {
+		.feedback {
+			top: 0;
+			opacity: 1;
+			visibility: visible;
+		}
+	}
+
+	.feedback {
+		.center;
+		.transition();
+		top: @spacing/2;
+		opacity: 1;
+		visibility: hidden;
+		color: @white;
+		padding-left: @spacing*2;
+		font-size: @smallestHeadingSize;
+		font-weight: bold;
+
+		&:before {
+			.centerY;
+			content: '';
+			left: 0;
+			background-image: url('/img/edit.svg');
+			background-position: center;
+			background-size: contain;
+			width: @spacing*1.5;
+			height: @spacing*1.5;
+		}
+	}	
 }
 /* end general webbeheer form */

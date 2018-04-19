@@ -58,6 +58,7 @@
 			navCloser: 			'#js-nav-closer', // The overlay to close the navigation
 			navWrapper: 		'#js-nav-wrapper', // The container that holds al the navigation elements
 			mainNavigation: 	'#js-mainmenu', // Primairy navigation
+			loggedin:           '#js-loggedin',
 			navContainers: 	    [] // Array of elements that are pushed in the responsive navigation
 		},
 
@@ -71,9 +72,11 @@
 
 			// Move all menu's to the mobile navigation container
 			if( settings.navWrapper ){
-				$.each(settings.navContainers, function() {
-					$(settings.navWrapper).append($(this).html());
-				});
+				if(!$(settings.loggedin).length) {
+					$.each(settings.navContainers, function() {
+						$(settings.navWrapper).append($(this).html());
+					});
+				}
 			}
 
 			// Handle desktop menu submenu functionalities on touch-devices
@@ -118,9 +121,16 @@
 				}
 			});
 
+			//If the user is loggedin the menu have to show
+			if($(settings.loggedin).length) {
+				$(this.settings.navTrigger).prop('checked', true);
+			}
+
 			// Close nav on click / touch outside the responsive menu
 			$(settings.navCloser).on('click', function(){
-				self.clearNav();
+				if(!(settings.loggedin).length) {
+					self.clearNav();
+				}	
 			});
 
 			// resetNav on resize (or orientationchange for touch devices)

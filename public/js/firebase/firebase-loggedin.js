@@ -28,7 +28,7 @@
 		  	// Sync object USER changes
 		  	dbRefUserObject.on('value', snap => {
 		  		if(username) {
-		  			username.innerHTML = snap.val().name
+		  			username.value = snap.val().name;
 		  		}
 
 		  		if(image) {
@@ -44,6 +44,7 @@
 			    UpdateField(user.uid, dInput, field);
 			});
 
+			// Update fields
 			function UpdateField(uid, content, field) {
 			  	// Write the new post's data.
 			  	var updates = {};

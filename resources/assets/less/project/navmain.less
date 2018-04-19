@@ -120,59 +120,12 @@
     }
 }
 
-.logedin{
-    .page-mainmenu{
-        .flex-grow(1);
-        overflow: visible;
-    }
-
-    .mobilemenu{
-         display: none;
-
-        @media @bp-TabletL{
-            display: block;
-        }
-    }
-
-    .usermenu{
-        @media @bp-TabletL{
-            display: none;
-        }
-    }
-
-    .level-1{
-        .justify-content(flex-end);
-        position: relative;
-    }
+#js-loggedin {
 
     .level-1-item{
         a,
         .mainmenu{
-            &:after{
-                font-size: 21px;
-            }
+            color: @primColor;
         }
-    }
-
-    .search{
-        .center;
-        border-left: 8px solid #e3262e;
-    }
-    
-    #js-search-trigger{
-        position: relative;
-
-        &:before{
-            .centerY;
-            right:12px;
-        }
-
-        span{
-            display: none;
-        }
-    }
-
-    .page-searchbox{
-        margin-left: 0;
     }
 }

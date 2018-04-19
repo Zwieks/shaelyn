@@ -37,12 +37,63 @@
 }
 
 .nav-wrapper {
+	background: #0d0d0d;
 	.search{
 		.translate(0,0);
 		position: relative;
 		top:auto;
 		left:auto;
 		border-left:0;
+	}
+
+	.particles-animation-wrapper {
+		.transform(none);
+		width: auto;
+    	height: auto;
+    	min-height: 0;
+    	margin: -@spacing/2 -@spacing/2 0;
+    	padding-top: @spacing/2;
+    	padding-bottom: @spacing/2;
+   		left: auto;
+    	right: auto;
+    	background: #0d0d0d;
+	}
+
+	.particles-content-wrapper {
+		.transform(none);
+		width: 100%;
+		height: 100%;
+		top: auto;
+    	left: auto;
+    	position: relative;
+
+    	figure {
+    		margin-bottom: @spacing/2;
+    	}
+
+    	img {
+    		width: @spacing*4.5;
+    	}
+	}
+
+	.editable-firebase-wrapper {
+
+		&:hover,
+		&:focus {
+			.feedback {
+				top: -0.5rem;
+			}
+		}
+
+		.feedback {
+			width: 80%;
+		}
+	}
+
+	.ghost-input {
+		width: 100%;
+		font-size: @smallHeadingSize;
+		padding: 0 @spacing/2;
 	}
 
 	.ajax-search-wrapper{ //Hides the search results on mobile
@@ -146,9 +197,87 @@
 	}
 }
 
+#js-loggedin {
+	.nav-toggle {
+		left: 0;
+	}
+
+	.page-mobile-nav-container {
+		width: @navWidth;
+		left: 0;
+	}
+
+	.nav-wrapper {
+		.translate3d(-@navWidth, 0, 0);
+		padding: @spacing/2;
+		width: @navWidth;
+		left: 0;
+
+		&:before {
+			right: 0;
+		}
+	}
+
+	.nav-closer {
+		left: 0;
+	}
+
+	.nav-trigger:checked {
+		~ .page-mobile-nav-container .nav-toggle,
+		~ .page-header,
+		~ .page-website-wrapper {
+			.transition(@navSpeed ease-in-out);
+			transition-delay: 0.02s;
+			margin-left: @navWidth;
+		}
+
+		~ .page-mobile-nav-container .nav-wrapper {
+			.translateX(0);
+		}
+	}
+
+	.nav-toggle,
+	.page-mobile-nav-container {
+		display: block;
+	}
+
+	.nav-trigger:checked ~ .page-mobile-nav-container {
+		.nav-toggle span {
+			background: transparent;
+
+			&:before {
+				.rotate(45deg);
+			}
+
+			&:after {
+				.rotate(-45deg);
+			}
+		}
+
+		.nav-closer {
+			opacity: 1;
+			visibility: visible;
+		}
+	}
+}
+
 @media @navBreakPoint {
 	// @TODO: Complete this list with all the elements that are pushed into the responsive navigation
 	.page-mainmenu {
 		display: none;
+	}
+
+	#js-loggedin {
+		.nav-trigger:checked {
+			~ .page-mobile-nav-container .nav-toggle,
+			~ .page-header,
+			~ .page-website-wrapper {
+				.translateX(0);
+			}
+
+			~ .page-mobile-nav-container .nav-wrapper {
+				.translateX(0);
+			}
+		}	
 	}
 }

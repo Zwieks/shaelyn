@@ -1,5 +1,5 @@
 <!-- {{$debugpath}} -->
-@extends('layouts.master')
+@extends('layouts.master-loggedin')
 
 {{-- Page Title --}}
 @section('title', Lang::get('global.head-title'))
@@ -12,7 +12,7 @@
 
 {{-- Include Content --}}
 @section('content')
-    @include('pages.homepage.loggedin.intro')
+    @include('pages.homepage.loggedin')
 @stop
 
 {{-- Include Scripts --}}
