@@ -59,6 +59,24 @@
 	}
 }
 
+// Loggedin needs some special framework settings
+#js-loggedin {
+	.page-wrapper {
+		> .inner {
+			max-width: 100%;
+		}
+	}
+
+	.page-content {
+		padding-top: 0;
+		margin: 0;
+	}
+
+	.page-middle {
+		padding: @spacing/2 @spacing @spacing/2;
+	}
+}
+
 // Make the framework responsive
 @media @bp-TabletM {
 	// Make the middle slightly bigger

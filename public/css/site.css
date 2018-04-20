@@ -641,6 +641,9 @@ body {
   overflow-x: hidden;
   padding-top: 9rem;
 }
+body#js-loggedin {
+  padding-top: 5.4rem;
+}
 @media (max-width: 1023px) {
   body {
     padding-top: 4.8rem;
@@ -1113,6 +1116,9 @@ html .cookie-explanation button.request-cookies,
   -webkit-box-direction: normal;
           flex-direction: column;
   min-height: calc(100vh - 9rem);
+}
+#js-loggedin .page-website-wrapper {
+  min-height: calc(100vh - 5.4rem);
 }
 @media (max-width: 1023px) {
   .page-website-wrapper {
@@ -2355,6 +2361,16 @@ html[lang='en'] .comp-login .social-login:before {
   width: 18%;
   margin-right: 1.2rem;
 }
+#js-loggedin .page-wrapper > .inner {
+  max-width: 100%;
+}
+#js-loggedin .page-content {
+  padding-top: 0;
+  margin: 0;
+}
+#js-loggedin .page-middle {
+  padding: 1.2rem 2.4rem 1.2rem;
+}
 @media screen and (max-width: 896px) {
   .page-middle {
     -webkit-box-ordinal-group: 1;
@@ -2739,6 +2755,8 @@ html .cookie-explanation button.request-cookies:before,
   margin: 0 auto;
 }
 #js-loggedin .page-header .inner {
+  max-width: 100%;
+  padding: 0 2.4rem 0 4.8rem;
   height: 5.4rem;
 }
 .page-header .inner {
@@ -3230,11 +3248,15 @@ html .cookie-explanation button.request-cookies:before,
   height: auto;
   min-height: 0;
   margin: -1.2rem -1.2rem 0;
-  padding-top: 1.2rem;
+  padding-top: 5.4rem;
   padding-bottom: 1.2rem;
   left: auto;
   right: auto;
   background: #0d0d0d;
+  overflow: hidden;
+}
+.nav-wrapper .particles-animation {
+  bottom: auto;
 }
 .nav-wrapper .particles-content-wrapper {
   -webkit-transform: none;
@@ -3246,14 +3268,10 @@ html .cookie-explanation button.request-cookies:before,
   position: relative;
 }
 .nav-wrapper .particles-content-wrapper figure {
-  margin-bottom: 1.2rem;
+  margin-bottom: 2.4rem;
 }
 .nav-wrapper .particles-content-wrapper img {
   width: 10.8rem;
-}
-.nav-wrapper .editable-firebase-wrapper:hover .feedback,
-.nav-wrapper .editable-firebase-wrapper:focus .feedback {
-  top: -0.5rem;
 }
 .nav-wrapper .editable-firebase-wrapper .feedback {
   width: 80%;
@@ -3348,14 +3366,14 @@ html .cookie-explanation button.request-cookies:before,
   left: 0;
 }
 #js-loggedin .page-mobile-nav-container {
-  width: 24rem;
+  width: 30rem;
   left: 0;
 }
 #js-loggedin .nav-wrapper {
-  -webkit-transform: translate3d(-24rem, 0, 0);
-  transform: translate3d(-24rem, 0, 0);
+  -webkit-transform: translate3d(-30rem, 0, 0);
+  transform: translate3d(-30rem, 0, 0);
   padding: 1.2rem;
-  width: 24rem;
+  width: 30rem;
   left: 0;
 }
 #js-loggedin .nav-wrapper:before {
@@ -3371,7 +3389,7 @@ html .cookie-explanation button.request-cookies:before,
   transition: 0.3s ease-in-out;
   -webkit-transition-delay: 0.02s;
           transition-delay: 0.02s;
-  margin-left: 24rem;
+  margin-left: 30rem;
 }
 #js-loggedin .nav-trigger:checked ~ .page-mobile-nav-container .nav-wrapper {
   -webkit-transform: translateX(0);

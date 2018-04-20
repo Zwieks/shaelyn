@@ -10,6 +10,10 @@
 	.flex-direction(column);
 	min-height: calc(100vh ~'-' @headerHeight);
 
+	#js-loggedin & {
+		min-height: calc(100vh ~'-' @headerHeight*0.6);
+	}
+
 	@media @navBreakPoint {
 		min-height: calc(100vh ~'-' @responsiveHeaderHeight);
 	}

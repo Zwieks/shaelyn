@@ -18,6 +18,11 @@ body {
     & when (@responsive = true) {
         & when (@fixedHeader = true) {
             padding-top: @headerHeight;
+
+            &#js-loggedin {
+                padding-top: @headerHeight*0.6;
+            }
+
             @media @navBreakPoint {
                 padding-top: @responsiveHeaderHeight;
             }

@@ -128,7 +128,7 @@
 
 			// Close nav on click / touch outside the responsive menu
 			$(settings.navCloser).on('click', function(){
-				if(!(settings.loggedin).length) {
+				if(!$(settings.loggedin).length) {
 					self.clearNav();
 				}	
 			});

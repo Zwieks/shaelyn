@@ -52,11 +52,16 @@
     	height: auto;
     	min-height: 0;
     	margin: -@spacing/2 -@spacing/2 0;
-    	padding-top: @spacing/2;
+    	padding-top: @headerHeight*0.6;
     	padding-bottom: @spacing/2;
    		left: auto;
     	right: auto;
     	background: #0d0d0d;
+    	overflow: hidden;
+	}
+
+	.particles-animation {
+		bottom: auto;
 	}
 
 	.particles-content-wrapper {
@@ -68,7 +73,7 @@
     	position: relative;
 
     	figure {
-    		margin-bottom: @spacing/2;
+    		margin-bottom: @spacing;
     	}
 
     	img {
@@ -77,13 +82,6 @@
 	}
 
 	.editable-firebase-wrapper {
-
-		&:hover,
-		&:focus {
-			.feedback {
-				top: -0.5rem;
-			}
-		}
 
 		.feedback {
 			width: 80%;
@@ -198,6 +196,8 @@
 }
 
 #js-loggedin {
+	@navWidth: 30rem;
+
 	.nav-toggle {
 		left: 0;
 	}
