@@ -13,6 +13,7 @@
   	//Set the base containers
   	const username = document.getElementById('firebase-username');
   	const user_setting_mail = document.getElementById('firebase-setting-mail');
+  	const user_setting_notifications = document.getElementById('firebase-setting-notifications');  	
   	const image = document.getElementById('firebase-image');
 
 	firebase.auth().onAuthStateChanged((user) => {
@@ -38,12 +39,19 @@
 		  		}
 		  	});
 
+		  	// Sync object USER SETTING MAIL changes
+		  	dbRefUserSettingsObject.on('value', snap => {
+		  		if(user_setting_notifications) {
+		  			user_setting_notifications.checked = snap.val().notifications;
+		  		}
+		  	});
+
+		  	// Sync object USER SETTING NOTIFICATIONS changes
 		  	dbRefUserSettingsObject.on('value', snap => {
 		  		if(user_setting_mail) {
 		  			user_setting_mail.checked = snap.val().sendmail;
 		  		}
 		  	});
-
 
 			$('.firebase-set').on("input", function() {
 				var field = $(this).attr('field'),
