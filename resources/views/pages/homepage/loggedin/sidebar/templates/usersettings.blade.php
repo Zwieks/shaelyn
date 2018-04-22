@@ -1,5 +1,6 @@
 <!-- {{$debugpath}} -->
 <div class="settings-wrapper">
+	<h2 class="settings-title">{{ Lang::get('forms.settings.title') }}</h2>
 	<!-- MAIL -->
 	<div class="setting-item">
 		<span class="slide-label">{{ Lang::get('forms.settings.label-mail') }}</span>

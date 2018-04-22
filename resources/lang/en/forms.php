@@ -7,6 +7,7 @@ return [
     ],
     'editable' => 'Yay! you can edit this',
     'settings' => [
+    	'title' => 'Settings',
     	'label-mail' => 'Receive emails',
     	'label-notifications' => 'Show notifications',
     ],
