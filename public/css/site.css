@@ -5012,6 +5012,92 @@ form ol {
   width: 3.6rem;
   height: 3.6rem;
 }
+.settings-wrapper .setting-item {
+  display: -webkit-box;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: -ms-flex;
+  display: flex;
+}
+.settings-wrapper .slide-label {
+  -moz-flex-grow: 1;
+  -ms-flex-grow: 1;
+  -webkit-box-flex: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
+  color: #fff;
+}
+.settings-wrapper .slide-wrapper {
+  position: relative;
+}
+.settings-wrapper .slide-wrapper:hover,
+.settings-wrapper .slide-wrapper:focus {
+  cursor: pointer;
+}
+.settings-wrapper input[type=checkbox]:checked + .slide .slide-control,
+.settings-wrapper input[type=checkbox]:checked + .slide .slide-bg {
+  -webkit-transition: 0.15s ease-out;
+  transition: 0.15s ease-out;
+}
+.settings-wrapper input[type=checkbox]:checked + .slide .slide-control:after,
+.settings-wrapper input[type=checkbox]:checked + .slide .slide-bg:after {
+  -webkit-transition: 0.15s ease-out;
+  transition: 0.15s ease-out;
+}
+.settings-wrapper input[type=checkbox]:checked + .slide .slide-control {
+  left: 4.4rem;
+  right: 0;
+}
+.settings-wrapper input[type=checkbox]:checked + .slide .slide-bg {
+  background: #7bd921;
+}
+.settings-wrapper input[type=checkbox]:checked + .slide .slide-bg:after {
+  background: #66b31b;
+}
+.settings-wrapper .slide-bg {
+  border-radius: 2.4rem;
+  background: #ff4b26;
+  width: 6rem;
+  height: 2.2rem;
+  z-index: -1;
+}
+.settings-wrapper .slide-bg:after {
+  border-radius: 2.4rem 2.4rem 0 0;
+  content: '';
+  position: absolute;
+  background: #d93f21;
+  width: 100%;
+  height: 1.1rem;
+  z-index: 0;
+}
+.settings-wrapper .slide-control {
+  border-radius: 50%;
+  display: block;
+  margin: auto;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transition: 0.15s ease-out;
+  transition: 0.15s ease-out;
+  left: 1.4rem;
+  height: 3rem;
+  width: 3rem;
+  background: #e6f3ff;
+  z-index: 0;
+  margin: 0;
+}
+.settings-wrapper .slide-control:after {
+  border-radius: 0 0 2.4rem 2.4rem;
+  content: '';
+  position: absolute;
+  bottom: 0;
+  background: #cfdbe6;
+  width: 100%;
+  height: 1.5rem;
+  z-index: 0;
+}
 /* end general webbeheer form */
 /*
  *	Animating labels on focus and with value

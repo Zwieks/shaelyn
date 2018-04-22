@@ -12,12 +12,14 @@
 
   	//Set the base containers
   	const username = document.getElementById('firebase-username');
+  	const user_setting_mail = document.getElementById('firebase-setting-mail');
   	const image = document.getElementById('firebase-image');
 
 	firebase.auth().onAuthStateChanged((user) => {
 	  	if (user) {
 	      	// Create references
 		  	const dbRefUserObject = firebase.database().ref().child('Users/'+user.uid);
+		  	const dbRefUserSettingsObject = firebase.database().ref().child('UserSettings/'+user.uid);
 		  	const dbRefChatObject = firebase.database().ref().child('Chat/'+user.uid);
 		  	const dbRefFriendsObject = firebase.database().ref().child('Friends/'+user.uid);
 		  	const dbRefFeedsObject = firebase.database().ref().child('feed/'+user.uid);
@@ -36,19 +38,34 @@
 		  		}
 		  	});
 
+		  	dbRefUserSettingsObject.on('value', snap => {
+		  		if(user_setting_mail) {
+		  			user_setting_mail.checked = snap.val().sendmail;
+		  		}
+		  	});
+
 
 			$('.firebase-set').on("input", function() {
 				var field = $(this).attr('field'),
+					item = $(this).attr('item'),
 					dInput = this.value;
 
-			    UpdateField(user.uid, dInput, field);
+			    UpdateField(field, user.uid, dInput, item);
+			});
+
+			$(".firebase-set-checkbox").change(function() {
+				var field = $(this).attr('field'),
+					item = $(this).attr('item'),
+					dInput = $(this).prop('checked');
+
+			    UpdateField(field, user.uid, dInput, item);
 			});
 
 			// Update fields
-			function UpdateField(uid, content, field) {
+			function UpdateField(field, uid, content, item) {
 			  	// Write the new post's data.
 			  	var updates = {};
-			  	updates['Users/'+uid+'/'+field] = content;
+			  	updates[field+'/'+uid+'/'+item] = content;
 
 			  	return firebase.database().ref().update(updates);
 			}
