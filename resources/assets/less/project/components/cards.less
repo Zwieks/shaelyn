@@ -1,0 +1,142 @@
+.card {
+	.displayflex;
+	.flex-wrap;
+	.align-items(center);
+	width: 100%;
+	margin-bottom: @spacing/2;
+
+	&:last-child {
+		margin-bottom: 0;
+	}
+
+	.card-image-wrapper {
+		width: @spacing*2.5;
+		height: @spacing*2.5;
+		margin-right: @spacing/2;
+		position: relative;
+	}
+
+	.card-content-wrapper {
+		.flex-grow(1);
+		max-width: 70%;
+		overflow: hidden;
+	}
+
+	.card-title,
+	.card-description {
+		width: 100%;
+		display: block;
+		font-size: @XSmallHeadingSize;
+	}
+
+	.card-title {
+		font-weight: bold;
+	}
+
+	.card-description {
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		font-style: italic;
+		font-size: 1.2rem;
+	}
+
+	.card-indicator {
+		position: relative;
+		width: @spacing;
+		height: 100%;
+
+		.indicator {
+			.center;
+		}
+
+		.online-indicator {
+			&:extend(indicator all);
+			width: @spacing/2;
+			height: @spacing/2;
+			border-radius: 50%;
+			background: @errorColor;
+			float: right;
+		}
+	}
+
+	&.online {
+		.arc {
+			.animation(rotate 0.5s linear forwards);
+			.transform-origin(100% 100%);
+			.transform(rotate(0) skewX(30deg));
+			overflow: hidden;
+			position: absolute;
+			top: -0.4em; 
+			right: 50%; 
+			bottom: 50%; 
+			left: -0.4em;
+			opacity: 0;
+
+			&:before {
+				.transform(skewX(-30deg));
+				content: '';
+				box-sizing: border-box;
+				display: block;
+				border: solid 0.6rem @successColor;
+				width: 200%; height: 200%;
+				border-radius: 50%;
+			}
+		}
+
+		.online-indicator {
+			background: @successColor;
+		}
+	}
+
+	.card-meta {
+		position: relative;
+		padding-left: 2.5rem;
+		margin-right: @spacing;
+		margin-top: @spacing/4;
+
+		&:last-child {
+			margin-right: 0;
+		}
+
+		&:before {
+	    	.centerY;
+	    	content: '';
+	    	left: 0;
+			background-image: url('/img/users.svg');
+			background-size: cover;
+			width: 2rem;
+			height: 2rem;
+		}
+
+		&.items {
+			&:before {
+				background-image: url('/img/list.svg');
+				width: 1.5rem;
+				height: 1.5rem;
+			}
+		}
+	}
+
+	&.list {
+		.card-description {
+			font-style: normal;
+			padding-top: 0.3rem;
+		}
+	}
+}
+
+@keyframes rotate {
+	0%	{
+		.transform(rotate(0deg) skewX(30deg));
+		opacity: 0;
+	}
+	50% {
+		.transform(rotate(200deg) skewX(30deg));
+		opacity: 1;
+	}
+	100% {
+		.transform(rotate(400deg) skewX(30deg));
+		opacity: 0;
+	}
+}

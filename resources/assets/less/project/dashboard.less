@@ -1,0 +1,63 @@
+.dashboard-wrapper {
+	.displayflex;
+	.flex-wrap;
+	margin: 0 -@spacing/2;
+
+	.item-wrapper {
+		.flex-grow(1);
+		min-height: @spacing*20;
+		padding: @spacing/2;
+		margin-bottom: @spacing;
+
+		&.large {
+			.flex-grow(0);
+			width: 75%;
+		}
+
+		&.medium {
+			.flex-grow(0);
+			width: 50%;
+		}
+
+		&.small {
+			.flex-grow(0);
+			width: 25%;
+		}
+	}
+
+	.title-wrapper {
+		.displayflex;
+		.justify-content(center);
+		border-bottom: 0.1rem solid @borderColor;
+		margin-bottom: @spacing;
+	}
+
+	.item-title {
+		.align-self(center);
+		text-align: center;
+	    font-family: @secondaryFont;
+	    font-weight: normal;
+	    font-size: @mediumSmallHeadingSize;
+	    position: relative;
+	    display: inline-block;
+	    padding-left: 4rem;
+
+	    &:before {
+	    	.centerY;
+	    	content: '';
+	    	left: 0;
+			background-image: url('/img/astronaut.svg');
+			background-size: cover;
+			width: 3rem;
+			height: 3rem;
+		}
+	}
+
+	.item {
+		.box-shadow(0 0.1rem 0.4rem rgba(0,0,0, 0.15));
+		padding: @spacing/2 @spacing @spacing;
+		background: #fbfbfb;
+		height: 100%;
+		width: 100%;
+	}
+}

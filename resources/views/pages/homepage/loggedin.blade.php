@@ -1,5 +1,3 @@
 <!-- {{$debugpath}} -->
-<div class="home-wrapper">
-	{{--Render Loggedin Blocks --}}
-	@include('pages.homepage.loggedin.blocks.layout')
-</div>
+{{--Render Loggedin Dashboard --}}
+@include('pages.homepage.loggedin.dashboard.layout')
