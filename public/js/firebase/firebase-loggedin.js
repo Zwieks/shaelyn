@@ -18,6 +18,7 @@
   	const friends = document.getElementById('firebase-friends');
   	const feeds = document.getElementById('firebase-feeds');
   	const lists = document.getElementById('firebase-lists');
+  	const lists_details = document.getElementById('firebase-list-details');
 
 	firebase.auth().onAuthStateChanged((user) => {
 	  	if (user) {
@@ -65,20 +66,26 @@
 					owner_array.forEach(function (value, i) {
 						firebase.database().ref().child('lists/'+owner_array[i]+'/'+messages_array[i]).on('value', snap => {
 							if (messages_array[i] in list_object){
-								var item_title = '',
+								var list_items = '',
 									count = Object.keys(snap.val()).length;
 									value = messages_array[i];
 
 								$.each( snap.val(), function( key, value ) {
-									item_title = item_title+'<li>'+value.title+'</li>';
+									list_items = list_items+'<li id="'+key+'">'+value.title+'</li>';
 								});	
 
-								var html = '<div class="card list '+value+'"><div class="card-content-wrapper"><span class="card-title">'+list_object[messages_array[i]][0]+'</span><div class="card-description"><span class="card-meta friends">'+list_object[messages_array[i]][1]+'</span><span class="card-meta items">'+count+'</span></div></div><div class="card-indicator"><div class="owner-indicator"><img class="avatar" src="'+list_object[messages_array[i]][2]+'" alt="Owner image"/></div></div></div>';
-
+								var html = '<div list="'+value+'" class="card list js-list '+value+'"><div class="card-content-wrapper"><span class="card-title">'+list_object[messages_array[i]][0]+'</span><div class="card-description"><span class="card-meta friends">'+list_object[messages_array[i]][1]+'</span><span class="card-meta items">'+count+'</span></div></div><div class="card-indicator"><div class="owner-indicator"><img class="avatar" src="'+list_object[messages_array[i]][2]+'" alt="Owner image"/></div></div></div>';
+								var html_details = '<div class="detail-item detail-'+value+'"><span class="card-title">'+list_object[messages_array[i]][0]+'</span><ul>'+list_items+'</ul><button class="detail js-list-back">Go back</button></div>';
 								if(lists.getElementsByClassName(value).length > 0){
 									lists.getElementsByClassName(value)[0].innerHTML = html;
 								}else {
 								  	lists.innerHTML += html;
+								}
+
+								if(lists_details.getElementsByClassName('detail-'+value).length > 0){
+									lists_details.getElementsByClassName('detail-'+value)[0].innerHTML = html_details;
+								}else {
+								  	lists_details.innerHTML += html_details;
 								}								
 							}
 						});		
@@ -170,3 +177,16 @@
 	  	}
 	});
 }());
+
+
+// SHOW DETAIL LIST
+$(document).on("click",".js-list",function() {
+	var list_id = 'detail-'+$(this).attr('list');
+	$(this).closest('.item-wrapper').find('.item').addClass('details');
+	$(this).closest('.item-wrapper').find('.'+list_id).addClass('show');
+});
+
+$(document).on("click",".js-list-back",function() {
+	$(this).closest('.item-wrapper').find('.item').removeClass('details');
+	$(this).parent().parent().find('.show').removeClass('show');
+});	

@@ -60,4 +60,65 @@
 		height: 100%;
 		width: 100%;
 	}
+
+	.content,
+	.detail {
+		.transition;		
+	}
+
+	.content {
+		display: block;
+		opacity: 1;
+		visibility: visible;
+	}
+
+	.detail {
+		display: none;
+		opacity: 0;
+		visibility: hidden;
+		height: calc(100% ~'-' @spacing*2.5);
+	}
+
+	.details {
+		.detail-item {
+			.flex-direction(column);
+			height: 100%;
+			display: none;
+
+			ul {
+				.flex-grow(1);
+			}
+
+			button {
+				line-height: @spacing/2;
+				height: @spacing;
+			}
+
+			.card-title {
+				font-weight: bold;
+				font-size: @XSmallHeadingSize;
+			}
+
+			&.show {
+				.displayflex;
+			}
+		}
+
+		.detail,
+		.content {
+			.transition;
+		}
+
+		.detail {
+			display: block;
+			opacity: 1;
+			visibility: visible;
+		}
+
+		.content {
+			display: none;
+			opacity: 0;
+			visibility: hidden
+		}		
+	}
 }
