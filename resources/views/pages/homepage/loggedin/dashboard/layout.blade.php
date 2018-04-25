@@ -7,5 +7,5 @@
 	@include('pages.homepage.loggedin.dashboard.blocks.lists', ['size' => 'small'])
 
 	{{--Render Loggedin Chats --}}
-	@include('pages.homepage.loggedin.dashboard.blocks.chats', ['size' => 'large'])
+	@include('pages.homepage.loggedin.dashboard.blocks.chats', ['size' => 'medium'])
 </div>

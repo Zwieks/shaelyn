@@ -7993,6 +7993,11 @@ form ol {
   background: #f00;
   float: right;
 }
+.card .card-indicator .owner-indicator {
+  width: 3.5rem;
+  height: 3.5rem;
+  margin-top: 1rem;
+}
 .card.online .arc {
   -webkit-animation: rotate 0.5s linear forwards;
   animation: rotate 0.5s linear forwards;
@@ -8049,9 +8054,23 @@ form ol {
   width: 1.5rem;
   height: 1.5rem;
 }
+.card.list {
+  -moz-justify-content: space-between;
+  -ms-justify-content: space-between;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
 .card.list .card-description {
   font-style: normal;
   padding-top: 0.3rem;
+}
+.card.list .card-indicator {
+  width: 3.5rem;
+  margin-left: 1.2rem;
+}
+.card.list .card-content-wrapper {
+  max-width: none;
 }
 @-webkit-keyframes rotate {
   0% {

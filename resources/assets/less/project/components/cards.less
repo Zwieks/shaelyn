@@ -58,6 +58,12 @@
 			background: @errorColor;
 			float: right;
 		}
+
+		.owner-indicator {
+			width: 3.5rem;
+		    height: 3.5rem;
+		    margin-top: 1rem;
+		}
 	}
 
 	&.online {
@@ -119,9 +125,20 @@
 	}
 
 	&.list {
+		.justify-content(space-between);
+
 		.card-description {
 			font-style: normal;
 			padding-top: 0.3rem;
+		}
+
+		.card-indicator {
+			width: 3.5rem;
+			margin-left: @spacing/2;
+		}
+
+		.card-content-wrapper {
+			max-width: none;
 		}
 	}
 }

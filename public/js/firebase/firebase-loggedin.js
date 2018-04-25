@@ -45,7 +45,14 @@
 						if(type == 'list') {
 							var owner = item.owner,
 								friend_count = item.partyPeople.split(';').length,
+								owner_image = '',
 								message = item.message;
+
+							if(user.uid != owner) {
+								firebase.database().ref().child('Users/'+owner).on('value', snap => {
+									list_object[message].push(snap.val().image.toString());
+								});
+							}
 
 							owner_array.push(owner);
 							messages_array.push(message);
@@ -61,12 +68,12 @@
 								var item_title = '',
 									count = Object.keys(snap.val()).length;
 									value = messages_array[i];
-									console.log(count);
+
 								$.each( snap.val(), function( key, value ) {
 									item_title = item_title+'<li>'+value.title+'</li>';
 								});	
 
-								var html = '<div class="card list '+value+'"><div class="card-content-wrapper"><span class="card-title">'+list_object[messages_array[i]][0]+'</span><div class="card-description"><span class="card-meta friends">'+list_object[messages_array[i]][1]+'</span><span class="card-meta items">'+count+'</span></div></div></div>';
+								var html = '<div class="card list '+value+'"><div class="card-content-wrapper"><span class="card-title">'+list_object[messages_array[i]][0]+'</span><div class="card-description"><span class="card-meta friends">'+list_object[messages_array[i]][1]+'</span><span class="card-meta items">'+count+'</span></div></div><div class="card-indicator"><div class="owner-indicator"><img class="avatar" src="'+list_object[messages_array[i]][2]+'" alt="Owner image"/></div></div></div>';
 
 								if(lists.getElementsByClassName(value).length > 0){
 									lists.getElementsByClassName(value)[0].innerHTML = html;
