@@ -85,7 +85,7 @@
 			height: 100%;
 			display: none;
 
-			ul {
+			.card-main {
 				.flex-grow(1);
 			}
 
@@ -121,4 +121,20 @@
 			visibility: hidden
 		}		
 	}
+
+	.detail-members {
+		.flex-grow(0);
+		margin: 0 0 @spacing/4 0;
+
+		.member {
+			width: 3rem;
+			display: inline-block;
+			margin-right: @spacing/4;
+
+			&:last-child {
+				margin-right: 0;
+			}
+		}
+	}
+
 }

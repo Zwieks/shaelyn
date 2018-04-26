@@ -8224,7 +8224,7 @@ form ol {
   height: 100%;
   display: none;
 }
-.dashboard-wrapper .details .detail-item ul {
+.dashboard-wrapper .details .detail-item .card-main {
   -moz-flex-grow: 1;
   -ms-flex-grow: 1;
   -webkit-box-flex: 1;
@@ -8260,6 +8260,22 @@ form ol {
   display: none;
   opacity: 0;
   visibility: hidden;
+}
+.dashboard-wrapper .detail-members {
+  -moz-flex-grow: 0;
+  -ms-flex-grow: 0;
+  -webkit-box-flex: 0;
+      -ms-flex-positive: 0;
+          flex-grow: 0;
+  margin: 0 0 0.6rem 0;
+}
+.dashboard-wrapper .detail-members .member {
+  width: 3rem;
+  display: inline-block;
+  margin-right: 0.6rem;
+}
+.dashboard-wrapper .detail-members .member:last-child {
+  margin-right: 0;
 }
 /* Third party */
 /* owl carousel */

@@ -38,31 +38,43 @@
 		  			var feeds_object = snap.val(),
 		  				owner_array = [],
 		  				messages_array = [],
+		  				friend_array = [],
+		  				friend_list = '',
 						list_object = {};
 
 					$.each( feeds_object, function( key, item ) {
 						var type = item.type;
 
 						if(type == 'list') {
+							friend_array = item.partyPeople.split(';');
+
 							var owner = item.owner,
-								friend_count = item.partyPeople.split(';').length,
+								friend_count = friend_array.length,
 								owner_image = '',
 								message = item.message;
 
+								list_object[message] = [];
+
 							if(user.uid != owner) {
 								firebase.database().ref().child('Users/'+owner).on('value', snap => {
-									list_object[message].push(snap.val().image.toString());
+									list_object[message]['image'] = snap.val().image.toString();
 								});
 							}
 
 							owner_array.push(owner);
 							messages_array.push(message);
 
-							list_object[message] = [];
-							list_object[message].push(item.title);
-							list_object[message].push(friend_count);
+							list_object[message]['title'] = item.title;
+							list_object[message]['count'] = friend_count;
 						}
 					});
+
+					friend_array.forEach(function (user, i) {
+						firebase.database().ref().child('Users/'+user).on('value', snap => {
+							friend_list = friend_list+'<li class="member"><img class="avatar" src="'+snap.val().image+'" title="'+snap.val().name+'" alt="member"/></li>';
+						});
+					});	
+
 					owner_array.forEach(function (value, i) {
 						firebase.database().ref().child('lists/'+owner_array[i]+'/'+messages_array[i]).on('value', snap => {
 							if (messages_array[i] in list_object){
@@ -74,8 +86,8 @@
 									list_items = list_items+'<li id="'+key+'">'+value.title+'</li>';
 								});	
 
-								var html = '<div list="'+value+'" class="card list js-list '+value+'"><div class="card-content-wrapper"><span class="card-title">'+list_object[messages_array[i]][0]+'</span><div class="card-description"><span class="card-meta friends">'+list_object[messages_array[i]][1]+'</span><span class="card-meta items">'+count+'</span></div></div><div class="card-indicator"><div class="owner-indicator"><img class="avatar" src="'+list_object[messages_array[i]][2]+'" alt="Owner image"/></div></div></div>';
-								var html_details = '<div class="detail-item detail-'+value+'"><span class="card-title">'+list_object[messages_array[i]][0]+'</span><ul>'+list_items+'</ul><button class="detail js-list-back">Go back</button></div>';
+								var html = '<div list="'+value+'" class="card list js-list '+value+'"><div class="card-content-wrapper"><span class="card-title">'+list_object[messages_array[i]]['title']+'</span><div class="card-description"><span class="card-meta friends">'+list_object[messages_array[i]]['count']+'</span><span class="card-meta items">'+count+'</span></div></div><div class="card-indicator"><div class="owner-indicator"><img class="avatar" src="'+list_object[messages_array[i]]['image']+'" alt="Owner image"/></div></div></div>';
+								var html_details = '<div class="detail-item detail-'+value+'"><ul class="detail-members">'+friend_list+'</ul><span class="card-title">'+list_object[messages_array[i]]['title']+'</span><ul class="card-main">'+list_items+'</ul><button class="detail js-list-back">Go back</button></div>';
 								if(lists.getElementsByClassName(value).length > 0){
 									lists.getElementsByClassName(value)[0].innerHTML = html;
 								}else {
@@ -83,7 +95,15 @@
 								}
 
 								if(lists_details.getElementsByClassName('detail-'+value).length > 0){
-									lists_details.getElementsByClassName('detail-'+value)[0].innerHTML = html_details;
+									var object = $(lists_details.getElementsByClassName('detail-'+value)),
+										show = false;
+									if (object.hasClass('show')) {
+										show = true;
+										html_details = $(html_details).addClass('show');
+									}
+
+									object.replaceWith(html_details);
+
 								}else {
 								  	lists_details.innerHTML += html_details;
 								}								
