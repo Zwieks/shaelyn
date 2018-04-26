@@ -83,7 +83,7 @@
 									value = messages_array[i];
 
 								$.each( snap.val(), function( key, value ) {
-									list_items = list_items+'<li id="'+key+'">'+value.title+'</li>';
+									list_items = list_items+'<li id="'+key+'"><span class="list-item-title">'+value.title+'</span><div class="list-item-detail">'+value.detail+'</div></li>';
 								});	
 
 								var html = '<div list="'+value+'" class="card list js-list '+value+'"><div class="card-content-wrapper"><span class="card-title">'+list_object[messages_array[i]]['title']+'</span><div class="card-description"><span class="card-meta friends">'+list_object[messages_array[i]]['count']+'</span><span class="card-meta items">'+count+'</span></div></div><div class="card-indicator"><div class="owner-indicator"><img class="avatar" src="'+list_object[messages_array[i]]['image']+'" alt="Owner image"/></div></div></div>';

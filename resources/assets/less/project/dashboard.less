@@ -87,6 +87,11 @@
 
 			.card-main {
 				.flex-grow(1);
+
+				li {
+					padding: @spacing/4 0;
+					border-bottom: 0.1rem solid @borderColor;
+				}
 			}
 
 			button {
@@ -96,12 +101,21 @@
 
 			.card-title {
 				font-weight: bold;
-				font-size: @XSmallHeadingSize;
+				font-size: 1.5rem;
 			}
 
 			&.show {
 				.displayflex;
 			}
+		}
+
+		.list-item-detail {
+			margin-left: @spacing/2;
+			font-size: @spacing/2;
+		}
+
+		.list-item-title {
+			font-weight: 600;
 		}
 
 		.detail,

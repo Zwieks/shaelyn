@@ -8231,13 +8231,17 @@ form ol {
       -ms-flex-positive: 1;
           flex-grow: 1;
 }
+.dashboard-wrapper .details .detail-item .card-main li {
+  padding: 0.6rem 0;
+  border-bottom: 0.1rem solid #e5e5e5;
+}
 .dashboard-wrapper .details .detail-item button {
   line-height: 1.2rem;
   height: 2.4rem;
 }
 .dashboard-wrapper .details .detail-item .card-title {
   font-weight: bold;
-  font-size: 1.3rem;
+  font-size: 1.5rem;
 }
 .dashboard-wrapper .details .detail-item.show {
   display: -webkit-box;
@@ -8245,6 +8249,13 @@ form ol {
   display: -ms-flexbox;
   display: -ms-flex;
   display: flex;
+}
+.dashboard-wrapper .details .list-item-detail {
+  margin-left: 1.2rem;
+  font-size: 1.2rem;
+}
+.dashboard-wrapper .details .list-item-title {
+  font-weight: 600;
 }
 .dashboard-wrapper .details .detail,
 .dashboard-wrapper .details .content {
