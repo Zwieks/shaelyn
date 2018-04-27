@@ -84,7 +84,7 @@
 									value = messages_array[i];
 
 								$.each( snap.val(), function( key, value ) {
-									list_items = list_items+'<li id="'+key+'"><div class="list-wrapper"><span class="list-item-title">'+value.title+'</span><div class="list-item-detail">'+value.detail+'</div></div><form><fieldset><ul class="velden"><li class="form-input-checkbox"><input class="checkbox" type="checkbox" id="filter-'+key+'"/><label for="filter-'+key+'" class="option-label"></label></li></ul><fiedset></form></li>';
+									list_items = list_items+'<li id="'+key+'"><span class="firebase-remove-item remove-item"></span><div class="list-wrapper"><span class="list-item-title">'+value.title+'</span><div class="list-item-detail">'+value.detail+'</div></div><form><fieldset><ul class="velden"><li class="form-input-checkbox"><input class="checkbox" type="checkbox" id="filter-'+key+'"/><label for="filter-'+key+'" class="option-label"></label></li></ul><fiedset></form></li>';
 								});	
 
 								var html = '<div list="'+value+'" class="card list js-list '+value+'"><div class="card-content-wrapper"><div class="card-description"><span class="card-meta friends">'+list_object[messages_array[i]]['count']+'</span><span class="card-meta items">'+count+'</span></div></div><div class="card-indicator"><div class="owner-indicator"><img class="avatar" src="'+list_object[messages_array[i]]['image']+'" alt="Owner image"/></div></div></div>';
@@ -220,12 +220,21 @@ $(document).on("click",".js-list",function() {
 	var list_id = 'detail-'+$(this).attr('list');
 	var title_id = 'title-'+$(this).attr('list');
 
-	$(this).closest('.item-wrapper').find('.item').addClass('details');
+	$(this).closest('.item-wrapper').find('.item').addClass('details').delay(200).queue(function(next){
+    	$(this).addClass("active");
+    	next();
+	});
 	$(this).closest('.item-wrapper').find('.'+list_id).addClass('show');
 	$(this).closest('.item-wrapper').find('.'+title_id).addClass('show');
 });
 
 $(document).on("click",".js-list-back",function() {
-	$(this).closest('.item-wrapper').find('.item').removeClass('details');
+	$(this).closest('.item-wrapper').find('.item').removeClass('details active');
 	$(this).parent().parent().parent().find('.show').removeClass('show');
+	$('#js-remove-list-items').removeClass('active');
 });	
+
+$(document).on("click","#js-remove-list-items",function() {
+	$(this).toggleClass('active');
+	$(this).parent().find('.remove-item').toggleClass('show');
+});

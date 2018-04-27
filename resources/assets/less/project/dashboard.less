@@ -59,8 +59,7 @@
 		width: 100%;
 	}
 
-	.content,
-	.detail {
+	.content {
 		.transition;		
 	}
 
@@ -72,22 +71,43 @@
 
 	.detail {
 		display: none;
-		opacity: 0;
-		visibility: hidden;
 		height: calc(100% ~'-' @spacing*2.5);
 	}
 
-	.back {
+	.icon {
+		.transition;
 		.border-radius(50%);
 		display: none;
 		background: #fbfbfb;
 		position: absolute;
 		top: -@spacing/2;
-		left: -@spacing/2;
+		left: -1.7rem;
 		width: 3rem;
 		height: 3rem;
 		z-index: 1;
 		cursor: pointer;
+
+		&:hover,
+		&:focus {
+			.scale(1.1);
+		}
+
+		&.remove {
+			top: 3rem;
+			width: 2.9rem;
+			height: 2.9rem;
+			border: 2px solid #e1e1e1;
+
+			img {
+				.center;
+				width: 1.5rem;
+				height: 1.5rem;
+			}
+		}
+
+		&.active {
+			border-color: #cd0d35;		
+		}
 	}	
 
 	.title-wrapper {
@@ -119,14 +139,51 @@
 		}
 	}
 
+	.remove-item {
+		.transition;
+		background-image: url('/img/x-button.svg');
+		background-size: cover;
+		width: 0;
+		height: 0;
+		margin-right: 0;
+		visibility: hidden;
+		opacity: 0;
+		cursor: pointer;
+
+		&.show {
+			visibility: visible;
+			opacity: 1;
+			width: 2rem;
+			height: 2rem;
+			margin-right: @spacing/2;					
+		}
+	}
+
 	.details {
 		position: relative;
+
+		> div {
+			opacity: 0;
+			visibility: hidden;
+		}
+
+		&.active {
+			> div {
+				.transition(0.5s);
+				opacity: 1;
+				visibility: visible;
+			}			
+		}
 
 		.item-title {
 			display: none;
 		}
 
-		.back {
+		.icon {
+			display: block;
+		}
+
+		.detail {
 			display: block;
 		}
 
@@ -155,7 +212,6 @@
 				li {
 					&:not(.form-input-checkbox) {
 						.displayflex;
-						.justify-content(space-between);
 						.align-items(center);
 						padding: 0.8rem 0;
 						border-bottom: 0.1rem solid @borderColor;
@@ -199,23 +255,14 @@
 		}
 
 		.list-wrapper {
+			.flex-grow(1);
 			display: block;
+			margin-right: @spacing/2;
 		}
 
 		.list-item-detail {
 			font-style: italic;
 			font-size: 1.1rem;
-		}
-
-		.detail,
-		.content {
-			.transition;
-		}
-
-		.detail {
-			display: block;
-			opacity: 1;
-			visibility: visible;
 		}
 
 		.content {
