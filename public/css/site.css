@@ -8304,7 +8304,6 @@ form ol {
 .dashboard-wrapper .details > div {
   opacity: 0;
   visibility: hidden;
-  border-bottom-color: #fbfbfb;
 }
 .dashboard-wrapper .details.active > div {
   -webkit-transition: 0.3s;
