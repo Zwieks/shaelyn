@@ -25,13 +25,6 @@
 		}
 	}
 
-	.title-wrapper {
-		.displayflex;
-		.justify-content(center);
-		border-bottom: 0.1rem solid @borderColor;
-		margin-bottom: @spacing;
-	}
-
 	.item-title {
 		.align-self(center);
 		text-align: center;
@@ -51,6 +44,11 @@
 			width: 3rem;
 			height: 3rem;
 		}
+	}
+
+	.list-item-title {
+		font-weight: 600;
+		font-size: 1.1rem;
 	}
 
 	.item {
@@ -79,7 +77,73 @@
 		height: calc(100% ~'-' @spacing*2.5);
 	}
 
+	.back {
+		.border-radius(50%);
+		display: none;
+		background: #fbfbfb;
+		position: absolute;
+		top: -@spacing/2;
+		left: -@spacing/2;
+		width: 3rem;
+		height: 3rem;
+		z-index: 1;
+		cursor: pointer;
+	}	
+
+	.title-wrapper {
+		.displayflex;
+		.justify-content(center);
+		border-bottom: 0.1rem solid @borderColor;
+		margin-bottom: 0;
+		position: relative;
+
+		.list-item-title {
+			.align-self(center);
+			display: none;
+			text-align: center;
+		    font-family: @secondaryFont;
+		    font-weight: normal;
+		    font-size: @MediumSmallHeadingSize;
+		    position: relative;
+		    padding-left: 0;
+
+		    &:before {
+		    	.centerY;
+		    	content: '';
+		    	left: 0;
+				background-image: url('/img/astronaut.svg');
+				background-size: cover;
+				width: 3rem;
+				height: 3rem;
+			}
+		}
+	}
+
 	.details {
+		position: relative;
+
+		.item-title {
+			display: none;
+		}
+
+		.back {
+			display: block;
+		}
+
+		.title-wrapper {
+			.list-item-title {
+				display: none;
+
+				&.show {
+					display: block;
+
+					&:before {
+						display: none;
+					}
+				}
+			}	
+		}
+
 		.detail-item {
 			.flex-direction(column);
 			height: 100%;
@@ -89,8 +153,33 @@
 				.flex-grow(1);
 
 				li {
-					padding: @spacing/4 0;
-					border-bottom: 0.1rem solid @borderColor;
+					&:not(.form-input-checkbox) {
+						.displayflex;
+						.justify-content(space-between);
+						.align-items(center);
+						padding: 0.8rem 0;
+						border-bottom: 0.1rem solid @borderColor;
+					}
+				}
+
+				.form-input-checkbox {
+					width: auto;
+					margin: 0;
+				}
+
+				.velden {
+					label {
+						padding: 0;
+						margin: 0;
+						width: 2rem;
+						height: 2rem;
+
+						&:before,
+						&:after {
+							width: 2rem;
+							height: 2rem;
+						}						
+					}
 				}
 			}
 
@@ -101,7 +190,7 @@
 
 			.card-title {
 				font-weight: bold;
-				font-size: 1.5rem;
+				font-size: 1.3rem;
 			}
 
 			&.show {
@@ -109,13 +198,13 @@
 			}
 		}
 
-		.list-item-detail {
-			margin-left: @spacing/2;
-			font-size: @spacing/2;
+		.list-wrapper {
+			display: block;
 		}
 
-		.list-item-title {
-			font-weight: 600;
+		.list-item-detail {
+			font-style: italic;
+			font-size: 1.1rem;
 		}
 
 		.detail,
@@ -138,7 +227,11 @@
 
 	.detail-members {
 		.flex-grow(0);
-		margin: 0 0 @spacing/4 0;
+		position: absolute;
+		top: -@spacing/2;
+		right: -1.5rem;
+		width: 3rem;
+		margin-bottom: 0;
 
 		.member {
 			width: 3rem;

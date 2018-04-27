@@ -19,6 +19,7 @@
   	const feeds = document.getElementById('firebase-feeds');
   	const lists = document.getElementById('firebase-lists');
   	const lists_details = document.getElementById('firebase-list-details');
+  	const lists_title = document.getElementById('firebase-list-title');
 
 	firebase.auth().onAuthStateChanged((user) => {
 	  	if (user) {
@@ -83,11 +84,13 @@
 									value = messages_array[i];
 
 								$.each( snap.val(), function( key, value ) {
-									list_items = list_items+'<li id="'+key+'"><span class="list-item-title">'+value.title+'</span><div class="list-item-detail">'+value.detail+'</div></li>';
+									list_items = list_items+'<li id="'+key+'"><div class="list-wrapper"><span class="list-item-title">'+value.title+'</span><div class="list-item-detail">'+value.detail+'</div></div><form><fieldset><ul class="velden"><li class="form-input-checkbox"><input class="checkbox" type="checkbox" id="filter-'+key+'"/><label for="filter-'+key+'" class="option-label"></label></li></ul><fiedset></form></li>';
 								});	
 
-								var html = '<div list="'+value+'" class="card list js-list '+value+'"><div class="card-content-wrapper"><span class="card-title">'+list_object[messages_array[i]]['title']+'</span><div class="card-description"><span class="card-meta friends">'+list_object[messages_array[i]]['count']+'</span><span class="card-meta items">'+count+'</span></div></div><div class="card-indicator"><div class="owner-indicator"><img class="avatar" src="'+list_object[messages_array[i]]['image']+'" alt="Owner image"/></div></div></div>';
-								var html_details = '<div class="detail-item detail-'+value+'"><ul class="detail-members">'+friend_list+'</ul><span class="card-title">'+list_object[messages_array[i]]['title']+'</span><ul class="card-main">'+list_items+'</ul><button class="detail js-list-back">Go back</button></div>';
+								var html = '<div list="'+value+'" class="card list js-list '+value+'"><div class="card-content-wrapper"><div class="card-description"><span class="card-meta friends">'+list_object[messages_array[i]]['count']+'</span><span class="card-meta items">'+count+'</span></div></div><div class="card-indicator"><div class="owner-indicator"><img class="avatar" src="'+list_object[messages_array[i]]['image']+'" alt="Owner image"/></div></div></div>';
+								var html_details = '<div class="detail-item detail-'+value+'"><ul class="detail-members">'+friend_list+'</ul><ul class="card-main">'+list_items+'</ul></div>';
+								var html_title ='<h3 class="list-item-title title-'+value+'">'+list_object[messages_array[i]]['title']+'</h3>';
+
 								if(lists.getElementsByClassName(value).length > 0){
 									lists.getElementsByClassName(value)[0].innerHTML = html;
 								}else {
@@ -106,7 +109,20 @@
 
 								}else {
 								  	lists_details.innerHTML += html_details;
-								}								
+								}	
+
+								if(lists_title.getElementsByClassName('title-'+value).length > 0) {
+									var object = $(lists_title.getElementsByClassName('title-'+value)),
+										show = false;
+									if (lists_details.hasClass('show')) {
+										show = true;
+										html_title = $(html_title).addClass('show');
+									}
+
+									object.replaceWith(html_title);
+								}else {
+									lists_title.innerHTML += html_title;
+								}						
 							}
 						});		
 					});
@@ -202,11 +218,14 @@
 // SHOW DETAIL LIST
 $(document).on("click",".js-list",function() {
 	var list_id = 'detail-'+$(this).attr('list');
+	var title_id = 'title-'+$(this).attr('list');
+
 	$(this).closest('.item-wrapper').find('.item').addClass('details');
 	$(this).closest('.item-wrapper').find('.'+list_id).addClass('show');
+	$(this).closest('.item-wrapper').find('.'+title_id).addClass('show');
 });
 
 $(document).on("click",".js-list-back",function() {
 	$(this).closest('.item-wrapper').find('.item').removeClass('details');
-	$(this).parent().parent().find('.show').removeClass('show');
+	$(this).parent().parent().parent().find('.show').removeClass('show');
 });	
