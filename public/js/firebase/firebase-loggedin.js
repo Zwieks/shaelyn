@@ -87,7 +87,7 @@
 									list_items = list_items+'<li id="'+key+'"><span class="firebase-remove-item remove-item"></span><div class="list-wrapper"><span class="list-item-title">'+value.title+'</span><div class="list-item-detail">'+value.detail+'</div></div><form><fieldset><ul class="velden"><li class="form-input-checkbox"><input class="checkbox" type="checkbox" id="filter-'+key+'"/><label for="filter-'+key+'" class="option-label"></label></li></ul><fiedset></form></li>';
 								});	
 
-								var html = '<div list="'+value+'" class="card list js-list '+value+'"><div class="card-content-wrapper"><div class="card-description"><span class="card-meta friends">'+list_object[messages_array[i]]['count']+'</span><span class="card-meta items">'+count+'</span></div></div><div class="card-indicator"><div class="owner-indicator"><img class="avatar" src="'+list_object[messages_array[i]]['image']+'" alt="Owner image"/></div></div></div>';
+								var html = '<div list="'+value+'" class="card list js-list '+value+'"><div class="card-content-wrapper"><span class="card-title">'+list_object[messages_array[i]]['title']+'</span><div class="card-description"><span class="card-meta friends">'+list_object[messages_array[i]]['count']+'</span><span class="card-meta items">'+count+'</span></div></div><div class="card-indicator"><div class="owner-indicator"><img class="avatar" src="'+list_object[messages_array[i]]['image']+'" alt="Owner image"/></div></div></div>';
 								var html_details = '<div class="detail-item detail-'+value+'"><ul class="detail-members">'+friend_list+'</ul><ul class="card-main">'+list_items+'</ul></div>';
 								var html_title ='<h3 class="list-item-title title-'+value+'">'+list_object[messages_array[i]]['title']+'</h3>';
 
@@ -220,7 +220,7 @@ $(document).on("click",".js-list",function() {
 	var list_id = 'detail-'+$(this).attr('list');
 	var title_id = 'title-'+$(this).attr('list');
 
-	$(this).closest('.item-wrapper').find('.item').addClass('details').delay(200).queue(function(next){
+	$(this).closest('.item-wrapper').find('.item').addClass('details').delay(100).queue(function(next){
     	$(this).addClass("active");
     	next();
 	});
@@ -229,7 +229,13 @@ $(document).on("click",".js-list",function() {
 });
 
 $(document).on("click",".js-list-back",function() {
-	$(this).closest('.item-wrapper').find('.item').removeClass('details active');
+	$(this).closest('.item-wrapper').find('.item').delay(100).queue(function(next){
+    	$(this).removeClass("active").delay(100).queue(function(next){
+	    	$(this).removeClass("details");
+	    	next();
+		});
+    	next();
+	});
 	$(this).parent().parent().parent().find('.show').removeClass('show');
 	$('#js-remove-list-items').removeClass('active');
 });	

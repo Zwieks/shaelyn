@@ -8203,8 +8203,6 @@ form ol {
   height: calc(100% - 6rem);
 }
 .dashboard-wrapper .icon {
-  -webkit-transition: 0.15s ease-out;
-  transition: 0.15s ease-out;
   border-radius: 50%;
   display: none;
   background: #fbfbfb;
@@ -8253,7 +8251,7 @@ form ol {
       -ms-flex-pack: center;
           justify-content: center;
   border-bottom: 0.1rem solid #e5e5e5;
-  margin-bottom: 0;
+  margin-bottom: 1.2rem;
   position: relative;
 }
 .dashboard-wrapper .title-wrapper .list-item-title {
@@ -8306,10 +8304,11 @@ form ol {
 .dashboard-wrapper .details > div {
   opacity: 0;
   visibility: hidden;
+  border-bottom-color: #fbfbfb;
 }
 .dashboard-wrapper .details.active > div {
-  -webkit-transition: 0.5s;
-  transition: 0.5s;
+  -webkit-transition: 0.3s;
+  transition: 0.3s;
   opacity: 1;
   visibility: visible;
 }
@@ -8321,6 +8320,9 @@ form ol {
 }
 .dashboard-wrapper .details .detail {
   display: block;
+}
+.dashboard-wrapper .details .title-wrapper {
+  margin-bottom: 0;
 }
 .dashboard-wrapper .details .title-wrapper .list-item-title {
   display: none;

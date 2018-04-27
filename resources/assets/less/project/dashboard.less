@@ -73,9 +73,7 @@
 		display: none;
 		height: calc(100% ~'-' @spacing*2.5);
 	}
-
 	.icon {
-		.transition;
 		.border-radius(50%);
 		display: none;
 		background: #fbfbfb;
@@ -114,7 +112,7 @@
 		.displayflex;
 		.justify-content(center);
 		border-bottom: 0.1rem solid @borderColor;
-		margin-bottom: 0;
+		margin-bottom: @spacing/2;
 		position: relative;
 
 		.list-item-title {
@@ -165,11 +163,12 @@
 		> div {
 			opacity: 0;
 			visibility: hidden;
+			border-bottom-color: #fbfbfb;
 		}
 
 		&.active {
 			> div {
-				.transition(0.5s);
+				.transition(0.3s);
 				opacity: 1;
 				visibility: visible;
 			}			
@@ -188,6 +187,8 @@
 		}
 
 		.title-wrapper {
+			margin-bottom: 0;
+
 			.list-item-title {
 				display: none;
 
