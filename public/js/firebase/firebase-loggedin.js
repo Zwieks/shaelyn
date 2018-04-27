@@ -88,7 +88,7 @@
 								});	
 
 								var html = '<div list="'+value+'" class="card list js-list '+value+'"><div class="card-content-wrapper"><span class="card-title">'+list_object[messages_array[i]]['title']+'</span><div class="card-description"><span class="card-meta friends">'+list_object[messages_array[i]]['count']+'</span><span class="card-meta items">'+count+'</span></div></div><div class="card-indicator"><div class="owner-indicator"><img class="avatar" src="'+list_object[messages_array[i]]['image']+'" alt="Owner image"/></div></div></div>';
-								var html_details = '<div class="detail-item detail-'+value+'"><ul class="detail-members">'+friend_list+'</ul><ul class="card-main">'+list_items+'</ul></div>';
+								var html_details = '<div ref="'+user.uid+'" class="detail-item detail-'+value+'"><ul class="detail-members">'+friend_list+'</ul><ul class="card-main">'+list_items+'</ul></div>';
 								var html_title ='<h3 class="list-item-title title-'+value+'">'+list_object[messages_array[i]]['title']+'</h3>';
 
 								if(lists.getElementsByClassName(value).length > 0){
@@ -244,3 +244,42 @@ $(document).on("click","#js-remove-list-items",function() {
 	$(this).toggleClass('active');
 	$(this).parent().find('.remove-item').toggleClass('show');
 });
+
+$(document).on("click",".firebase-remove-item",function() {
+	var classes = $(this).closest('.detail-item').attr('class').split(' '),
+		uid = $(this).closest('.detail-item').attr('ref'),
+		itemId = $(this).parent().attr('id'),
+		feedId = '';
+
+	classes.forEach(function (item, i) {
+	 	if (item.indexOf("detail--") >= 0) {
+	 		feedId = item.replace("detail-", "");
+	 	}
+	});
+	
+	if(feedId != '' && typeof uid != 'undefined') {
+		var people = getFeedPartyPeople(uid, feedId);
+
+		people.forEach(function (user, i) {
+			deleteListItem(user, feedId, itemId);
+		});
+	}
+
+	//deleteListItem();
+	//return firebase.database().ref().update(updates);
+});
+
+
+function getFeedPartyPeople(uId, feedId) {
+	var people_array
+	firebase.database().ref().child('feed/'+uId+'/'+feedId).on('value', snap => {
+		people_array = snap.val().partyPeople.split(';');
+		return people_array;	
+	});
+
+	return people_array
+}
+
+function deleteListItem(uId, listId, itemId) {
+	return firebase.database().ref().child('lists/'+uId+'/'+listId+'/'+itemId).remove();
+}
