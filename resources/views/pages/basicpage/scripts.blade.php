@@ -17,6 +17,10 @@
 <script type="text/javascript" src="{{ URL::asset('js/jquery.parallax.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/bootstrap/modal.js') }}"></script>
 
+<!-- FIREBASE DOM FUNCTIONALITES -->
+<script type="text/javascript" src="{{ URL::asset('js/firebase/firebase-feeds.js') }}"></script>
+<script type="text/javascript" src="{{ URL::asset('js/firebase/firebase-lists.js') }}"></script>
+
 @hasSection('headeranimation')
 	@yield('headeranimation')
 @endif

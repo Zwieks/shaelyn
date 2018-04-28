@@ -8,6 +8,7 @@
     	storageBucket: "shaelyn-487ff.appspot.com",
     	messagingSenderId: "188207705889"
   	};
+
   	firebase.initializeApp(config);
 
   	//Set the base containers
@@ -37,92 +38,103 @@
 			dbRefFeedsObject.on('value', snap => {
 				if(lists) {
 		  			var feeds_object = snap.val(),
+		  				user_feeds = {},
 		  				owner_array = [],
 		  				messages_array = [],
 		  				friend_array = [],
-		  				friend_list = '',
-						list_object = {};
+		  				friend_count = '';
 
 					$.each( feeds_object, function( key, item ) {
 						var type = item.type;
 
 						if(type == 'list') {
-							friend_array = item.partyPeople.split(';');
-
 							var owner = item.owner,
-								friend_count = friend_array.length,
 								owner_image = '',
 								message = item.message;
 
-								list_object[message] = [];
+							friend_array = item.partyPeople.split(';');
+							friend_count = friend_array.length;
+							user_feeds[message] = [];
+
+							user_feeds[message]['listId'] = key;
+							user_feeds[message]['userId'] = user.uid;
+							user_feeds[message]['owner'] = owner;
+							user_feeds[message]['title'] = item.title;
+							user_feeds[message]['friendsCount'] = friend_count;
+							user_feeds[message]['friends'] = friend_array;
 
 							if(user.uid != owner) {
 								firebase.database().ref().child('Users/'+owner).on('value', snap => {
-									list_object[message]['image'] = snap.val().image.toString();
+									user_feeds[message]['ownerImage'] = snap.val().image.toString();
 								});
+							} else {
+								user_feeds[message]['ownerImage'] = '';
 							}
 
 							owner_array.push(owner);
 							messages_array.push(message);
-
-							list_object[message]['title'] = item.title;
-							list_object[message]['count'] = friend_count;
 						}
 					});
 
-					friend_array.forEach(function (user, i) {
-						firebase.database().ref().child('Users/'+user).on('value', snap => {
-							friend_list = friend_list+'<li class="member"><img class="avatar" src="'+snap.val().image+'" title="'+snap.val().name+'" alt="member"/></li>';
-						});
-					});	
+					$.each( user_feeds, function( key, items ) {
+						var HTML_friend_list = '',
+							HTML_list_items = '';
 
-					owner_array.forEach(function (value, i) {
-						firebase.database().ref().child('lists/'+owner_array[i]+'/'+messages_array[i]).on('value', snap => {
-							if (messages_array[i] in list_object){
-								var list_items = '',
-									count = Object.keys(snap.val()).length;
-									value = messages_array[i];
+						items['friends'].forEach(function (friend, i) {
+							firebase.database().ref().child('Users/'+friend).on('value', snap => {
+								HTML_friend_list = HTML_friend_list+'<li class="member"><img class="avatar" src="'+snap.val().image+'" title="'+snap.val().name+'" alt="member"/></li>';
+							});
+						});
+
+						firebase.database().ref().child('lists/'+items['owner']+'/'+items['listId']).on('value', snap => {
+							if (snap.val() != null) {
+								items['totalItems'] = Object.keys(snap.val()).length;
+								items['items'] = snap.val();
 
 								$.each( snap.val(), function( key, value ) {
-									list_items = list_items+'<li id="'+key+'"><span class="firebase-remove-item remove-item"></span><div class="list-wrapper"><span class="list-item-title">'+value.title+'</span><div class="list-item-detail">'+value.detail+'</div></div><form><fieldset><ul class="velden"><li class="form-input-checkbox"><input class="checkbox" type="checkbox" id="filter-'+key+'"/><label for="filter-'+key+'" class="option-label"></label></li></ul><fiedset></form></li>';
-								});	
+									HTML_list_items = HTML_list_items+'<li id="'+key+'"><span class="firebase-remove-item remove-item"></span><div class="list-wrapper"><span class="list-item-title">'+value.title+'</span><div class="list-item-detail">'+value.detail+'</div></div><form><fieldset><ul class="velden"><li class="form-input-checkbox"><input class="checkbox" type="checkbox" id="filter-'+key+'"/><label for="filter-'+key+'" class="option-label"></label></li></ul><fiedset></form></li>';
+								});
+							}else {
+								items['totalItems'] = 0;
+								items['items'] = 'empty';
+							}
 
-								var html = '<div list="'+value+'" class="card list js-list '+value+'"><div class="card-content-wrapper"><span class="card-title">'+list_object[messages_array[i]]['title']+'</span><div class="card-description"><span class="card-meta friends">'+list_object[messages_array[i]]['count']+'</span><span class="card-meta items">'+count+'</span></div></div><div class="card-indicator"><div class="owner-indicator"><img class="avatar" src="'+list_object[messages_array[i]]['image']+'" alt="Owner image"/></div></div></div>';
-								var html_details = '<div ref="'+user.uid+'" class="detail-item detail-'+value+'"><ul class="detail-members">'+friend_list+'</ul><ul class="card-main">'+list_items+'</ul></div>';
-								var html_title ='<h3 class="list-item-title title-'+value+'">'+list_object[messages_array[i]]['title']+'</h3>';
+							//Set the HTML elements
+							var html = '<div list="'+items['listId']+'" class="card list js-list '+items['listId']+'"><div class="card-content-wrapper"><span class="card-title">'+items['title']+'</span><div class="card-description"><span class="card-meta friends">'+items['friendsCount']+'</span><span class="card-meta items">'+items['totalItems']+'</span></div></div><div class="card-indicator"><div class="owner-indicator"><img class="avatar" src="'+items['ownerImage']+'" alt="Owner image"/></div></div></div>';
+							var html_details = '<div ref="'+items['userId']+'" class="detail-item detail-'+items['listId']+'"><ul class="detail-members">'+HTML_friend_list+'</ul><ul class="card-main">'+HTML_list_items+'</ul></div>';
+							var html_title ='<h3 class="list-item-title title-'+items['listId']+'">'+items['title']+'</h3>';
 
-								if(lists.getElementsByClassName(value).length > 0){
-									lists.getElementsByClassName(value)[0].innerHTML = html;
-								}else {
-								  	lists.innerHTML += html;
+							if(lists.getElementsByClassName(items['listId']).length > 0){
+								lists.getElementsByClassName(items['listId'])[0].innerHTML = html;
+							}else {
+							  	lists.innerHTML += html;
+							}
+
+							if(lists_details.getElementsByClassName('detail-'+items['listId']).length > 0){
+								var object = $(lists_details.getElementsByClassName('detail-'+items['listId'])),
+									show = false;
+								if (object.hasClass('show')) {
+									show = true;
+									html_details = $(html_details).addClass('show');
 								}
 
-								if(lists_details.getElementsByClassName('detail-'+value).length > 0){
-									var object = $(lists_details.getElementsByClassName('detail-'+value)),
-										show = false;
-									if (object.hasClass('show')) {
-										show = true;
-										html_details = $(html_details).addClass('show');
-									}
+								object.replaceWith(html_details);
 
-									object.replaceWith(html_details);
+							}else {
+							  	lists_details.innerHTML += html_details;
+							}
 
-								}else {
-								  	lists_details.innerHTML += html_details;
-								}	
+							if(lists_title.getElementsByClassName('title-'+items['listId']).length > 0) {
+								var object = $(lists_title.getElementsByClassName('title-'+items['listId'])),
+									show = false;
+								if (lists_details.hasClass('show')) {
+									show = true;
+									html_title = $(html_title).addClass('show');
+								}
 
-								if(lists_title.getElementsByClassName('title-'+value).length > 0) {
-									var object = $(lists_title.getElementsByClassName('title-'+value)),
-										show = false;
-									if (lists_details.hasClass('show')) {
-										show = true;
-										html_title = $(html_title).addClass('show');
-									}
-
-									object.replaceWith(html_title);
-								}else {
-									lists_title.innerHTML += html_title;
-								}						
+								object.replaceWith(html_title);
+							}else {
+								lists_title.innerHTML += html_title;
 							}
 						});		
 					});
@@ -213,73 +225,3 @@
 	  	}
 	});
 }());
-
-
-// SHOW DETAIL LIST
-$(document).on("click",".js-list",function() {
-	var list_id = 'detail-'+$(this).attr('list');
-	var title_id = 'title-'+$(this).attr('list');
-
-	$(this).closest('.item-wrapper').find('.item').addClass('details').delay(100).queue(function(next){
-    	$(this).addClass("active");
-    	next();
-	});
-	$(this).closest('.item-wrapper').find('.'+list_id).addClass('show');
-	$(this).closest('.item-wrapper').find('.'+title_id).addClass('show');
-});
-
-$(document).on("click",".js-list-back",function() {
-	$(this).closest('.item-wrapper').find('.item').delay(100).queue(function(next){
-    	$(this).removeClass("active").delay(100).queue(function(next){
-	    	$(this).removeClass("details");
-	    	next();
-		});
-    	next();
-	});
-	$(this).parent().parent().parent().find('.show').removeClass('show');
-	$('#js-remove-list-items').removeClass('active');
-});	
-
-$(document).on("click","#js-remove-list-items",function() {
-	$(this).toggleClass('active');
-	$(this).parent().find('.remove-item').toggleClass('show');
-});
-
-$(document).on("click",".firebase-remove-item",function() {
-	var classes = $(this).closest('.detail-item').attr('class').split(' '),
-		uid = $(this).closest('.detail-item').attr('ref'),
-		itemId = $(this).parent().attr('id'),
-		feedId = '';
-
-	classes.forEach(function (item, i) {
-	 	if (item.indexOf("detail--") >= 0) {
-	 		feedId = item.replace("detail-", "");
-	 	}
-	});
-	
-	if(feedId != '' && typeof uid != 'undefined') {
-		var people = getFeedPartyPeople(uid, feedId);
-
-		people.forEach(function (user, i) {
-			deleteListItem(user, feedId, itemId);
-		});
-	}
-
-	//deleteListItem();
-	//return firebase.database().ref().update(updates);
-});
-
-
-function getFeedPartyPeople(uId, feedId) {
-	var people_array
-	firebase.database().ref().child('feed/'+uId+'/'+feedId).on('value', snap => {
-		people_array = snap.val().partyPeople.split(';');
-		return people_array;	
-	});
-
-	return people_array
-}
-
-function deleteListItem(uId, listId, itemId) {
-	return firebase.database().ref().child('lists/'+uId+'/'+listId+'/'+itemId).remove();
-}

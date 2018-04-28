@@ -8294,6 +8294,7 @@ form ol {
 .dashboard-wrapper .remove-item.show {
   visibility: visible;
   opacity: 1;
+  min-width: 2rem;
   width: 2rem;
   height: 2rem;
   margin-right: 1.2rem;
