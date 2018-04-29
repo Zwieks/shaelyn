@@ -45,11 +45,29 @@
 	// Toggles the add functionality
 	$(document).on("click","#js-add-list-items",function() {
 		$(this).toggleClass('active');
-		var key = 0;
-		$('.card-main').prepend('<li class="new-item" id="'+key+'"><span class="firebase-remove-item remove-item"></span><div class="list-wrapper"><span class="list-item-title"></span><div class="list-item-detail"></div></div><form><fieldset><ul class="velden"><li class="form-input-checkbox"><input class="checkbox" type="checkbox" id="filter-'+key+'"/><label for="filter-'+key+'" class="option-label"></label></li></ul><fiedset></form></li>').delay(100).queue(function(next){
-	    	$('#'+key).addClass("show");
-	    	next();
-		});
+		var object = $('#firebase-list-details').find('.show'),
+			owner = '',
+			listId = '',
+			detail = '',
+			orderNumber = '',
+			ticked = false,
+			title = '';
+
+	 	if (object.attr('class').indexOf("detail--") >= 0) {
+	 		var classes = object.attr('class').split(' '),
+	 			
+	 		owner = object.attr('own');
+
+			classes.forEach(function (item, i) {
+			 	if (item.indexOf("detail--") >= 0) {
+			 		listId = item.replace("detail-", "");
+			 	}
+			});
+
+			orderNumber = object.find('.card-main > li').length + 1;
+
+			writeNewListItem(owner, listId, detail, orderNumber, ticked, title);
+	 	}
 	});
 
 
@@ -87,4 +105,25 @@
 		$('#js-remove-list-items, #js-add-list-items').removeClass('active');
 		$('#focus').removeAttr('id');
 	});
+
+	function writeNewListItem(owner, listId, detail, orderNumber, ticked, title) {
+	  // A post entry.
+	  var postData = {
+    	detail: detail,
+    	orderNumber: orderNumber,
+    	ticked : ticked,
+    	title : title
+	  };
+
+	  // Get a key for a new Post.
+	  var newPostKey = firebase.database().ref().child('lists/'+owner+'/'+listId).push().key;
+
+	  // Write the new post's data simultaneously in the posts list and the user's post list.
+	  var updates = {};
+	  updates['lists/'+owner+'/'+listId +'/'+ newPostKey] = postData;
+	  //updates['/user-posts/' + uid + '/' + newPostKey] = postData;
+
+	  return firebase.database().ref().update(updates);
+	}
+
 })(jQuery);

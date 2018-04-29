@@ -100,15 +100,19 @@
 								items['items'] = snap.val();
 
 								$.each( snap.val(), function( key, value ) {
-									var focus = '';
+									var focus = '',
+										checked = '';
 									//Check if there is a focused item
 							 		if($('.firebase-set[itd="'+key+'"]').is(':focus')) {
 							 			focus = "id=focus ";
 							 		}
 
+							 		if(value.ticked == true) {
+							 			checked = 'checked';
+							 		}
 
 									firebase_settings = ''+focus+'class="list-item-title firebase-set" own="'+items['owner']+'" sub="'+items['listId']+'" field="lists" itd="'+key+'" item="title"';
-									HTML_list_items = HTML_list_items+'<li id="'+key+'"><span class="firebase-remove-item remove-item"></span><div class="list-wrapper"><div '+firebase_settings+' contentEditable="true">'+value.title+'</div><div class="list-item-detail firebase-set">'+value.detail+'</div></div><form><fieldset><ul class="velden"><li class="form-input-checkbox"><input class="checkbox" type="checkbox" id="filter-'+key+'"/><label for="filter-'+key+'" class="option-label"></label></li></ul><fiedset></form></li>';
+									HTML_list_items = HTML_list_items+'<li id="'+key+'"><span class="firebase-remove-item remove-item"></span><div class="list-wrapper"><div '+firebase_settings+' contentEditable="true">'+value.title+'</div><div class="list-item-detail firebase-set">'+value.detail+'</div></div><form><fieldset><ul class="velden"><li class="form-input-checkbox"><input class="checkbox" type="checkbox" id="filter-'+key+'" '+checked+'/><label for="filter-'+key+'" class="option-label"></label></li></ul><fiedset></form></li>';
 								});
 							}else {
 								items['totalItems'] = 0;
@@ -121,7 +125,7 @@
 
 							//Set the HTML elements
 							var html = '<div list="'+items['listId']+'" class="card list js-list '+items['listId']+'"><div class="card-content-wrapper"><span class="card-title">'+items['title']+'</span><div class="card-description"><span class="card-meta friends">'+items['friendsCount']+'</span><span class="card-meta items">'+items['totalItems']+'</span></div></div><div class="card-indicator"><div class="owner-indicator">'+HTML_owner_image+'</div></div></div>';
-							var html_details = '<div ref="'+items['userId']+'" class="detail-item detail-'+items['listId']+'"><ul class="detail-members">'+HTML_friend_list+'</ul><ul class="card-main">'+HTML_list_items+'</ul></div>';
+							var html_details = '<div own="'+items['owner']+'" ref="'+items['userId']+'" class="detail-item detail-'+items['listId']+'"><ul class="detail-members">'+HTML_friend_list+'</ul><ul class="card-main">'+HTML_list_items+'</ul></div>';
 							var html_title ='<h3 class="list-item-title title-'+items['listId']+'">'+items['title']+'</h3>';
 
 							if(lists.getElementsByClassName(items['listId']).length > 0){
