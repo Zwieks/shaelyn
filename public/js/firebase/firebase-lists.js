@@ -85,5 +85,6 @@
 		$(this).parent().parent().parent().find('.show').removeClass('show');
 		$('.card-main .new-item').remove();
 		$('#js-remove-list-items, #js-add-list-items').removeClass('active');
+		$('#focus').removeAttr('id');
 	});
 })(jQuery);
