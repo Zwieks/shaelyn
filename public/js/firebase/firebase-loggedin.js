@@ -78,15 +78,21 @@
 
 					$.each( user_feeds, function( key, items ) {
 						var HTML_friend_list = '',
+							HTML_owner_image = '',
 							HTML_list_items = '';
 
 						items['friends'].forEach(function (friend, i) {
+							HTML_friend_list = '';
+
 							firebase.database().ref().child('Users/'+friend).on('value', snap => {
 								HTML_friend_list = HTML_friend_list+'<li class="member"><img class="avatar" src="'+snap.val().image+'" title="'+snap.val().name+'" alt="member"/></li>';
 							});
 						});
 
 						firebase.database().ref().child('lists/'+items['owner']+'/'+items['listId']).on('value', snap => {
+							HTML_list_items = '';
+							HTML_owner_image = '';
+
 							if (snap.val() != null) {
 								items['totalItems'] = Object.keys(snap.val()).length;
 								items['items'] = snap.val();
@@ -99,8 +105,12 @@
 								items['items'] = 'empty';
 							}
 
+							if(items['ownerImage'] != ''){
+								HTML_owner_image = '<img class="avatar" src="'+items['ownerImage']+'" alt="Owner image"/>';
+							}
+
 							//Set the HTML elements
-							var html = '<div list="'+items['listId']+'" class="card list js-list '+items['listId']+'"><div class="card-content-wrapper"><span class="card-title">'+items['title']+'</span><div class="card-description"><span class="card-meta friends">'+items['friendsCount']+'</span><span class="card-meta items">'+items['totalItems']+'</span></div></div><div class="card-indicator"><div class="owner-indicator"><img class="avatar" src="'+items['ownerImage']+'" alt="Owner image"/></div></div></div>';
+							var html = '<div list="'+items['listId']+'" class="card list js-list '+items['listId']+'"><div class="card-content-wrapper"><span class="card-title">'+items['title']+'</span><div class="card-description"><span class="card-meta friends">'+items['friendsCount']+'</span><span class="card-meta items">'+items['totalItems']+'</span></div></div><div class="card-indicator"><div class="owner-indicator">'+HTML_owner_image+'</div></div></div>';
 							var html_details = '<div ref="'+items['userId']+'" class="detail-item detail-'+items['listId']+'"><ul class="detail-members">'+HTML_friend_list+'</ul><ul class="card-main">'+HTML_list_items+'</ul></div>';
 							var html_title ='<h3 class="list-item-title title-'+items['listId']+'">'+items['title']+'</h3>';
 

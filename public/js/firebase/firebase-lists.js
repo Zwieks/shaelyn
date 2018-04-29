@@ -41,7 +41,7 @@
 		$('#js-remove-list-items').removeClass('active');
 	});
 
-	//Triggerd when clicked on remove icon
+	//Triggerd when clicked on remove icon and REMOVING the item from DB
 	$(document).on("click",".firebase-remove-item",function() {
 		var classes = $(this).closest('.detail-item').attr('class').split(' '),
 			uid = $(this).closest('.detail-item').attr('ref'),
