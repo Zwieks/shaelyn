@@ -112,7 +112,7 @@
 							 		}
 
 									firebase_settings = ''+focus+'class="list-item-title firebase-set" own="'+items['owner']+'" sub="'+items['listId']+'" field="lists" itd="'+key+'" item="title"';
-									HTML_list_items = HTML_list_items+'<li id="'+key+'"><span class="firebase-remove-item remove-item"></span><div class="list-wrapper"><div '+firebase_settings+' contentEditable="true">'+value.title+'</div><div class="list-item-detail firebase-set">'+value.detail+'</div></div><form><fieldset><ul class="velden"><li class="form-input-checkbox"><input class="checkbox" type="checkbox" id="filter-'+key+'" '+checked+'/><label for="filter-'+key+'" class="option-label"></label></li></ul><fiedset></form></li>';
+									HTML_list_items = HTML_list_items+'<li id="'+key+'"><span class="firebase-remove-item remove-item"></span><div class="list-wrapper"><div '+firebase_settings+' contentEditable="true" placeholder="Type your item here">'+value.title+'</div><div class="list-item-detail firebase-set">'+value.detail+'</div></div><form><fieldset><ul class="velden"><li class="form-input-checkbox"><input class="checkbox" type="checkbox" id="filter-'+key+'" '+checked+'/><label for="filter-'+key+'" class="option-label"></label></li></ul><fiedset></form></li>';
 								});
 							}else {
 								items['totalItems'] = 0;

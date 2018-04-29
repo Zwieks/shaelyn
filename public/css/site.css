@@ -5133,6 +5133,10 @@ form ol {
   height: 1.2rem;
   z-index: 0;
 }
+[contenteditable=true]:empty:before {
+  content: attr(placeholder);
+  color: #d8d8d8;
+}
 /* end general webbeheer form */
 /*
  *	Animating labels on focus and with value

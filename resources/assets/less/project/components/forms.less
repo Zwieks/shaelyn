@@ -627,4 +627,13 @@ form ol {
 		}		
 	}
 }
+
+[contenteditable=true] {
+	&:empty {
+		&:before {
+		 	content: attr(placeholder);
+		 	color: @lighterGrey;
+		}
+	}
+}
 /* end general webbeheer form */
