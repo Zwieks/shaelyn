@@ -79,6 +79,7 @@
 					$.each( user_feeds, function( key, items ) {
 						var HTML_friend_list = '',
 							HTML_owner_image = '',
+							firebase_settings = '',
 							HTML_list_items = '';
 
 						items['friends'].forEach(function (friend, i) {
@@ -92,13 +93,22 @@
 						firebase.database().ref().child('lists/'+items['owner']+'/'+items['listId']).on('value', snap => {
 							HTML_list_items = '';
 							HTML_owner_image = '';
+							firebase_settings = '';
 
 							if (snap.val() != null) {
 								items['totalItems'] = Object.keys(snap.val()).length;
 								items['items'] = snap.val();
 
 								$.each( snap.val(), function( key, value ) {
-									HTML_list_items = HTML_list_items+'<li id="'+key+'"><span class="firebase-remove-item remove-item"></span><div class="list-wrapper"><span class="list-item-title">'+value.title+'</span><div class="list-item-detail">'+value.detail+'</div></div><form><fieldset><ul class="velden"><li class="form-input-checkbox"><input class="checkbox" type="checkbox" id="filter-'+key+'"/><label for="filter-'+key+'" class="option-label"></label></li></ul><fiedset></form></li>';
+									var focus = '';
+									//Check if there is a focused item
+							 		if($('.firebase-set[itd="'+key+'"]').is(':focus')) {
+							 			focus = "id=focus ";
+							 		}
+
+
+									firebase_settings = ''+focus+'class="list-item-title firebase-set" own="'+items['owner']+'" sub="'+items['listId']+'" field="lists" itd="'+key+'" item="title"';
+									HTML_list_items = HTML_list_items+'<li id="'+key+'"><span class="firebase-remove-item remove-item"></span><div class="list-wrapper"><div '+firebase_settings+' contentEditable="true">'+value.title+'</div><div class="list-item-detail firebase-set">'+value.detail+'</div></div><form><fieldset><ul class="velden"><li class="form-input-checkbox"><input class="checkbox" type="checkbox" id="filter-'+key+'"/><label for="filter-'+key+'" class="option-label"></label></li></ul><fiedset></form></li>';
 								});
 							}else {
 								items['totalItems'] = 0;
@@ -122,9 +132,11 @@
 
 							if(lists_details.getElementsByClassName('detail-'+items['listId']).length > 0){
 								var object = $(lists_details.getElementsByClassName('detail-'+items['listId'])),
-									show = false;
+									show = false,
+									focus = false;
 								if (object.hasClass('show')) {
 									show = true;
+
 									html_details = $(html_details).addClass('show');
 								}
 
@@ -137,7 +149,7 @@
 							if(lists_title.getElementsByClassName('title-'+items['listId']).length > 0) {
 								var object = $(lists_title.getElementsByClassName('title-'+items['listId'])),
 									show = false;
-								if (lists_details.hasClass('show')) {
+								if (object.hasClass('show')) {
 									show = true;
 									html_title = $(html_title).addClass('show');
 								}
@@ -146,7 +158,14 @@
 							}else {
 								lists_title.innerHTML += html_title;
 							}
-						});		
+
+							//Set focus if element got class FOCUS
+							if(document.getElementById("focus"))
+							{
+								$(document.getElementById('focus')).focus();
+								setEndOfContenteditable(document.getElementById('focus'));
+							} 
+						});
 					});
 				}
 			});
@@ -207,28 +226,54 @@
 		  			user_setting_mail.checked = snap.val().sendmail;
 		  		}
 		  	});
-
-			$('.firebase-set').on("input", function() {
+			$(document).on("input",".firebase-set",function(e) {
 				var field = $(this).attr('field'),
 					item = $(this).attr('item'),
+					itemid = $(this).attr('itd'),
+					fieldid = $(this).attr('sub'),
+					owner = $(this).attr('own'),
 					dInput = this.value;
 
-			    UpdateField(field, user.uid, dInput, item);
+				if(typeof dInput == 'undefined') {
+					dInput = $(this).text();
+				}
+
+			    UpdateField(field, user.uid, fieldid, owner, dInput, item, itemid);
 			});
 
 			$(".firebase-set-checkbox").change(function() {
 				var field = $(this).attr('field'),
 					item = $(this).attr('item'),
+					itemid = $(this).attr('itd'),
+					fieldid = $(this).attr('sub'),
+					owner = $(this).attr('own'),
 					dInput = $(this).prop('checked');
 
-			    UpdateField(field, user.uid, dInput, item);
+			    UpdateField(field, user.uid, fieldid, owner, dInput, item, itemid);
 			});
 
 			// Update fields
-			function UpdateField(field, uid, content, item) {
+			function UpdateField(field, uid, fieldid, owner, content, item, itemid) {
 			  	// Write the new post's data.
 			  	var updates = {};
-			  	updates[field+'/'+uid+'/'+item] = content;
+
+			  	if(typeof fieldid != 'undefined') {
+			  		fieldid = '/'+fieldid;
+			  	}else {
+			  		fieldid = '';
+			  	}
+
+			  	if(typeof owner != 'undefined') {
+			  		uid = owner;
+			  	}
+
+			  	if(typeof itemid != 'undefined') {
+			  		itemid = '/'+itemid;
+			  	}else {
+			  		itemid = '';
+			  	}
+
+			  	updates[field+'/'+uid+fieldid+itemid+'/'+item] = content;
 
 			  	return firebase.database().ref().update(updates);
 			}

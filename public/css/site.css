@@ -8118,6 +8118,13 @@ form ol {
   flex-wrap: nowrap;
   margin: 0 -1.2rem;
 }
+.dashboard-wrapper textarea {
+  height: auto;
+  min-height: 0px;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  resize: none;
+}
 .dashboard-wrapper .item-wrapper {
   -moz-flex-grow: 1;
   -ms-flex-grow: 1;
@@ -8178,8 +8185,12 @@ form ol {
   height: 3rem;
 }
 .dashboard-wrapper .list-item-title {
+  text-align: left;
+  font-family: 'Montserrat', sans-serif;
   font-weight: 600;
   font-size: 1.1rem;
+  color: #333;
+  padding: 0;
 }
 .dashboard-wrapper .item {
   -webkit-box-shadow: 0 0.1rem 0.4rem rgba(0, 0, 0, 0.15);
@@ -8202,30 +8213,38 @@ form ol {
   display: none;
   height: calc(100% - 6rem);
 }
+.dashboard-wrapper .controll-wrapper {
+  position: absolute;
+  left: -1.7rem;
+  top: 3.1rem;
+}
 .dashboard-wrapper .icon {
   border-radius: 50%;
   display: none;
+  position: relative;
   background: #fbfbfb;
-  position: absolute;
-  top: -1.2rem;
-  left: -1.7rem;
   width: 3rem;
   height: 3rem;
   z-index: 1;
   cursor: pointer;
+  margin-bottom: 0.8rem;
+}
+.dashboard-wrapper .icon:last-child {
+  margin-bottom: 0;
 }
 .dashboard-wrapper .icon:hover,
 .dashboard-wrapper .icon:focus {
   -webkit-transform: scale(1.1);
   transform: scale(1.1);
 }
-.dashboard-wrapper .icon.remove {
-  top: 3rem;
+.dashboard-wrapper .icon.remove,
+.dashboard-wrapper .icon.add {
   width: 2.9rem;
   height: 2.9rem;
   border: 2px solid #e1e1e1;
 }
-.dashboard-wrapper .icon.remove img {
+.dashboard-wrapper .icon.remove img,
+.dashboard-wrapper .icon.add img {
   display: block;
   margin: auto;
   -webkit-transform: translate(-50%, -50%);
@@ -8236,8 +8255,17 @@ form ol {
   width: 1.5rem;
   height: 1.5rem;
 }
-.dashboard-wrapper .icon.active {
+.dashboard-wrapper .icon.add.active {
+  border-color: #64c37d;
+}
+.dashboard-wrapper .icon.remove.active {
   border-color: #cd0d35;
+}
+.dashboard-wrapper .icon.back {
+  position: absolute;
+  left: -1.7rem;
+  top: -1.2rem;
+  margin: 0;
 }
 .dashboard-wrapper .title-wrapper {
   display: -webkit-box;
@@ -8362,6 +8390,18 @@ form ol {
           align-items: center;
   padding: 0.8rem 0;
   border-bottom: 0.1rem solid #e5e5e5;
+}
+.dashboard-wrapper .details .detail-item .card-main .new-item {
+  -webkit-transition: 0.2s;
+  transition: 0.2s;
+  opacity: 0;
+  visibility: hidden;
+  display: none;
+}
+.dashboard-wrapper .details .detail-item .card-main .new-item.show {
+  height: 100%;
+  visibility: visible;
+  opacity: 1;
 }
 .dashboard-wrapper .details .detail-item .card-main .form-input-checkbox {
   width: auto;

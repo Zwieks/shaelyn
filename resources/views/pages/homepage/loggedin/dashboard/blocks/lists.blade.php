@@ -1,13 +1,19 @@
 <!-- {{$debugpath}} -->
 <div class="item-wrapper {{$size}} mylists">
 	<div class="item">
-		<div class="icon js-list-back">
+		<div class="icon back js-list-back">
 			<img src="{{ asset('img/back.svg') }}" alt="Back" />
 		</div>
 
-		<div class="icon remove" id="js-remove-list-items">
-			<img src="{{ asset('img/delete.svg') }}" alt="Remove" />
-		</div>		
+		<div class="controll-wrapper">
+			<div class="icon add" id="js-add-list-items">
+				<img src="{{ asset('img/plus.svg') }}" alt="Add" />
+			</div>
+			
+			<div class="icon remove" id="js-remove-list-items">
+				<img src="{{ asset('img/delete.svg') }}" alt="Remove" />
+			</div>	
+		</div>
 
 		<div class="title-wrapper">
 			<h3 class="item-title">My Lists</h3>
