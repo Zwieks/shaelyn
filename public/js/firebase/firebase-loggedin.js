@@ -42,6 +42,7 @@
 		  				owner_array = [],
 		  				messages_array = [],
 		  				friend_array = [],
+		  				HTML_friend_list = '',
 		  				friend_count = '';
 
 					$.each( feeds_object, function( key, item ) {
@@ -79,40 +80,48 @@
 					$.each( user_feeds, function( key, items ) {
 						var HTML_friend_list = '',
 							HTML_owner_image = '',
-							firebase_settings = '',
+							firebase_settings_title = '',
+							firebase_settings_detail = '',
 							HTML_list_items = '';
-
-						items['friends'].forEach(function (friend, i) {
-							HTML_friend_list = '';
-
-							firebase.database().ref().child('Users/'+friend).on('value', snap => {
-								HTML_friend_list = HTML_friend_list+'<li class="member"><img class="avatar" src="'+snap.val().image+'" title="'+snap.val().name+'" alt="member"/></li>';
-							});
-						});
 
 						firebase.database().ref().child('lists/'+items['owner']+'/'+items['listId']).on('value', snap => {
 							HTML_list_items = '';
 							HTML_owner_image = '';
-							firebase_settings = '';
+							firebase_settings_title = '';
+							firebase_settings_detail ='';
+							HTML_friend_list = '';
+
+							items['friends'].forEach(function (friend, i) {
+								firebase.database().ref().child('Users/'+friend).on('value', snap => {
+									HTML_friend_list = HTML_friend_list+'<li class="member"><img class="avatar" src="'+snap.val().image+'" title="'+snap.val().name+'" alt="member"/></li>';
+								});
+							});
 
 							if (snap.val() != null) {
 								items['totalItems'] = Object.keys(snap.val()).length;
 								items['items'] = snap.val();
 
 								$.each( snap.val(), function( key, value ) {
-									var focus = '',
+									var focus_title = '',
+										focus_detail = '',
 										checked = '';
+
 									//Check if there is a focused item
-							 		if($('.firebase-set[itd="'+key+'"]').is(':focus')) {
-							 			focus = "id=focus ";
+									if($('.firebase-set[uni="title-'+key+'"]').is(':focus')) {
+							 			focus_title = "id=focus ";
+							 			console.log('testddd '+key);
+							 		}else if($('.firebase-set[uni="detail-'+key+'"]').is(':focus')){
+							 			focus_detail = "id=focus ";
+							 			console.log('test '+key);
 							 		}
 
 							 		if(value.ticked == true) {
 							 			checked = 'checked';
 							 		}
 
-									firebase_settings = ''+focus+'class="list-item-title firebase-set" own="'+items['owner']+'" sub="'+items['listId']+'" field="lists" itd="'+key+'" item="title"';
-									HTML_list_items = HTML_list_items+'<li id="'+key+'"><span class="firebase-remove-item remove-item"></span><div class="list-wrapper"><div '+firebase_settings+' contentEditable="true" placeholder="Type your item here">'+value.title+'</div><div class="list-item-detail firebase-set">'+value.detail+'</div></div><form><fieldset><ul class="velden"><li class="form-input-checkbox"><input class="checkbox" type="checkbox" id="filter-'+key+'" '+checked+'/><label for="filter-'+key+'" class="option-label"></label></li></ul><fiedset></form></li>';
+									firebase_settings = ''+focus_title+'class="list-item-title firebase-set" own="'+items['owner']+'" sub="'+items['listId']+'" field="lists" itd="'+key+'" item="title" uni="title-'+key+'"';
+									firebase_settings_detail = ''+focus_detail+'class="list-item-detail firebase-set" own="'+items['owner']+'" sub="'+items['listId']+'" field="lists" itd="'+key+'" item="detail" uni="detail-'+key+'"';
+									HTML_list_items = HTML_list_items+'<li id="'+key+'"><span class="firebase-remove-item remove-item"></span><div class="list-wrapper"><div '+firebase_settings+' contentEditable="true" placeholder="'+i18n.firebase.placeholder.title+'">'+value.title+'</div><div '+firebase_settings_detail+' contentEditable="true" placeholder="'+i18n.firebase.placeholder.detail+'">'+value.detail+'</div></div><form><fieldset><ul class="velden"><li class="form-input-checkbox"><input class="checkbox" type="checkbox" id="filter-'+key+'" '+checked+'/><label for="filter-'+key+'" class="option-label"></label></li></ul><fiedset></form></li>';
 								});
 							}else {
 								items['totalItems'] = 0;

@@ -20,6 +20,7 @@
 <!-- FIREBASE DOM FUNCTIONALITES -->
 <script type="text/javascript" src="{{ URL::asset('js/firebase/firebase-feeds.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/firebase/firebase-lists.js') }}"></script>
+<script src="/js/lang.js"></script>
 
 @hasSection('headeranimation')
 	@yield('headeranimation')
