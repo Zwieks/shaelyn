@@ -109,10 +109,8 @@
 									//Check if there is a focused item
 									if($('.firebase-set[uni="title-'+key+'"]').is(':focus')) {
 							 			focus_title = "id=focus ";
-							 			console.log('testddd '+key);
 							 		}else if($('.firebase-set[uni="detail-'+key+'"]').is(':focus')){
 							 			focus_detail = "id=focus ";
-							 			console.log('test '+key);
 							 		}
 
 							 		if(value.ticked == true) {
