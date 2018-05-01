@@ -4910,6 +4910,15 @@ form ol {
 .foodstand-additional-stand-info:last-child {
   margin-bottom: 0;
 }
+.form-input-checkbox label {
+  font-size: 1rem;
+}
+.form-input-checkbox label:not(.multiple-title):after {
+  text-align: center;
+  padding-top: 3px;
+  content: attr(init);
+  color: #fff;
+}
 .detailpage-additionaldetails label {
   padding: 0 1.6rem;
 }

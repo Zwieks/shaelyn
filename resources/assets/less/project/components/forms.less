@@ -397,6 +397,21 @@ form ol {
 	}
 }
 
+.form-input-checkbox{
+	label{
+		font-size: @smallestHeadingSize;
+
+		&:not(.multiple-title) {
+			&:after {
+				text-align: center;
+    			padding-top: 3px;
+				content: attr(init);
+				color: contrast(@primColor, @textColor, #fff);
+			}
+		}
+	}
+}	
+
 .detailpage-additionaldetails{
 
 	label{
