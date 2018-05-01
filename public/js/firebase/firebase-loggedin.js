@@ -119,7 +119,7 @@
 
 									firebase_settings = ''+focus_title+'class="list-item-title firebase-set" own="'+items['owner']+'" sub="'+items['listId']+'" field="lists" itd="'+key+'" item="title" uni="title-'+key+'"';
 									firebase_settings_detail = ''+focus_detail+'class="list-item-detail firebase-set" own="'+items['owner']+'" sub="'+items['listId']+'" field="lists" itd="'+key+'" item="detail" uni="detail-'+key+'"';
-									HTML_list_items = HTML_list_items+'<li id="'+key+'"><span class="firebase-remove-item remove-item"></span><div class="list-wrapper"><div '+firebase_settings+' contentEditable="true" placeholder="'+i18n.firebase.placeholder.title+'">'+value.title+'</div><div '+firebase_settings_detail+' contentEditable="true" placeholder="'+i18n.firebase.placeholder.detail+'">'+value.detail+'</div></div><form><fieldset><ul class="velden"><li class="form-input-checkbox"><input class="checkbox" type="checkbox" id="filter-'+key+'" '+checked+'/><label for="filter-'+key+'" class="option-label"></label></li></ul><fiedset></form></li>';
+									HTML_list_items = HTML_list_items+'<li id="'+key+'"><span class="firebase-remove-item remove-item"></span><div class="list-wrapper"><div '+firebase_settings+' contentEditable="true" placeholder="'+i18n.firebase.placeholder.title+'">'+value.title+'</div><div '+firebase_settings_detail+' contentEditable="true" placeholder="'+i18n.firebase.placeholder.detail+'">'+value.detail+'</div></div><form><fieldset><ul class="velden"><li class="form-input-checkbox"><input class="checkbox firebase-set-checkbox" type="checkbox" own="'+items['owner']+'" sub="'+items['listId']+'" field="lists" itd="'+key+'" item="ticked" id="filter-'+key+'" '+checked+'/><label for="filter-'+key+'" class="option-label"></label></li></ul><fiedset></form></li>';
 								});
 							}else {
 								items['totalItems'] = 0;
@@ -252,7 +252,7 @@
 			    UpdateField(field, user.uid, fieldid, owner, dInput, item, itemid);
 			});
 
-			$(".firebase-set-checkbox").change(function() {
+			$(document).on("change",".firebase-set-checkbox",function(e) {
 				var field = $(this).attr('field'),
 					item = $(this).attr('item'),
 					itemid = $(this).attr('itd'),
