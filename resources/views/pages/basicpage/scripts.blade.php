@@ -16,9 +16,9 @@
 <script type="text/javascript" src="{{ URL::asset('js/jquery.forms.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/jquery.parallax.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/bootstrap/modal.js') }}"></script>
+<script type="text/javascript" src="{{ URL::asset('js/HTML.creator.js') }}"></script>
 
 <!-- FIREBASE DOM FUNCTIONALITES -->
-<script type="text/javascript" src="{{ URL::asset('js/firebase/firebase-feeds.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/firebase/firebase-lists.js') }}"></script>
 <script src="/js/lang.js"></script>
 

@@ -3615,6 +3615,20 @@ html .cookie-explanation button.request-cookies:before,
   margin: 0 auto;
   border-radius: 50%;
   overflow: hidden;
+  position: relative;
+}
+.avatar:before,
+.particles-content-wrapper img:before {
+  display: block;
+  margin: auto;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  content: attr(init);
+  font-size: 1.1rem;
+  font-weight: bold;
 }
 figcaption {
   margin: 0;
@@ -4915,7 +4929,7 @@ form ol {
 }
 .form-input-checkbox label:not(.multiple-title):after {
   text-align: center;
-  padding-top: 3px;
+  line-height: 2rem;
   content: attr(init);
   color: #fff;
 }
@@ -7935,6 +7949,12 @@ form ol {
             align-items: center;
   }
 }
+.card-wrapper {
+  margin-bottom: 1.2rem;
+}
+.card-wrapper:last-child {
+  margin-bottom: 0;
+}
 .card {
   display: -webkit-box;
   display: -moz-flex;
@@ -7959,6 +7979,15 @@ form ol {
   height: 6rem;
   margin-right: 1.2rem;
   position: relative;
+}
+.card .card-image-wrapper .avatar,
+.card .card-image-wrapper .particles-content-wrapper img {
+  width: 6rem;
+  height: 6rem;
+}
+.card .card-image-wrapper .avatar:before,
+.card .card-image-wrapper .particles-content-wrapper img:before {
+  font-size: 1.4rem;
 }
 .card .card-content-wrapper {
   -moz-flex-grow: 1;
@@ -8369,8 +8398,12 @@ form ol {
 .dashboard-wrapper .details .title-wrapper {
   margin-bottom: 0;
 }
+.dashboard-wrapper .details .title-wrapper > div {
+  width: 100%;
+}
 .dashboard-wrapper .details .title-wrapper .list-item-title {
   display: none;
+  line-height: normal;
 }
 .dashboard-wrapper .details .title-wrapper .list-item-title.show {
   display: block;
@@ -8435,6 +8468,9 @@ form ol {
   width: 2rem;
   height: 2rem;
 }
+.dashboard-wrapper .details .detail-item .card-main .velden label:after {
+  background: inherit;
+}
 .dashboard-wrapper .details .detail-item button {
   line-height: 1.2rem;
   height: 2.4rem;
@@ -8487,6 +8523,11 @@ form ol {
 }
 .dashboard-wrapper .detail-members .member:last-child {
   margin-right: 0;
+}
+.dashboard-wrapper .detail-members .avatar,
+.dashboard-wrapper .detail-members .particles-content-wrapper img {
+  width: 3rem;
+  height: 3rem;
 }
 /* Third party */
 /* owl carousel */

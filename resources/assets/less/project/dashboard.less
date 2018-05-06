@@ -231,8 +231,13 @@
 		.title-wrapper {
 			margin-bottom: 0;
 
+			> div {
+				width: 100%;
+			}
+
 			.list-item-title {
 				display: none;
+				line-height: normal;
 
 				&.show {
 					display: block;
@@ -290,7 +295,11 @@
 						&:after {
 							width: 2rem;
 							height: 2rem;
-						}						
+						}	
+
+						&:after {
+							background: inherit;
+						}					
 					}
 				}
 			}
@@ -344,6 +353,11 @@
 			&:last-child {
 				margin-right: 0;
 			}
+		}
+
+		.avatar {
+			width: 3rem;
+			height: 3rem;
 		}
 	}
 
