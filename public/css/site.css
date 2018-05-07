@@ -3366,9 +3366,10 @@ html .cookie-explanation button.request-cookies:before,
 }
 #js-loggedin .nav-toggle {
   left: 0;
+  width: 7.2rem;
 }
 #js-loggedin .page-mobile-nav-container {
-  width: 30rem;
+  width: 0;
   left: 0;
 }
 #js-loggedin .nav-wrapper {
@@ -8250,6 +8251,7 @@ form ol {
 .dashboard-wrapper .item {
   -webkit-box-shadow: 0 0.1rem 0.4rem rgba(0, 0, 0, 0.15);
   box-shadow: 0 0.1rem 0.4rem rgba(0, 0, 0, 0.15);
+  position: relative;
   padding: 1.2rem 2.4rem 2.4rem;
   background: #fbfbfb;
   height: 100%;
@@ -8294,6 +8296,7 @@ form ol {
 }
 .dashboard-wrapper .icon.remove,
 .dashboard-wrapper .icon.add {
+  display: block;
   width: 2.9rem;
   height: 2.9rem;
   border: 2px solid #e1e1e1;
@@ -8362,7 +8365,8 @@ form ol {
   width: 3rem;
   height: 3rem;
 }
-.dashboard-wrapper .remove-item {
+.dashboard-wrapper .remove-item,
+.dashboard-wrapper .remove-list {
   -webkit-transition: 0.15s ease-out;
   transition: 0.15s ease-out;
   background-image: url('/img/x-button.svg');
@@ -8374,7 +8378,8 @@ form ol {
   opacity: 0;
   cursor: pointer;
 }
-.dashboard-wrapper .remove-item.show {
+.dashboard-wrapper .remove-item.show,
+.dashboard-wrapper .remove-list.show {
   visibility: visible;
   opacity: 1;
   min-width: 2rem;
@@ -8385,7 +8390,7 @@ form ol {
 .dashboard-wrapper .details {
   position: relative;
 }
-.dashboard-wrapper .details > div {
+.dashboard-wrapper .details > div:not(.controll-wrapper) {
   opacity: 0;
   visibility: hidden;
 }

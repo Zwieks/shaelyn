@@ -6,11 +6,11 @@
 		</div>
 
 		<div class="controll-wrapper">
-			<div class="icon add" id="js-add-list-items">
+			<div class="icon add" id="js-add-list">
 				<img src="{{ asset('img/plus.svg') }}" alt="Add" />
 			</div>
 			
-			<div class="icon remove" id="js-remove-list-items">
+			<div class="icon remove" id="js-remove-list">
 				<img src="{{ asset('img/delete.svg') }}" alt="Remove" />
 			</div>	
 		</div>

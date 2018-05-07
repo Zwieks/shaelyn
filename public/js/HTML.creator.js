@@ -92,6 +92,9 @@ function HTMLcreateFriend(snap) {
 }
 
 function HTMLcreateListOverviewItem(snap) {
+	var HTML_overview_remove_list = document.createElement("div");
+		HTML_overview_remove_list.className = "firebase-remove-list remove-list";
+
 	var HTML_list_overview_item = document.createElement("div");
 		HTML_list_overview_item.className = "card list js-list";
 		HTML_list_overview_item.setAttribute("sub", snap.key);
@@ -121,12 +124,18 @@ function HTMLcreateListOverviewItem(snap) {
 	var HTML_list_overview_indicator_owner = document.createElement("div");
 		HTML_list_overview_indicator_owner.className = "owner-indicator";
 
-	var HTML_list_overview_indicator_owner_image = document.createElement("img");
-		HTML_list_overview_indicator_owner_image.className = "avatar";
-		HTML_list_overview_indicator_owner_image.setAttribute("src", snap.val().ownerImage);
-		HTML_list_overview_indicator_owner_image.setAttribute("alt", "owner image");
+	if(snap.val().ownerImage != 'default') {
+		var HTML_list_overview_indicator_owner_image = document.createElement("img");
+			HTML_list_overview_indicator_owner_image.className = "avatar";
+			HTML_list_overview_indicator_owner_image.setAttribute("src", snap.val().ownerImage);
+			HTML_list_overview_indicator_owner_image.setAttribute("alt", "owner image");
+	}else {
+		var HTML_list_overview_indicator_owner_image = document.createElement("div");
+			HTML_list_overview_indicator_owner_image.className = "avatar";		
+	}
 
 	//Create the indicator
+	HTML_list_overview_item.appendChild(HTML_overview_remove_list);
 	HTML_list_overview_indicator_owner.appendChild(HTML_list_overview_indicator_owner_image);	
 	HTML_list_overview_indicator_wrapper.appendChild(HTML_list_overview_indicator_owner);
 

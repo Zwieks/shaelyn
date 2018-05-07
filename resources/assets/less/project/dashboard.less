@@ -70,6 +70,7 @@
 
 	.item {
 		.box-shadow(0 0.1rem 0.4rem rgba(0,0,0, 0.15));
+		position: relative;
 		padding: @spacing/2 @spacing @spacing;
 		background: #fbfbfb;
 		height: 100%;
@@ -119,6 +120,7 @@
 
 		&.remove,
 		&.add {
+			display: block;
 			width: 2.9rem;
 			height: 2.9rem;
 			border: 2px solid #e1e1e1;
@@ -179,7 +181,8 @@
 		}
 	}
 
-	.remove-item {
+	.remove-item,
+	.remove-list {
 		.transition;
 		background-image: url('/img/x-button.svg');
 		background-size: cover;
@@ -203,7 +206,7 @@
 	.details {
 		position: relative;
 
-		> div {
+		> div:not(.controll-wrapper) {
 			opacity: 0;
 			visibility: hidden;
 		}
