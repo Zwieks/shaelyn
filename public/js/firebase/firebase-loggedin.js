@@ -15,7 +15,7 @@
   	const username = document.getElementById('firebase-username');
   	const user_setting_mail = document.getElementById('firebase-setting-mail');
   	const user_setting_notifications = document.getElementById('firebase-setting-notifications');  	
-  	const image = document.getElementById('firebase-image');
+  	const image = document.getElementById('firebase-image-wrapper');
   	const friends = document.getElementById('firebase-friends');
   	const feeds = document.getElementById('firebase-feeds');
   	const lists = document.getElementById('firebase-lists');
@@ -35,17 +35,19 @@
   	function getUser(user, cb) {
 		usersRef.child(user).on('value', snap => {
 			if(snap.val() != null) {
-				//Image
-				image.setAttribute("sub", user);
-				image.src = snap.val().image;
-
 				//Username
 				username.setAttribute("sub", user);
 				username.value = snap.val().name;
 
+				getUserProfileImage(snap);
 				getUserSettings(user);
 			};
 		});
+  	}
+
+  	function getUserProfileImage(snap) {
+		var userImage = HTMLcreateUserProfile(snap);
+		updateOrAppendHTML("firebase-image-wrapper", userImage, image);
   	}
 
   	function getUserSettings(user) {
@@ -112,11 +114,11 @@
   			userRef.on('value', snap => {
   				if(snap.val() != null) {
 	  				//Renders the friends that are invited for the specific list
-	  				var friend = HTMLcreateListFriend(snap);
+	  				var friend = HTMLcreateListFriend(listId, snap);
 					//Put the HTML in the container
 					var friends_list = document.getElementById('friends-'+listId);
 
-					updateOrAppendHTML("friend-"+snap.key, friend, friends_list);
+					updateOrAppendHTML(listId+"friend-"+snap.key, friend, friends_list);
 				}	
   			});
   		});
@@ -139,14 +141,12 @@
   		//Get the list items
   		listItemsRef.child(listId).on('child_added', snap => {
   			active_remove = false;
-
   			listItemsRef.child(listId+'/'+snap.key).on('value', snap => {
+  				
   				if(snap.val() != null) {
   					let userRef = usersRef.child(snap.val().changedBy);
-
   					if(document.getElementById(snap.key) != null){
   						var remove_item = document.getElementsByClassName("remove-item show");
-
   						if(remove_item.length > 0) {
   							active_remove = true;
   						}else {
@@ -158,7 +158,6 @@
  						user = snapshot.val();
 						
 						var item = HTMLcreateListItem(listId, snap, checkFocus(), user, active_remove);
-
 						updateOrAppendHTML(snap.key, item, items_wrapper); 
  					});	
 				}	
@@ -223,8 +222,11 @@
 	};
 
   	function updateOrAppendHTML(id, HTML_object, parent) {
-		if(document.getElementById(id) != null) {
 
+		if(document.getElementById(id) != null) {
+			console.log(id);
+			console.log(HTML_object);
+			console.log(parent);
 			var update_item_list = document.getElementById(id);
 				update_item_list.innerHTML = HTML_object.innerHTML;
 		}else {

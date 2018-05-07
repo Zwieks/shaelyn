@@ -1,3 +1,28 @@
+function HTMLcreateUserProfile(snap) {
+	var HTML_user_image_wrapper = document.createElement("figure");
+		HTML_user_image_wrapper.setAttribute("id", "firebase-image-wrapper");
+
+	if(snap.val().image != 'default') {
+		var HTML_user_image = document.createElement("img");
+			HTML_user_image.className = "avatar";
+			HTML_user_image.setAttribute("src", snap.val().image);
+			HTML_user_image.setAttribute("title", snap.val().name);
+			HTML_user_image.setAttribute("alt", "member");
+			HTML_user_image.setAttribute("id", "firebase-image");
+	}else{
+		var HTML_user_image = document.createElement("div");
+			HTML_user_image.className = "avatar";
+			HTML_user_image.setAttribute("title", snap.val().name);
+			HTML_user_image.setAttribute("init", getInitials(snap.val().name));
+			HTML_user_image.setAttribute("id", "firebase-image");
+			HTML_user_image.style.background = snap.val().color;
+			HTML_user_image.style.color = invertColor(snap.val().color);
+	}
+
+	HTML_user_image_wrapper.appendChild(HTML_user_image);
+	return HTML_user_image_wrapper;
+}
+
 function HTMLcreateFriend(snap) {
 	var HTML_friends_overview_wrapper = document.createElement("div");
 		HTML_friends_overview_wrapper.className = "card-wrapper";
@@ -154,10 +179,10 @@ function HTMLcreateFriendsList(listId) {
 	return HTML_friendslist;
 }
 
-function HTMLcreateListFriend(snap) {
+function HTMLcreateListFriend(listId, snap) {
 	var HTML_friend_wrapper = document.createElement("li");
 		HTML_friend_wrapper.className = "member";
-		HTML_friend_wrapper.setAttribute("id", "friend-"+snap.key);
+		HTML_friend_wrapper.setAttribute("id", listId+"friend-"+snap.key);
 
 	if(snap.val().image != 'default') {
 		var HTML_friend_image = document.createElement("img");
@@ -202,7 +227,7 @@ function HTMLcreateListItem(listId, snap, focus, changer, active_remove) {
  		var HTML_list_item_remove = document.createElement('div');
 
 			if(active_remove == true) {
-				HTML_list_item_remove.className = 'firebase-remove-item remove-item';
+				HTML_list_item_remove.className = 'firebase-remove-item remove-item show';
 			}else {
 				HTML_list_item_remove.className = 'firebase-remove-item remove-item';
 			}

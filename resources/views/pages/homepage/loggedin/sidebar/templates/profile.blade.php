@@ -2,8 +2,7 @@
 <div class="particles-animation-wrapper">
 	<div class="particles-content-wrapper">
 
-		<figure>
-			<img id="firebase-image" field="Users" item="image" src="{{$user['image']}}" />
+		<figure id="firebase-image-wrapper">
 		</figure>
 
 		<fieldset class="editable-firebase-wrapper">
