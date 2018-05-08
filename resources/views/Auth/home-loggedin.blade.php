@@ -16,6 +16,16 @@
 @stop
 
 {{-- Include Scripts --}}
+@section('page-scripts')
+    @include('scripts.modal.modal-show-search-user-init', ['modalid' => 'modal-search-friend'])
+@stop
+
+{{-- Include Modal --}}
+@section('modal')
+	@include('modals.layout', ['content' => "modals.search.friends", 'modaltype' => 'transparent', 'modalid' => 'modal-search-friend'])
+@stop
+
+{{-- Include Scripts --}}
 @section('headeranimation')
 	<script type="text/javascript" src="{{ URL::asset('js/network-animation.js') }}"></script>
 	<script type="text/javascript" src="{{ URL::asset('js/network-animation-init.js') }}"></script>

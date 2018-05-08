@@ -196,6 +196,19 @@ function HTMLcreateFriendsList(listId) {
 		HTML_friendslist.className = 'detail-members';
 		HTML_friendslist.setAttribute("id", 'friends-'+listId);
 	
+	var HTML_add_friend = document.createElement("li");
+		HTML_add_friend.className = "add-member icon add-user";
+		HTML_add_friend.setAttribute("data-toggle", "modal");
+		HTML_add_friend.setAttribute("data-target", "#modal-search-friend");
+
+	var HTML_add_friend_image = document.createElement("img");
+		HTML_add_friend_image.className = "js-";
+		HTML_add_friend_image.setAttribute("src", "/img/add-user.svg");
+		HTML_add_friend_image.setAttribute("alt", "member");
+
+	HTML_add_friend.appendChild(HTML_add_friend_image);
+	HTML_friendslist.appendChild(HTML_add_friend);
+		
 	return HTML_friendslist;
 }
 

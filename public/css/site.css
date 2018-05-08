@@ -8299,14 +8299,16 @@ form ol {
   transform: scale(1.1);
 }
 .dashboard-wrapper .icon.remove,
-.dashboard-wrapper .icon.add {
+.dashboard-wrapper .icon.add,
+.dashboard-wrapper .icon.add-user {
   display: block;
   width: 2.9rem;
   height: 2.9rem;
   border: 2px solid #e1e1e1;
 }
 .dashboard-wrapper .icon.remove img,
-.dashboard-wrapper .icon.add img {
+.dashboard-wrapper .icon.add img,
+.dashboard-wrapper .icon.add-user img {
   display: block;
   margin: auto;
   -webkit-transform: translate(-50%, -50%);
@@ -8316,6 +8318,10 @@ form ol {
   left: 50%;
   width: 1.5rem;
   height: 1.5rem;
+}
+.dashboard-wrapper .icon.add-user img {
+  width: 1.7rem;
+  height: 1.7rem;
 }
 .dashboard-wrapper .icon.add.active {
   border-color: #64c37d;
@@ -8545,6 +8551,10 @@ form ol {
 }
 .dashboard-wrapper .detail-members .member:last-child {
   margin-right: 0;
+}
+.dashboard-wrapper .detail-members .add-member {
+  margin-bottom: 1.2rem;
+  cursor: pointer;
 }
 .dashboard-wrapper .detail-members .avatar,
 .dashboard-wrapper .detail-members .particles-content-wrapper img {

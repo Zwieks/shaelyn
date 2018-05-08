@@ -119,7 +119,8 @@
 		}
 
 		&.remove,
-		&.add {
+		&.add,
+		&.add-user {
 			display: block;
 			width: 2.9rem;
 			height: 2.9rem;
@@ -129,6 +130,13 @@
 				.center;
 				width: 1.5rem;
 				height: 1.5rem;
+			}
+		}
+
+		&.add-user {
+			img {
+				width: 1.7rem;
+				height: 1.7rem;
 			}
 		}
 
@@ -361,6 +369,11 @@
 			&:last-child {
 				margin-right: 0;
 			}
+		}
+
+		.add-member {
+			margin-bottom: @spacing/2;
+			cursor: pointer;
 		}
 
 		.avatar {
