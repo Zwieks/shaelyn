@@ -105,7 +105,12 @@ function HTMLcreateListOverviewItem(snap) {
 
 	var HTML_list_overview_title = document.createElement("span");
 		HTML_list_overview_title.className = "card-title";	
-		HTML_list_overview_title.appendChild(document.createTextNode(snap.val().name));
+		
+		if(snap.val().name) {
+			HTML_list_overview_title.appendChild(document.createTextNode(snap.val().name));
+		}else {
+			HTML_list_overview_title.setAttribute("placeholder", i18n.firebase.placeholder.notitle);
+		}
 
 	var HTML_list_overview_description = document.createElement("div");
 		HTML_list_overview_description.className = "card-description";	
@@ -154,7 +159,13 @@ function HTMLcreateListMainTitle(snap, focus, show) {
 		HTML_main_title_list_wrapper.setAttribute("id", "list-title-"+snap.key);
 
 	var HTML_main_title_list = document.createElement("h3");
-		HTML_main_title_list.appendChild(document.createTextNode(snap.val().name));
+
+		if(snap.val().name) {
+			HTML_main_title_list.appendChild(document.createTextNode(snap.val().name));
+		}else {
+			HTML_main_title_list.setAttribute("placeholder", i18n.firebase.placeholder.notitledetail);
+		}
+
 		HTML_main_title_list.setAttribute("contentEditable", true);
 
 		if(focus == "title-"+snap.key) {

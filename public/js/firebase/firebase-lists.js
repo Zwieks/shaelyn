@@ -110,7 +110,7 @@
 			$('#js-remove-list').attr("id","js-remove-list-items");
 			$('#js-add-list').attr("id","js-add-list-items");
 			$('#js-remove-list-items').removeClass('active');
-			$(this).parent().parent().find('.remove-item').removClass('show');
+			$(this).parent().parent().find('.remove-item').removeClass('show');
 		};	
 	});
 

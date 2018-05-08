@@ -48,6 +48,11 @@
 
 	.card-title {
 		font-weight: bold;
+		
+		&:before {
+		 	content: attr(placeholder);
+		 	color: @lighterGrey;
+		}
 	}
 
 	.card-description {

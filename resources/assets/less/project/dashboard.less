@@ -242,6 +242,11 @@
 				display: none;
 				line-height: normal;
 
+				&:after {
+					content: attr(placeholder);
+					color: @lighterGrey;
+				}
+
 				&.show {
 					display: block;
 
