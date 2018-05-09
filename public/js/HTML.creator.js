@@ -9,6 +9,13 @@ function HTMLcreateUserProfile(snap) {
 			HTML_user_image.setAttribute("title", snap.val().name);
 			HTML_user_image.setAttribute("alt", "member");
 			HTML_user_image.setAttribute("id", "firebase-image");
+	}else if(snap.val().name == ''){
+		var HTML_user_image = document.createElement("img");
+			HTML_user_image.className = "avatar";
+			HTML_user_image.setAttribute("src", "/img/sad.svg");
+			HTML_user_image.setAttribute("title", snap.val().name);
+			HTML_user_image.setAttribute("alt", "member");
+			HTML_user_image.setAttribute("id", "firebase-image");		
 	}else{
 		var HTML_user_image = document.createElement("div");
 			HTML_user_image.className = "avatar";
@@ -223,6 +230,13 @@ function HTMLcreateListFriend(listId, snap) {
 			HTML_friend_image.setAttribute("src", snap.val().image);
 			HTML_friend_image.setAttribute("title", snap.val().name);
 			HTML_friend_image.setAttribute("alt", "member");
+	}else if(snap.val().name == ''){
+		var HTML_friend_image = document.createElement("img");
+			HTML_friend_image.className = "avatar";
+			HTML_friend_image.setAttribute("src", "/img/sad.svg");
+			HTML_friend_image.setAttribute("title", snap.val().name);
+			HTML_friend_image.setAttribute("alt", "member");
+			HTML_friend_image.setAttribute("id", "firebase-image");		
 	}else{
 		var HTML_friend_image = document.createElement("div");
 			HTML_friend_image.className = "avatar";
