@@ -302,7 +302,7 @@
 
 	  		getLists(user.uid, snap => console.log(snap.val()));
 
-	  		$(document).on("input",".firebase-search",function(e) {
+	  		$(document).on("input",".firebase-search-friends",function(e) {
 				var dInput = this.value;
 
 				if(typeof dInput == 'undefined') {
@@ -311,6 +311,18 @@
 
 				if(dInput.trim() != '') {
 					searchFriends(dInput);
+				}
+	  		});
+
+	  		$(document).on("input",".firebase-search-users",function(e) {
+				var dInput = this.value;
+
+				if(typeof dInput == 'undefined') {
+					dInput = $(this).text();
+				}
+
+				if(dInput.trim() != '') {
+					searchUsers(dInput);
 				}
 	  		});
 

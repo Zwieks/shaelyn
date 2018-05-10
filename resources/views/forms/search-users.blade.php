@@ -5,7 +5,7 @@
         <ul class="velden">
             <li class="form-input-textfield">
                 @include('forms.inputerror')
-                {!! Form::text('email', '', array_merge(['id' => 'search_field_users', 'autocomplete'=> 'off', 'class' => 'firebase-search', 'placeholder' => Lang::get('forms.placeholder.user-search')])) !!}
+                {!! Form::text('email', '', array_merge(['id' => 'search_field_users', 'autocomplete'=> 'off', 'class' => 'firebase-search-users', 'placeholder' => Lang::get('forms.placeholder.user-search')])) !!}
             </li>
         </ul>
     </fieldset>
