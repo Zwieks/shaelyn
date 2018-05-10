@@ -1,7 +1,7 @@
 <!-- {{$debugpath}} -->
 {{--Modal HEADER--}}
 <div class="modal-header">
-	<h2 class="modal-title" id="favoritesModalLabel">{{ Lang::get('modal.search.friends.title') }}</h2>
+	<h2 class="modal-title" id="favoritesModalLabel">{{ Lang::get('modal.search.users.title') }}</h2>
 	<button type="button" class="modal-close" data-dismiss="modal" aria-label="Close" data-icon="n">
 		<span aria-hidden="true"></span>
 	</button>
@@ -14,13 +14,13 @@
 			<img src="{{ asset('img/add-user.svg') }}">
 		</figure>
 	</div>
-	@include('forms.search-friends')
+	@include('forms.search-users')
 
-	<div id="firebase-search-friends-results" class="component-search"></div>
+	<div id="firebase-search-users-results" class="component-search"></div>
 </div>
 
 {{--Modal FOOTER--}}
 <div class="modal-footer">
 	<button type="button" class="btn btn-default" data-dismiss="modal">{{ Lang::get('buttons.cancel') }}</button>
-	<button type="button" class="btn btn-primary" id="js-invite-friend">{{ Lang::get('buttons.invite') }}</button>
+	<button type="button" class="btn btn-primary" id="js-invite-user">{{ Lang::get('buttons.invite') }}</button>
 </div>

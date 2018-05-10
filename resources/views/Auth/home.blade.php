@@ -27,7 +27,7 @@
 
 {{-- Include Modal --}}
 @section('modal')
-	@include('modals.layout', ['content' => "modals.auth.login", 'modaltype' => 'transparent', 'modalid' => 'modal-login'])
+	@include('modals.layout', ['content' => "modals.auth.login",'modalsize' => '', 'modaltype' => 'transparent', 'modalid' => 'modal-login'])
 @stop
 
 {{-- Include Scripts --}}

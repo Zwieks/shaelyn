@@ -35,6 +35,7 @@
 //** Modal footer border color
 @modal-footer-border-color:   @modal-header-border-color;
 
+@modal-xlg:                   calc(100% ~'-' @modal-inner-padding*4);
 @modal-lg:                    900px;
 @modal-md:                    600px;
 @modal-sm:                    300px;
@@ -445,6 +446,10 @@
     .modal-dialog {
         width: @modal-md;
         margin: 30px auto;
+
+        &.large {
+          width: @modal-xlg;
+        }
     }
 
     .modal-media{

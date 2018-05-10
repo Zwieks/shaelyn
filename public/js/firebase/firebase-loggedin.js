@@ -32,6 +32,25 @@
   	const listItemsRef = ref.child('listItems');
   	const friendsRef = ref.child('Friends');
 
+  	function searchUser(search) {
+  		usersRef
+  			.orderByChild("nameToLower")
+  			.limitToFirst(9)
+  			.startAt(search.toLowerCase())
+  			.endAt(search.toLowerCase() + "\uf8ff")
+  			.on("value", function(snapshot) {
+  				if(snapshot.val() != null) {
+  					var search_users_results = document.getElementById('firebase-search-friends-results');
+  					search_users_results.innerHTML = '';
+	  				snapshot.forEach(function(childSnapshot) {
+	  					var searchItem = HTMLcreateFriend(childSnapshot);
+	  					
+	  					search_users_results.appendChild(searchItem);
+	  				});
+  				}
+			});
+  	}
+
   	function getUser(user, cb) {
 		usersRef.child(user).on('value', snap => {
 			if(snap.val() != null) {
@@ -258,6 +277,18 @@
 
 	  		getLists(user.uid, snap => console.log(snap.val()));
 
+	  		$(document).on("input",".firebase-search",function(e) {
+				var dInput = this.value;
+
+				if(typeof dInput == 'undefined') {
+					dInput = $(this).text();
+				}
+
+				if(dInput.trim() != '') {
+					searchUser(dInput);
+				}
+	  		});
+
 	  		$(document).on("input",".firebase-set",function(e) {
 				var field = $(this).attr('field'),
 					item = $(this).attr('item'),
@@ -272,7 +303,7 @@
 				}
 
 			    UpdateField(field, user.uid, fieldid, owner, dInput, item, itemid, changer);
-	  		});	
+	  		});
 
 			$(document).on("change",".firebase-set-checkbox",function(e) {
 				var field = $(this).attr('field'),

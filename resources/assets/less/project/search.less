@@ -1,0 +1,42 @@
+#modal-search-friends {
+	.modal-header {
+		margin-bottom: @spacing/2;
+	}
+
+	.velden > li{
+		width: @spacing*31;
+	}
+
+	.image-wrapper {
+		margin-bottom: @spacing;
+		figure {
+			padding-top: @spacing*4;
+		}
+	}
+
+	form {
+		margin-bottom: @spacing/2;
+	}
+
+	.component-search {
+		.displayflex;
+		.justify-content(center);
+		.flex-wrap(wrap);
+
+		margin: 0 -@spacing/2;
+
+		.card-wrapper {
+			width: calc(100%/3);
+			max-width: @spacing*16;
+	    	padding: @spacing/2;
+	    	margin: 0;
+		}
+
+		.card {
+			.transition;
+			background: rgba(255,255,255,0.2);
+			padding: @spacing/2;
+			cursor: pointer;
+		}
+	}
+}

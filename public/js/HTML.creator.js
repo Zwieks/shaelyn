@@ -5,7 +5,7 @@ function HTMLcreateUserProfile(snap) {
 	if(snap.val().image != 'default') {
 		var HTML_user_image = document.createElement("img");
 			HTML_user_image.className = "avatar";
-			HTML_user_image.setAttribute("src", snap.val().image);
+			HTML_user_image.setAttribute("src", snap.val().thumb_image);
 			HTML_user_image.setAttribute("title", snap.val().name);
 			HTML_user_image.setAttribute("alt", "member");
 			HTML_user_image.setAttribute("id", "firebase-image");
@@ -49,7 +49,7 @@ function HTMLcreateFriend(snap) {
 		if(snap.val().image != 'default') {
 			var HTML_friends_image = document.createElement("img");
 				HTML_friends_image.className = "avatar";
-				HTML_friends_image.setAttribute("src", snap.val().image);
+				HTML_friends_image.setAttribute("src", snap.val().thumb_image);
 				HTML_friends_image.setAttribute("title", snap.val().name);
 				HTML_friends_image.setAttribute("alt", "member");
 		}else{
@@ -206,7 +206,7 @@ function HTMLcreateFriendsList(listId) {
 	var HTML_add_friend = document.createElement("li");
 		HTML_add_friend.className = "add-member icon add-user";
 		HTML_add_friend.setAttribute("data-toggle", "modal");
-		HTML_add_friend.setAttribute("data-target", "#modal-search-friend");
+		HTML_add_friend.setAttribute("data-target", "#modal-search-friends");
 
 	var HTML_add_friend_image = document.createElement("img");
 		HTML_add_friend_image.className = "js-";
@@ -227,7 +227,7 @@ function HTMLcreateListFriend(listId, snap) {
 	if(snap.val().image != 'default') {
 		var HTML_friend_image = document.createElement("img");
 			HTML_friend_image.className = "avatar";
-			HTML_friend_image.setAttribute("src", snap.val().image);
+			HTML_friend_image.setAttribute("src", snap.val().thumb_image);
 			HTML_friend_image.setAttribute("title", snap.val().name);
 			HTML_friend_image.setAttribute("alt", "member");
 	}else if(snap.val().name == ''){

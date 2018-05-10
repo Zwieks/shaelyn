@@ -142,6 +142,18 @@ $(document).on("click","#js-logout",function() {
 	logout();
 });
 
+
+$(document).on("click","#js-invite-friends", function(){
+	$(".invite").each(function() {
+    	var id = $(this).attr('id').replace('userfriend-', '');
+    	console.log(id);
+	});
+});
+
+$(document).on("click","#modal-search-friends .card",function(){
+	$(this).parent().toggleClass("invite");
+});
+
 //This will sign-out the user
 function logout() {
 	firebase.auth().signOut().then(function() {

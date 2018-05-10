@@ -4,6 +4,35 @@
 	&:last-child {
 		margin-bottom: 0;
 	}
+
+	&.invite {
+		.card {
+			.transition;
+			position: relative;
+
+			&:before,
+			&:after {
+				content: "";
+				position: absolute;
+				width: 0;
+				height: 0;
+				background: transparent;
+				border:2px solid transparent;
+			}
+
+			&:before {
+				.animation(border-anim-right 0.4s linear forwards);
+				top: -2px;
+				left: -2px;
+			}
+
+			&:after {
+				.animation(border-anim-left 0.4s linear forwards);
+				top: -2px;
+				left: -2px;
+			}
+		}
+	}
 }
 
 .card {
@@ -163,6 +192,60 @@
 		.card-content-wrapper {
 			max-width: none;
 		}
+	}
+}
+
+@keyframes border-anim-left {
+    0%	{
+		width: 0;
+		height: 0;
+		border-top-color: transparent;
+		border-right-color: transparent;
+		border-bottom-color: transparent;
+		border-left-color: @successColor;
+	}
+	50% {
+		width: 0;
+		height: calc(100% ~'+' 4px);
+		border-top-color: transparent;
+		border-right-color: transparent;
+		border-bottom-color: @successColor;
+		border-left-color: @successColor;
+	}
+	100% {
+		width: calc(100% ~'+' 4px);
+		height: calc(100% ~'+' 4px);
+		border-top-color: transparent;
+		border-right-color: transparent;
+		border-bottom-color: @successColor;
+		border-left-color: @successColor;
+	}
+}
+
+@keyframes border-anim-right {
+    0%	{
+		width: 0;
+		height: 0;
+		border-top-color: @successColor;
+		border-right-color: transparent;
+		border-bottom-color: transparent;
+		border-left-color: transparent;
+	}
+	50% {
+		width: calc(100% ~'+' 4px);
+		height: 0;
+		border-top-color: @successColor;
+		border-right-color: @successColor;
+		border-bottom-color: transparent;
+		border-left-color: transparent;
+	}
+	100% {
+		width: calc(100% ~'+' 4px);
+		height: calc(100% ~'+' 4px);
+		border-top-color: @successColor;
+		border-right-color: @successColor;
+		border-bottom-color: transparent;
+		border-left-color: transparent;
 	}
 }
 

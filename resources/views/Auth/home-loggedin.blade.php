@@ -17,12 +17,14 @@
 
 {{-- Include Scripts --}}
 @section('page-scripts')
-    @include('scripts.modal.modal-show-search-user-init', ['modalid' => 'modal-search-friend'])
+    @include('scripts.modal.modal-show-search-users-init', ['modalid' => 'modal-search-friends'])
+    @include('scripts.modal.modal-show-search-friends-init', ['modalid' => 'modal-search-users'])
 @stop
 
 {{-- Include Modal --}}
 @section('modal')
-	@include('modals.layout', ['content' => "modals.search.friends", 'modaltype' => 'transparent', 'modalid' => 'modal-search-friend'])
+	@include('modals.layout', ['content' => "modals.search.friends", 'modalsize' => 'large', 'modaltype' => 'transparent', 'modalid' => 'modal-search-friends'])
+	@include('modals.layout', ['content' => "modals.search.users", 'modalsize' => 'large', 'modaltype' => 'transparent', 'modalid' => 'modal-search-users'])
 @stop
 
 {{-- Include Scripts --}}

@@ -3,7 +3,7 @@
 	<div class="particles-content-wrapper">
 
 		<figure id="firebase-image-wrapper">
-			<img id="firebase-image" field="Users" item="image" src="{{$user['image']}}" />
+
 		</figure>
 
 		<fieldset class="editable-firebase-wrapper">

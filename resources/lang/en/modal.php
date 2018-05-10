@@ -8,7 +8,10 @@ return [
 
    	'search' => [     
         'users' => [
+        	'title' => 'Find an user',
+        ],
+        'friends' => [
         	'title' => 'Invite your friends',
-        ]    
+        ],        
     ],
 ];
