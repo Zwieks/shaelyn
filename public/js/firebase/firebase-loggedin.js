@@ -32,7 +32,7 @@
   	const listItemsRef = ref.child('listItems');
   	const friendsRef = ref.child('Friends');
 
-  	function searchUser(search) {
+  	function searchUsers(search) {
   		usersRef
   			.orderByChild("nameToLower")
   			.limitToFirst(9)
@@ -46,6 +46,31 @@
 	  					var searchItem = HTMLcreateFriend(childSnapshot);
 	  					
 	  					search_users_results.appendChild(searchItem);
+	  				});
+  				}
+			});
+  	}
+
+  	function searchFriends(search) {
+  		usersRef
+  			.orderByChild("nameToLower")
+  			.limitToFirst(9)
+  			.startAt(search.toLowerCase())
+  			.endAt(search.toLowerCase() + "\uf8ff")
+  			.on("value", function(snapshot) {
+  				if(snapshot.val() != null) {
+  					var search_users_results = document.getElementById('firebase-search-friends-results');
+  					search_users_results.innerHTML = '';
+	  				snapshot.forEach(function(childSnapshot) {
+
+					  	friendsRef.child(firebase.auth().currentUser.uid+'/'+childSnapshot.key).once('value', function(snapshot) {
+					  		if (snapshot.exists()) {
+	  							var searchItem = HTMLcreateFriend(childSnapshot);
+	  					
+	  							search_users_results.appendChild(searchItem);
+					  		}
+						});
+
 	  				});
   				}
 			});
@@ -285,7 +310,7 @@
 				}
 
 				if(dInput.trim() != '') {
-					searchUser(dInput);
+					searchFriends(dInput);
 				}
 	  		});
 
