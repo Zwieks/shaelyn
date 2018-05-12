@@ -17,6 +17,7 @@
 <script type="text/javascript" src="{{ URL::asset('js/jquery.parallax.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/bootstrap/modal.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/HTML.creator.js') }}"></script>
+<script type="text/javascript" src="{{ URL::asset('js/jquery.CustomScrollbar.js') }}"></script>
 
 <!-- FIREBASE DOM FUNCTIONALITES -->
 <script type="text/javascript" src="{{ URL::asset('js/firebase/firebase-lists.js') }}"></script>

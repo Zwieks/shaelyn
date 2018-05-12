@@ -71,25 +71,23 @@
 	.item {
 		.box-shadow(0 0.1rem 0.4rem rgba(0,0,0, 0.15));
 		position: relative;
-		padding: @spacing/2 @spacing @spacing;
+		padding: @spacing/2 0 @spacing;
 		background: #fbfbfb;
 		height: 100%;
 		width: 100%;
 	}
 
 	.content {
-		.transition;		
-	}
-
-	.content {
+		.transition;			
 		display: block;
 		opacity: 1;
 		visibility: visible;
+		height: @scrollContent;
 	}
 
 	.detail {
 		display: none;
-		height: calc(100% ~'-' @spacing*2.5);
+		height: calc(100% ~'-' 8rem);
 	}
 
 	.controll-wrapper {
@@ -164,7 +162,7 @@
 		.displayflex;
 		.justify-content(center);
 		border-bottom: 0.1rem solid @borderColor;
-		margin-bottom: @spacing/2;
+		margin: 0 @spacing @spacing/2 @spacing;
 		position: relative;
 
 		.list-item-title {
@@ -272,6 +270,7 @@
 
 			.card-main {
 				.flex-grow(1);
+				height: @scrollContent;
 
 				li {
 					&:not(.form-input-checkbox) {
@@ -382,4 +381,33 @@
 		}
 	}
 
+	.btn-group-list {
+		.displayflex;
+		.align-items(center);
+		.justify-content(center);
+
+		position: absolute;
+	    bottom: 0;
+	    right: 0;
+	    left: 0;
+	    height: @spacing*2.5;
+	    margin: 0;
+	    background: #e5e5e530;
+
+	    .icon {
+	    	.transition;
+	    	height: @spacing*1.7;
+	    	width: @spacing*1.7;
+	    	margin: 0 @spacing/2 0 0;
+
+	    	&:last-child {
+	    		margin: 0;
+	    	}	
+
+	    	img {
+				height: 60%;
+				width: auto;
+			}
+	    }	
+	}
 }

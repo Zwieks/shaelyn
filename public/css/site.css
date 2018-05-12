@@ -8293,22 +8293,28 @@ form ol {
     opacity: 0;
   }
 }
-#modal-search-friends .modal-header {
+#modal-search-friends .modal-header,
+#modal-search-users .modal-header {
   margin-bottom: 1.2rem;
 }
-#modal-search-friends .velden > li {
+#modal-search-friends .velden > li,
+#modal-search-users .velden > li {
   width: 74.4rem;
 }
-#modal-search-friends .image-wrapper {
+#modal-search-friends .image-wrapper,
+#modal-search-users .image-wrapper {
   margin-bottom: 2.4rem;
 }
-#modal-search-friends .image-wrapper figure {
+#modal-search-friends .image-wrapper figure,
+#modal-search-users .image-wrapper figure {
   padding-top: 9.6rem;
 }
-#modal-search-friends form {
+#modal-search-friends form,
+#modal-search-users form {
   margin-bottom: 1.2rem;
 }
-#modal-search-friends .component-search {
+#modal-search-friends .component-search,
+#modal-search-users .component-search {
   display: -webkit-box;
   display: -moz-flex;
   display: -ms-flexbox;
@@ -8323,13 +8329,15 @@ form ol {
   flex-wrap: wrap;
   margin: 0 -1.2rem;
 }
-#modal-search-friends .component-search .card-wrapper {
+#modal-search-friends .component-search .card-wrapper,
+#modal-search-users .component-search .card-wrapper {
   width: calc(33.33333333%);
   max-width: 38.4rem;
   padding: 1.2rem;
   margin: 0;
 }
-#modal-search-friends .component-search .card {
+#modal-search-friends .component-search .card,
+#modal-search-users .component-search .card {
   -webkit-transition: 0.15s ease-out;
   transition: 0.15s ease-out;
   background: rgba(255, 255, 255, 0.2);
@@ -8429,7 +8437,7 @@ form ol {
   -webkit-box-shadow: 0 0.1rem 0.4rem rgba(0, 0, 0, 0.15);
   box-shadow: 0 0.1rem 0.4rem rgba(0, 0, 0, 0.15);
   position: relative;
-  padding: 1.2rem 2.4rem 2.4rem;
+  padding: 1.2rem 0 2.4rem;
   background: #fbfbfb;
   height: 100%;
   width: 100%;
@@ -8437,15 +8445,14 @@ form ol {
 .dashboard-wrapper .content {
   -webkit-transition: 0.15s ease-out;
   transition: 0.15s ease-out;
-}
-.dashboard-wrapper .content {
   display: block;
   opacity: 1;
   visibility: visible;
+  height: 33.6rem;
 }
 .dashboard-wrapper .detail {
   display: none;
-  height: calc(100% - 6rem);
+  height: calc(100% - 8rem);
 }
 .dashboard-wrapper .controll-wrapper {
   position: absolute;
@@ -8520,7 +8527,7 @@ form ol {
       -ms-flex-pack: center;
           justify-content: center;
   border-bottom: 0.1rem solid #e5e5e5;
-  margin-bottom: 1.2rem;
+  margin: 0 2.4rem 1.2rem 2.4rem;
   position: relative;
 }
 .dashboard-wrapper .title-wrapper .list-item-title {
@@ -8627,6 +8634,7 @@ form ol {
   -webkit-box-flex: 1;
       -ms-flex-positive: 1;
           flex-grow: 1;
+  height: 33.6rem;
 }
 .dashboard-wrapper .details .detail-item .card-main li:not(.form-input-checkbox) {
   display: -webkit-box;
@@ -8733,6 +8741,51 @@ form ol {
 .dashboard-wrapper .detail-members .particles-content-wrapper img {
   width: 3rem;
   height: 3rem;
+}
+.dashboard-wrapper .btn-group-list {
+  display: -webkit-box;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: -ms-flex;
+  display: flex;
+  -moz-align-items: center;
+  -ms-align-items: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -moz-justify-content: center;
+  -ms-justify-content: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  height: 6rem;
+  margin: 0;
+  background: #e5e5e530;
+}
+.dashboard-wrapper .btn-group-list .icon {
+  -webkit-transition: 0.15s ease-out;
+  transition: 0.15s ease-out;
+  height: 4.08rem;
+  width: 4.08rem;
+  margin: 0 1.2rem 0 0;
+}
+.dashboard-wrapper .btn-group-list .icon:last-child {
+  margin: 0;
+}
+.dashboard-wrapper .btn-group-list .icon img {
+  height: 60%;
+  width: auto;
+}
+.mCSB_container {
+  padding: 0 2.4rem;
+}
+.mCSB_scrollTools {
+  left: 0!important;
+  right: auto!important;
 }
 /* Third party */
 /* owl carousel */

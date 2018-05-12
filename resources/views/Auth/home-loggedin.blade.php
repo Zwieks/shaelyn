@@ -17,6 +17,7 @@
 
 {{-- Include Scripts --}}
 @section('page-scripts')
+	@include('scripts.customscrollbar.customscrollbar-init')
     @include('scripts.modal.modal-show-search-users-init', ['modalid' => 'modal-search-friends'])
     @include('scripts.modal.modal-show-search-friends-init', ['modalid' => 'modal-search-users'])
 @stop

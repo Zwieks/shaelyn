@@ -98,6 +98,40 @@ function HTMLcreateFriend(snap) {
 	return HTML_friends_overview_wrapper;
 }
 
+function HTMLcreateListOverviewControls() {
+	var HTML_list_button_wrapper = document.createElement("ul");
+		HTML_list_button_wrapper.className = "btn-group-list";
+
+	var HTML_list_button_item_delete_list = document.createElement("li");
+		HTML_list_button_item_delete_list.className = "icon remove";
+		HTML_list_button_item_delete_list.setAttribute("id", "js-remove-list");
+
+	var HTML_list_button_item_delete_list_image = document.createElement("img");
+		HTML_list_button_item_delete_list_image.className = "js-";
+		HTML_list_button_item_delete_list_image.setAttribute("src", "/img/delete.svg");
+		HTML_list_button_item_delete_list_image.setAttribute("alt", "Delete list");
+
+	var HTML_list_button_item_add_list = document.createElement("li");
+		HTML_list_button_item_add_list.className = "icon add";
+		HTML_list_button_item_add_list.setAttribute("id", "js-add-list");
+
+	var HTML_list_button_item_add_list_image = document.createElement("img");
+		HTML_list_button_item_add_list_image.className = "js-";
+		HTML_list_button_item_add_list_image.setAttribute("src", "/img/plus.svg");
+		HTML_list_button_item_add_list_image.setAttribute("alt", "Add list");
+
+		//Create buttons
+		HTML_list_button_item_delete_list.appendChild(HTML_list_button_item_delete_list_image);
+		HTML_list_button_item_add_list.appendChild(HTML_list_button_item_add_list_image);
+		//HTML_list_button_item_add_item.appendChild(HTML_list_button_item_add_item_image);
+
+		HTML_list_button_wrapper.appendChild(HTML_list_button_item_delete_list);
+		HTML_list_button_wrapper.appendChild(HTML_list_button_item_add_list);
+		// HTML_list_button_wrapper.appendChild(HTML_list_button_item_add_user);
+
+	return HTML_list_button_wrapper;
+}
+
 function HTMLcreateListOverviewItem(snap) {
 	var HTML_overview_remove_list = document.createElement("div");
 		HTML_overview_remove_list.className = "firebase-remove-list remove-list";
@@ -202,19 +236,6 @@ function HTMLcreateFriendsList(listId) {
 	var HTML_friendslist = document.createElement("ul");
 		HTML_friendslist.className = 'detail-members';
 		HTML_friendslist.setAttribute("id", 'friends-'+listId);
-	
-	var HTML_add_friend = document.createElement("li");
-		HTML_add_friend.className = "add-member icon add-user";
-		HTML_add_friend.setAttribute("data-toggle", "modal");
-		HTML_add_friend.setAttribute("data-target", "#modal-search-friends");
-
-	var HTML_add_friend_image = document.createElement("img");
-		HTML_add_friend_image.className = "js-";
-		HTML_add_friend_image.setAttribute("src", "/img/add-user.svg");
-		HTML_add_friend_image.setAttribute("alt", "member");
-
-	HTML_add_friend.appendChild(HTML_add_friend_image);
-	HTML_friendslist.appendChild(HTML_add_friend);
 		
 	return HTML_friendslist;
 }
@@ -264,6 +285,50 @@ function HTMLcreateList(listId) {
 		HTML_list_item_template.setAttribute('ref', listId);
 
 		return HTML_list_item_template;
+}
+
+function HTMLcreateListItemControls() {
+	var HTML_list_button_wrapper = document.createElement("ul");
+		HTML_list_button_wrapper.className = "btn-group-list";
+
+	var HTML_list_button_item_delete_item = document.createElement("li");
+		HTML_list_button_item_delete_item.className = "icon remove";
+		HTML_list_button_item_delete_item.setAttribute("id", "js-remove-list-items");
+
+	var HTML_list_button_item_delete_item_image = document.createElement("img");
+		HTML_list_button_item_delete_item_image.className = "js-";
+		HTML_list_button_item_delete_item_image.setAttribute("src", "/img/delete.svg");
+		HTML_list_button_item_delete_item_image.setAttribute("alt", "Delete item");
+
+	var HTML_list_button_item_add_user = document.createElement("li");
+		HTML_list_button_item_add_user.className = "add-member icon add-user";
+		HTML_list_button_item_add_user.setAttribute("data-toggle", "modal");
+		HTML_list_button_item_add_user.setAttribute("data-target", "#modal-search-friends");
+
+	var HTML_list_button_item_add_user_image = document.createElement("img");
+		HTML_list_button_item_add_user_image.className = "js-";
+		HTML_list_button_item_add_user_image.setAttribute("src", "/img/add-user.svg");
+		HTML_list_button_item_add_user_image.setAttribute("alt", "member");
+
+	var HTML_list_button_item_add_item = document.createElement("li");
+		HTML_list_button_item_add_item.className = "icon add";
+		HTML_list_button_item_add_item.setAttribute("id", "js-add-list-items");
+
+	var HTML_list_button_item_add_item_image = document.createElement("img");
+		HTML_list_button_item_add_item_image.className = "js-";
+		HTML_list_button_item_add_item_image.setAttribute("src", "/img/plus.svg");
+		HTML_list_button_item_add_item_image.setAttribute("alt", "Add item");
+
+	//Create buttons
+	HTML_list_button_item_delete_item.appendChild(HTML_list_button_item_delete_item_image);
+	HTML_list_button_item_add_user.appendChild(HTML_list_button_item_add_user_image);
+	HTML_list_button_item_add_item.appendChild(HTML_list_button_item_add_item_image);
+
+	HTML_list_button_wrapper.appendChild(HTML_list_button_item_delete_item);
+	HTML_list_button_wrapper.appendChild(HTML_list_button_item_add_item);
+	HTML_list_button_wrapper.appendChild(HTML_list_button_item_add_user);
+
+	return	HTML_list_button_wrapper;
 }
 
 function HTMLcreateListItem(listId, snap, focus, changer, active_remove) {

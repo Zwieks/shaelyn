@@ -40,7 +40,7 @@
   			.endAt(search.toLowerCase() + "\uf8ff")
   			.on("value", function(snapshot) {
   				if(snapshot.val() != null) {
-  					var search_users_results = document.getElementById('firebase-search-friends-results');
+  					var search_users_results = document.getElementById('firebase-search-users-results');
   					search_users_results.innerHTML = '';
 	  				snapshot.forEach(function(childSnapshot) {
 	  					var searchItem = HTMLcreateFriend(childSnapshot);
@@ -116,6 +116,7 @@
 				if(snap.val() != null) {
 	  				//Renders the friends that are invited for the specific list
 	  				var friend = HTMLcreateFriend(snap);
+	  				document.getElementById(friends.childNodes[0].id+'_container').appendChild(friend);
 					updateOrAppendHTML("userfriend-"+snap.key, friend, friends);
 				};	
   			});	
@@ -144,11 +145,15 @@
 
 	  				//Put the HTML in the container
 	  				updateOrAppendHTML("list-"+snap.key, list_overview_item, lists);
-	  				
+
+	  				document.getElementById(lists.childNodes[0].id+'_container').appendChild(list_overview_item);
 	  				updateOrAppendHTML("list-title-"+snap.key, list_main_title, lists_title);
 	  			}	
   			});
   		});
+  		//Add the controls
+	  	var listControls = HTMLcreateListOverviewControls();
+		lists.appendChild(listControls);		
   	};
 
   	function getFriendsOfList(listId, cb) {
@@ -192,6 +197,9 @@
 
   		var active_remove = false;
 
+  		//Put the list items in the list
+  		list.appendChild(items_wrapper);
+
   		//Get the list items
   		listItemsRef.child(listId).on('child_added', snap => {
   			active_remove = false;
@@ -212,6 +220,11 @@
  						user = snapshot.val();
 						
 						var item = HTMLcreateListItem(listId, snap, checkFocus(), user, active_remove);
+							$(items_wrapper).mCustomScrollbar({
+					            theme:"light-3",
+					            autoHideScrollbar: true
+					        });
+						document.getElementById(items_wrapper.childNodes[0].id+'_container').appendChild(item);
 						updateOrAppendHTML(snap.key, item, items_wrapper); 
  					});	
 				}	
@@ -221,11 +234,12 @@
   		//Put the friends list in the list
   		list.appendChild(friends_list);
 
-  		//Put the list items in the list
-  		list.appendChild(items_wrapper);
-
   		//Append the list to the HTML wrapper
   		lists_details.appendChild(list);
+
+  		//Add the controls
+	  	var listControls = HTMLcreateListItemControls();
+		list.appendChild(listControls);
   	};
 
   	function removeUsersList(key, cb) {
