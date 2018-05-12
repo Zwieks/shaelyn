@@ -16,6 +16,12 @@
 	 	return firebase.database().ref().update(updates);
 	};
 
+	$.fn.firebase_invite_user = function(inviteUserId) {
+	 	if (typeof inviteUserId != 'undefined') {
+			writeNewUserInvite(inviteUserId, firebase.auth().currentUser.uid);
+	 	}
+	};
+
 	//Removes single LIST ITEM
 	$.fn.firebase_removeListItem = function(listId, itemId) {
 		$('#'+itemId).slideUp();
@@ -80,7 +86,6 @@
 		$(this).parent().parent().find('.remove-list').removeClass('show');
 		$("#js-remove-list").removeClass('active');
 
-		$(this).toggleClass('active');
 		var itemCount = 0,
 			name = "",
 			ownerImage = 'default',
@@ -158,6 +163,24 @@
 		writeNewListItem(newPostKey, "", 0, false, "");
 
 		return firebase.database().ref().update(updates);		
+	}
+
+	function writeNewUserInvite(inviteUserId, uId) {
+		// A post entry.
+	  	var postData = {
+    		from: uId,
+    		type: "request"
+	  	};
+
+		// Get a key for a new Post.
+		var newPostKey = firebase.database().ref().child('notifications/'+ inviteUserId).push().key;
+		
+	  	// Write the new post's data simultaneously in the posts list and the user's post list.
+	  	var updates = {};
+
+		updates['notifications/'+ inviteUserId +'/'+ newPostKey] = postData;
+
+		return firebase.database().ref().update(updates);
 	}
 
 	function writeNewListItem(listId, detail, orderNumber, ticked, title) {

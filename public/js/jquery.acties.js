@@ -142,6 +142,9 @@ $(document).on("click","#js-logout",function() {
 	logout();
 });
 
+$(document).on("click","#modal-search-friends .card",function(){
+	$(this).parent().toggleClass("invite");
+});
 
 $(document).on("click","#js-invite-friends", function(){
 	$(".invite").each(function() {
@@ -150,8 +153,15 @@ $(document).on("click","#js-invite-friends", function(){
 	});
 });
 
-$(document).on("click","#modal-search-friends .card",function(){
+$(document).on("click","#modal-search-users .card",function(){
 	$(this).parent().toggleClass("invite");
+});
+
+$(document).on("click","#js-invite-users", function(){
+	$(".invite").each(function() {
+    	var id = $(this).attr('id').replace('userfriend-', '');
+    	$.fn.firebase_invite_user(id);
+	});
 });
 
 //This will sign-out the user

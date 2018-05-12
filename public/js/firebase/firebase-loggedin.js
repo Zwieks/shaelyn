@@ -116,7 +116,7 @@
 				if(snap.val() != null) {
 	  				//Renders the friends that are invited for the specific list
 	  				var friend = HTMLcreateFriend(snap);
-	  				
+
 					updateOrAppendHTML("userfriend-"+snap.key, friend, document.getElementById(friends.childNodes[0].id+'_container'));
 				};	
   			});	
@@ -222,8 +222,8 @@
 				            theme:"light-3",
 				            autoHideScrollbar: true
 				        });
-				        $(items_wrapper).mCustomScrollbar("scrollTo","top");
 						if(document.getElementById(items_wrapper.childNodes[0].id+'_container') != null) {
+				        	$(items_wrapper).mCustomScrollbar("scrollTo","top");
 							updateOrAppendHTML(snap.key, item, document.getElementById(items_wrapper.childNodes[0].id+'_container')); 
 						}
  					});	
