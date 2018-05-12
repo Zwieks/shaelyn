@@ -9,14 +9,20 @@
 
 {{--Modal BODY--}}
 <div class="modal-body">
-	<div class="image-wrapper">
-		<figure>
-			<img src="{{ asset('img/add-user.svg') }}">
-		</figure>
-	</div>
-	@include('forms.search-users')
+	<div id="js-invite-user-search">
+		<div class="image-wrapper">
+			<figure>
+				<img src="{{ asset('img/add-user.svg') }}">
+			</figure>
+		</div>
+		@include('forms.search-users')
 
-	<div id="firebase-search-users-results" class="component-search"></div>
+		<div id="firebase-search-users-results" class="component-search"></div>
+	</div>
+
+	<div id="js-user-invite-confirmation">
+		<h3>{{ Lang::get('modal.confirmation.userinvite') }}</h3>
+	</div>	
 </div>
 
 {{--Modal FOOTER--}}

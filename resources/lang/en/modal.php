@@ -14,4 +14,8 @@ return [
         	'title' => 'Invite your friends',
         ],        
     ],
+
+    'confirmation' => [
+        'userinvite' => 'The invitation has been sent',   
+    ],
 ];

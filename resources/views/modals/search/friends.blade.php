@@ -9,18 +9,24 @@
 
 {{--Modal BODY--}}
 <div class="modal-body">
-	<div class="image-wrapper">
-		<figure>
-			<img src="{{ asset('img/add-user.svg') }}">
-		</figure>
-	</div>
-	@include('forms.search-friends')
+	<div id="js-invite-friend-search">
+		<div class="image-wrapper">
+			<figure>
+				<img src="{{ asset('img/add-user.svg') }}">
+			</figure>
+		</div>
+		@include('forms.search-friends')
 
-	<div id="firebase-search-friends-results" class="component-search"></div>
+		<div id="firebase-search-friends-results" class="component-search"></div>
+	</div>
+
+	<div id="js-user-invite-confirmation">
+		<h3>{{ Lang::get('modal.confirmation.userinvite') }}</h3>
+	</div>
 </div>
 
 {{--Modal FOOTER--}}
 <div class="modal-footer">
 	<button type="button" class="btn btn-default" data-dismiss="modal">{{ Lang::get('buttons.cancel') }}</button>
-	<button type="button" class="btn btn-primary" id="js-invite-friend">{{ Lang::get('buttons.invite') }}</button>
+	<button type="button" class="btn btn-primary" id="js-invite-friends">{{ Lang::get('buttons.invite') }}</button>
 </div>

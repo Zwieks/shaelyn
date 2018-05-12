@@ -147,10 +147,18 @@ $(document).on("click","#modal-search-friends .card",function(){
 });
 
 $(document).on("click","#js-invite-friends", function(){
+
 	$(".invite").each(function() {
     	var id = $(this).attr('id').replace('userfriend-', '');
     	console.log(id);
 	});
+
+	$('#js-invite-friend-search').hide();
+	$('#js-friend-invite-confirmation').show();
+
+	setTimeout(function(){
+		$('#modal-search-friends').modal('hide');
+	}, 1500);
 });
 
 $(document).on("click","#modal-search-users .card",function(){
@@ -162,6 +170,13 @@ $(document).on("click","#js-invite-users", function(){
     	var id = $(this).attr('id').replace('userfriend-', '');
     	$.fn.firebase_invite_user(id);
 	});
+
+	$('#js-invite-user-search').hide();
+	$('#js-user-invite-confirmation').show();
+
+	setTimeout(function(){
+		$('#modal-search-users').modal('hide');
+	}, 1500);
 });
 
 //This will sign-out the user
