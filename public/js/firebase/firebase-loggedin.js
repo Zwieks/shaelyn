@@ -116,8 +116,8 @@
 				if(snap.val() != null) {
 	  				//Renders the friends that are invited for the specific list
 	  				var friend = HTMLcreateFriend(snap);
-	  				document.getElementById(friends.childNodes[0].id+'_container').appendChild(friend);
-					updateOrAppendHTML("userfriend-"+snap.key, friend, friends);
+
+					updateOrAppendHTML("userfriend-"+snap.key, friend, document.getElementById(friends.childNodes[0].id+'_container'));
 				};	
   			});	
   		});		
@@ -144,9 +144,7 @@
 	  				var list_main_title = HTMLcreateListMainTitle(snap, checkFocus(), show);
 
 	  				//Put the HTML in the container
-	  				updateOrAppendHTML("list-"+snap.key, list_overview_item, lists);
-
-	  				document.getElementById(lists.childNodes[0].id+'_container').appendChild(list_overview_item);
+	  				updateOrAppendHTML("list-"+snap.key, list_overview_item, document.getElementById(lists.childNodes[0].id+'_container'));
 	  				updateOrAppendHTML("list-title-"+snap.key, list_main_title, lists_title);
 	  			}	
   			});
@@ -220,12 +218,12 @@
  						user = snapshot.val();
 						
 						var item = HTMLcreateListItem(listId, snap, checkFocus(), user, active_remove);
-							$(items_wrapper).mCustomScrollbar({
-					            theme:"light-3",
-					            autoHideScrollbar: true
-					        });
-						document.getElementById(items_wrapper.childNodes[0].id+'_container').appendChild(item);
-						updateOrAppendHTML(snap.key, item, items_wrapper); 
+						$(items_wrapper).mCustomScrollbar({
+				            theme:"light-3",
+				            autoHideScrollbar: true
+				        });
+
+						updateOrAppendHTML(snap.key, item, document.getElementById(items_wrapper.childNodes[0].id+'_container')); 
  					});	
 				}	
 			});
