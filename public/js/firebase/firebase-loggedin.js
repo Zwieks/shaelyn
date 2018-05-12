@@ -116,7 +116,7 @@
 				if(snap.val() != null) {
 	  				//Renders the friends that are invited for the specific list
 	  				var friend = HTMLcreateFriend(snap);
-
+	  				
 					updateOrAppendHTML("userfriend-"+snap.key, friend, document.getElementById(friends.childNodes[0].id+'_container'));
 				};	
   			});	
@@ -142,7 +142,7 @@
 	  					show = true;
 	  				}
 	  				var list_main_title = HTMLcreateListMainTitle(snap, checkFocus(), show);
-
+	  				$(lists).mCustomScrollbar("scrollTo","top");
 	  				//Put the HTML in the container
 	  				updateOrAppendHTML("list-"+snap.key, list_overview_item, document.getElementById(lists.childNodes[0].id+'_container'));
 	  				updateOrAppendHTML("list-title-"+snap.key, list_main_title, lists_title);
@@ -222,8 +222,10 @@
 				            theme:"light-3",
 				            autoHideScrollbar: true
 				        });
-
-						updateOrAppendHTML(snap.key, item, document.getElementById(items_wrapper.childNodes[0].id+'_container')); 
+				        $(items_wrapper).mCustomScrollbar("scrollTo","top");
+						if(document.getElementById(items_wrapper.childNodes[0].id+'_container') != null) {
+							updateOrAppendHTML(snap.key, item, document.getElementById(items_wrapper.childNodes[0].id+'_container')); 
+						}
  					});	
 				}	
 			});
@@ -293,7 +295,7 @@
 			var update_item_list = document.getElementById(id);
 				update_item_list.innerHTML = HTML_object.innerHTML;
 		}else {
-			parent.appendChild(HTML_object);
+			parent.prepend(HTML_object);
 		}
 
 
