@@ -20,7 +20,7 @@
 		<div id="firebase-search-friends-results" class="component-search"></div>
 	</div>
 
-	<div id="js-user-invite-confirmation">
+	<div id="js-friend-invite-confirmation">
 		<h3>{{ Lang::get('modal.confirmation.userinvite') }}</h3>
 	</div>
 </div>
