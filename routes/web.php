@@ -33,7 +33,7 @@ Route::get('/roadmap', 'RoadmapController@anchor');
 // Auth
 Route::post('/auth/{uid}', 'FirebaseController@index');
 
-Route::post('/ajax/resetSession', 'ajaxController@resetSession');
+Route::get('/ajax/resetSession', 'AjaxController@resetSession');
 
 // Localization
 Route::get('/js/lang.js', function () {
