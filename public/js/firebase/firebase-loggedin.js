@@ -224,19 +224,16 @@
 				            autoHideScrollbar: true
 				        });
 
-						console.log(focusCheck);
-
 						if(document.getElementById(items_wrapper.childNodes[0].id+'_container') != null) {
 				        	$(items_wrapper).mCustomScrollbar("scrollTo","top");   	
 
 							if(focusCheck != '') {
-								console.log('focus');
 								updateOrAppendHTML(snap.key, item, document.getElementById(items_wrapper.childNodes[0].id+'_container')); 
 							}else {
 								if(document.getElementById(snap.key) != null) {
 									document.getElementById(snap.key).remove();
 								}  
-								
+
 					        	if(snap.val().ticked != false) {
 									updateOrAppendHTML(snap.key, item, document.getElementById("list-items-checked"));
 					        	}else {
