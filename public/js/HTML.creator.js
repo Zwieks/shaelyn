@@ -170,7 +170,16 @@ function HTMLcreateListOverviewItem(snap) {
 	var HTML_list_overview_indicator_owner = document.createElement("div");
 		HTML_list_overview_indicator_owner.className = "owner-indicator";
 
-	if(snap.val().ownerImage != 'default') {
+	//Get the user image
+	var image = '';
+
+	firebase.database().ref("Users/"+firebase.auth().currentUser.uid).once('value', snap => {
+	   image = snap.val().thumb_image;
+
+	   return image;
+	});
+
+	if(snap.val().ownerImage != image) {
 		var HTML_list_overview_indicator_owner_image = document.createElement("img");
 			HTML_list_overview_indicator_owner_image.className = "avatar";
 			HTML_list_overview_indicator_owner_image.setAttribute("src", snap.val().ownerImage);

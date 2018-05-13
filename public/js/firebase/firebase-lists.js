@@ -83,12 +83,21 @@
 
 	// Add a new LIST
 	$(document).on("click","#js-add-list",function() {
+		var image = '';
+		
 		$(this).parent().parent().find('.remove-list').removeClass('show');
 		$("#js-remove-list").removeClass('active');
 
+		//Get the user image
+		firebase.database().ref("Users/"+firebase.auth().currentUser.uid).once('value', snap => {
+		   image = snap.val().thumb_image;
+
+		   return image;
+		});
+
 		var itemCount = 0,
 			name = "",
-			ownerImage = 'default',
+			ownerImage = image,
 			time = '',
 			userCount = 1;
 
