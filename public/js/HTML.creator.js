@@ -273,8 +273,17 @@ function HTMLcreateListFriend(listId, snap) {
 }
 
 function HTMLcreateListItemsWrapper(listId) {
-	var HTML_list_items_wrapper = document.createElement("ul");
+	var HTML_list_items_wrapper = document.createElement("div");
 		HTML_list_items_wrapper.className = 'card-main';
+
+	var HTML_list_items_wrapper_unchecked = document.createElement("ul");
+		HTML_list_items_wrapper_unchecked.setAttribute("id", "list-items-unchecked");
+
+	var HTML_list_items_wrapper_checked = document.createElement("ul");
+		HTML_list_items_wrapper_checked.setAttribute("id", "list-items-checked");
+
+	HTML_list_items_wrapper.appendChild(HTML_list_items_wrapper_unchecked);
+	HTML_list_items_wrapper.appendChild(HTML_list_items_wrapper_checked);
 
 	return HTML_list_items_wrapper;	
 }

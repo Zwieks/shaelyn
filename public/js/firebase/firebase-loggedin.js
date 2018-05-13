@@ -215,19 +215,37 @@
   					}
 
 					userRef.on('value', snapshot => {
+						var focusCheck = checkFocus();
  						user = snapshot.val();
 						
-						var item = HTMLcreateListItem(listId, snap, checkFocus(), user, active_remove);
+						var item = HTMLcreateListItem(listId, snap, focusCheck, user, active_remove);
 						$(items_wrapper).mCustomScrollbar({
 				            theme:"light-3",
 				            autoHideScrollbar: true
 				        });
+
+						console.log(focusCheck);
+
 						if(document.getElementById(items_wrapper.childNodes[0].id+'_container') != null) {
-				        	$(items_wrapper).mCustomScrollbar("scrollTo","top");
-							updateOrAppendHTML(snap.key, item, document.getElementById(items_wrapper.childNodes[0].id+'_container')); 
+				        	$(items_wrapper).mCustomScrollbar("scrollTo","top");   	
+
+							if(focusCheck != '') {
+								console.log('focus');
+								updateOrAppendHTML(snap.key, item, document.getElementById(items_wrapper.childNodes[0].id+'_container')); 
+							}else {
+								if(document.getElementById(snap.key) != null) {
+									document.getElementById(snap.key).remove();
+								}  
+								
+					        	if(snap.val().ticked != false) {
+									updateOrAppendHTML(snap.key, item, document.getElementById("list-items-checked"));
+					        	}else {
+					        		updateOrAppendHTML(snap.key, item, document.getElementById("list-items-unchecked"));
+					        	}
+							}
 						}
- 					});	
-				}	
+ 					});
+				}
 			});
   		});
 

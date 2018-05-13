@@ -147,18 +147,19 @@ $(document).on("click","#modal-search-friends .card",function(){
 });
 
 $(document).on("click","#js-invite-friends", function(){
+	if ($(".invite").length) {
+		$(".invite").each(function() {
+	    	var id = $(this).attr('id').replace('userfriend-', '');
+		});
 
-	$(".invite").each(function() {
-    	var id = $(this).attr('id').replace('userfriend-', '');
-	});
+		$('#js-invite-friend-search').hide();
+		$('#js-friend-invite-confirmation').show();
+		$('#js-invite-friends').hide();
 
-	$('#js-invite-friend-search').hide();
-	$('#js-friend-invite-confirmation').show();
-	$('#js-invite-friends').hide();
-
-	setTimeout(function(){
-		$('#modal-search-friends').modal('hide');
-	}, 1500);
+		setTimeout(function(){
+			$('#modal-search-friends').modal('hide');
+		}, 1500);
+	};		
 });
 
 $(document).on("click","#modal-search-users .card",function(){
@@ -166,18 +167,28 @@ $(document).on("click","#modal-search-users .card",function(){
 });
 
 $(document).on("click","#js-invite-users", function(){
-	$(".invite").each(function() {
-    	var id = $(this).attr('id').replace('userfriend-', '');
-    	$.fn.firebase_invite_user(id);
-	});
+	if ($(".invite").length) {
+		$(".invite").each(function() {
+	    	var id = $(this).attr('id').replace('userfriend-', '');
+	    	$.fn.firebase_invite_user(id);
+		});
 
-	$('#js-invite-user-search').hide();
-	$('#js-user-invite-confirmation').show();
-	$('#js-invite-users').hide();
+		$('#js-invite-user-search').hide();
+		$('#js-user-invite-confirmation').show();
+		$('#js-invite-users').hide();
 
-	setTimeout(function(){
-		$('#modal-search-users').modal('hide');
-	}, 1500);
+		setTimeout(function(){
+			$('#modal-search-users').modal('hide');
+		}, 1500);
+	};		
+});
+
+$(document).on("keypress","[contenteditable]", function(evt){
+  var keycode = evt.charCode || evt.keyCode;
+  if (keycode  == 13) { //Enter key's keycode
+  	$(this).blur();
+    return false;
+  }
 });
 
 //This will sign-out the user

@@ -21,6 +21,11 @@
 	</div>
 
 	<div class="modal-notification" id="js-user-invite-confirmation">
+		<div class="image-wrapper">
+			<figure>
+				<img src="{{ asset('img/rocket.svg') }}">
+			</figure>
+		</div>
 		<h3>{{ Lang::get('modal.confirmation.userinvite') }}</h3>
 	</div>	
 </div>

@@ -8636,6 +8636,9 @@ form ol {
           flex-grow: 1;
   height: 33.6rem;
 }
+.dashboard-wrapper .details .detail-item .card-main ul {
+  margin: 0;
+}
 .dashboard-wrapper .details .detail-item .card-main li:not(.form-input-checkbox) {
   display: -webkit-box;
   display: -moz-flex;
