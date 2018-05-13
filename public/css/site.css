@@ -10457,6 +10457,12 @@ form ol {
   width: 100%;
   height: auto;
 }
+.modal-notification h3 {
+  font-size: 2.4rem;
+}
+.modal-notification .image-wrapper {
+  height: 23rem;
+}
 @media (min-width: 900px) {
   .modal-dialog {
     width: 600px;

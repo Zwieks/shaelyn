@@ -14,6 +14,7 @@
         $( "#modal-search-friends" ).on('shown.bs.modal', function(e){
 			$('#search_field_friends').focus();
             $('#js-friend-invite-confirmation').hide();
+            $('#js-invite-friends').show();
         });
     });
 </script>

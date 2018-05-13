@@ -14,6 +14,7 @@
         $( "#modal-search-users" ).on('shown.bs.modal', function(e){
 			$('#search_field_users').focus();
             $('#js-user-invite-confirmation').hide();
+            $('#js-invite-users').show();
         });
     });
 </script>

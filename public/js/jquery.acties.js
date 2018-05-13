@@ -150,11 +150,11 @@ $(document).on("click","#js-invite-friends", function(){
 
 	$(".invite").each(function() {
     	var id = $(this).attr('id').replace('userfriend-', '');
-    	console.log(id);
 	});
 
 	$('#js-invite-friend-search').hide();
 	$('#js-friend-invite-confirmation').show();
+	$('#js-invite-friends').hide();
 
 	setTimeout(function(){
 		$('#modal-search-friends').modal('hide');
@@ -173,6 +173,7 @@ $(document).on("click","#js-invite-users", function(){
 
 	$('#js-invite-user-search').hide();
 	$('#js-user-invite-confirmation').show();
+	$('#js-invite-users').hide();
 
 	setTimeout(function(){
 		$('#modal-search-users').modal('hide');

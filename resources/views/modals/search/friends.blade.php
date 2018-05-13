@@ -20,7 +20,12 @@
 		<div id="firebase-search-friends-results" class="component-search"></div>
 	</div>
 
-	<div id="js-friend-invite-confirmation">
+	<div class="modal-notification" id="js-friend-invite-confirmation">
+		<div class="image-wrapper">
+			<figure>
+				<img src="{{ asset('img/rocket.svg') }}">
+			</figure>
+		</div>
 		<h3>{{ Lang::get('modal.confirmation.userinvite') }}</h3>
 	</div>
 </div>
