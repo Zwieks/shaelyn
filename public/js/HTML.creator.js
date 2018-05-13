@@ -277,10 +277,10 @@ function HTMLcreateListItemsWrapper(listId) {
 		HTML_list_items_wrapper.className = 'card-main';
 
 	var HTML_list_items_wrapper_unchecked = document.createElement("ul");
-		HTML_list_items_wrapper_unchecked.setAttribute("id", "list-items-unchecked");
+		HTML_list_items_wrapper_unchecked.setAttribute("id", listId+"-items-unchecked");
 
 	var HTML_list_items_wrapper_checked = document.createElement("ul");
-		HTML_list_items_wrapper_checked.setAttribute("id", "list-items-checked");
+		HTML_list_items_wrapper_checked.setAttribute("id", listId+"-items-checked");
 
 	HTML_list_items_wrapper.appendChild(HTML_list_items_wrapper_unchecked);
 	HTML_list_items_wrapper.appendChild(HTML_list_items_wrapper_checked);

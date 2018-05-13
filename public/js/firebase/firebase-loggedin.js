@@ -235,9 +235,9 @@
 								}  
 
 					        	if(snap.val().ticked != false) {
-									updateOrAppendHTML(snap.key, item, document.getElementById("list-items-checked"));
+									updateOrAppendHTML(snap.key, item, document.getElementById(listId+"-items-checked"));
 					        	}else {
-					        		updateOrAppendHTML(snap.key, item, document.getElementById("list-items-unchecked"));
+					        		updateOrAppendHTML(snap.key, item, document.getElementById(listId+"-items-unchecked"));
 					        	}
 							}
 						}
