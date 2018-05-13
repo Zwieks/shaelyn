@@ -92,7 +92,8 @@
 			time = '',
 			userCount = 1;
 
-			writeNewList(itemCount, name, ownerImage, time, userCount);
+		var newPostKey = writeNewList(itemCount, name, ownerImage, time, userCount);
+			writeNewListItem(newPostKey, "", 0, false, "");
 	});
 
 
@@ -160,9 +161,9 @@
 		updates['UsersLists/' + firebase.auth().currentUser.uid + '/' + newPostKey] = true;
 		updates['listAttendees/' + newPostKey + '/' + firebase.auth().currentUser.uid] = true;
 
-		writeNewListItem(newPostKey, "", 0, false, "");
+		firebase.database().ref().update(updates);
 
-		return firebase.database().ref().update(updates);		
+		return newPostKey;
 	}
 
 	function writeNewUserInvite(inviteUserId, uId) {
