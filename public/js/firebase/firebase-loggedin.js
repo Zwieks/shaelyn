@@ -17,6 +17,8 @@
   	const user_setting_notifications = document.getElementById('firebase-setting-notifications');  	
   	const image = document.getElementById('firebase-image-wrapper');
   	const friends = document.getElementById('firebase-friends');
+  	const chat_friends = document.getElementById('firebase-chat-friends');
+  	const chat_window = document.getElementById('firebase-chat-window');
   	const feeds = document.getElementById('firebase-feeds');
   	const lists = document.getElementById('firebase-lists');
   	const lists_details = document.getElementById('firebase-list-details');
@@ -39,19 +41,24 @@
   			.startAt(search.toLowerCase())
   			.endAt(search.toLowerCase() + "\uf8ff")
   			.on("value", function(snapshot) {
-  				if(snapshot.val() != null) {
+  				if(snapshot.val() != null) {	
   					var search_users_results = document.getElementById('firebase-search-users-results');
   					search_users_results.innerHTML = '';
 	  				snapshot.forEach(function(childSnapshot) {
-	  					var searchItem = HTMLcreateFriend(childSnapshot);
+
+	  					friendsRef.child(firebase.auth().currentUser.uid+'/'+childSnapshot.key).once('value', function(friendshot) {
+	  						if (!friendshot.exists()) {
+	  							var searchItem = HTMLcreateFriend(childSnapshot);
 	  					
-	  					search_users_results.appendChild(searchItem);
+	  							search_users_results.appendChild(searchItem);
+	  						};
+	  					});
 	  				});
   				}
 			});
   	}
 
-  	function searchFriends(search) {
+  	function searchFriends(search, listId) {
   		usersRef
   			.orderByChild("nameToLower")
   			.limitToFirst(9)
@@ -65,9 +72,13 @@
 
 					  	friendsRef.child(firebase.auth().currentUser.uid+'/'+childSnapshot.key).once('value', function(snapshot) {
 					  		if (snapshot.exists()) {
-	  							var searchItem = HTMLcreateFriend(childSnapshot);
+					  			listAttendeesRef.child(listId+'/'+childSnapshot.key).once('value', function(friendshot) {
+					  				if(!friendshot.exists()) {
+										var searchItem = HTMLcreateFriend(childSnapshot);
 	  					
-	  							search_users_results.appendChild(searchItem);
+	  									search_users_results.appendChild(searchItem);
+					  				}
+					  			});	
 					  		}
 						});
 
@@ -115,9 +126,15 @@
   			userRef.on('value', snap => {
 				if(snap.val() != null) {
 	  				//Renders the friends that are invited for the specific list
-	  				var friend = HTMLcreateFriend(snap);
+	  				var friend = HTMLcreateFriend(snap, '');
 
 					updateOrAppendHTML("userfriend-"+snap.key, friend, document.getElementById(friends.childNodes[0].id+'_container'));
+
+					if(document.getElementById(chat_friends.childNodes[0].id+'_container')) {
+						friend = HTMLcreateFriend(snap, 'chat-');
+						updateOrAppendHTML("chat-userfriend-"+snap.key, friend, document.getElementById(chat_friends.childNodes[0].id+'_container'));	
+					}
+					
 				};	
   			});	
   		});		
@@ -131,21 +148,35 @@
   			//Get the Friends
   			getFriendsOfList(snap.key, snap => console.log(snap.val()));
 
+  			$("#firebase-lists .remove-list").removeClass('show');
+
   			listRef.on('value', snap => {
   				if(snap.val() != null) {
 	  				//Renders the list overview
-	  				var list_overview_item = HTMLcreateListOverviewItem(snap);
-	  				var show = false;
+	  				var list_overview_item = HTMLcreateListOverviewItem(snap),
+	  					focusCheck = checkFocus(),
+	  					show = false;
+
+					//Set the focus position of the cursor
+					if(focusCheck != '') {
+						var contentEditable = getCaretPosition(document.querySelectorAll('[uni='+focusCheck+']')[0]);
+					}
 
 	  				//HTML for the main title of the list
 	  				if($("#list-title-"+snap.key).children().hasClass('show')) {
 	  					show = true;
 	  				}
-	  				var list_main_title = HTMLcreateListMainTitle(snap, checkFocus(), show);
-	  				$(lists).mCustomScrollbar("scrollTo","top");
+	  				var list_main_title = HTMLcreateListMainTitle(snap, focusCheck, show);
+
+	  				//$(lists).mCustomScrollbar("scrollTo","top");
 	  				//Put the HTML in the container
 	  				updateOrAppendHTML("list-"+snap.key, list_overview_item, document.getElementById(lists.childNodes[0].id+'_container'));
 	  				updateOrAppendHTML("list-title-"+snap.key, list_main_title, lists_title);
+
+	  				//Set the cursor position
+					if(contentEditable != 0 && focusCheck != '') {
+						setCaretPosition(document.querySelectorAll('[uni='+focusCheck+']')[0],contentEditable);	
+					}
 	  			}	
   			});
   		});
@@ -200,7 +231,8 @@
 
   		//Get the list items
   		listItemsRef.child(listId).on('child_added', snap => {
-  			active_remove = false;
+  			active_remove = false;  			
+
   			listItemsRef.child(listId+'/'+snap.key).on('value', snap => {
   				if(snap.val() != null) {
   					let userRef = usersRef.child(snap.val().changedBy);
@@ -216,20 +248,30 @@
 					userRef.on('value', snapshot => {
 						var focusCheck = checkFocus();
  						user = snapshot.val();
-						
 						var item = HTMLcreateListItem(listId, snap, focusCheck, user, active_remove);
 
+						//Set the focus position of the cursor
+						if(focusCheck != '') {
+							var contentEditable = getCaretPosition(document.querySelectorAll('[uni='+focusCheck+']')[0]);
+						}
+
+						//Init the scrollbar
 						$(items_wrapper).mCustomScrollbar({
 				            theme:"light-3",
 				            autoHideScrollbar: true
 				        });
 
 						if(document.getElementById(items_wrapper.childNodes[0].id+'_container') != null) {
-				        	$(items_wrapper).mCustomScrollbar("scrollTo","top");   	
+				        	//$(items_wrapper).mCustomScrollbar("scrollTo","top");   	
 
 							if(focusCheck != '') {
 								if(document.getElementById(items_wrapper.childNodes[0].id+'_container') != null) {
-									updateOrAppendHTML(snap.key, item, document.getElementById(listId+"-items-unchecked")); 
+									updateOrAppendHTML(snap.key, item, document.getElementById(listId+"-items-unchecked"));
+								}
+
+								//Set the cursor position
+								if(contentEditable != 0) {
+									setCaretPosition(document.querySelectorAll('[uni='+focusCheck+']')[0],contentEditable);	
 								}
 							}else {
 								if(document.getElementById(snap.key) != null) {
@@ -309,7 +351,6 @@
 	};
 
   	function updateOrAppendHTML(id, HTML_object, parent) {
-
 		if(document.getElementById(id) != null) {
 			var update_item_list = document.getElementById(id);
 				update_item_list.innerHTML = HTML_object.innerHTML;
@@ -317,13 +358,13 @@
 			parent.prepend(HTML_object);
 		}
 
-
 		//Set focus if element got class FOCUS
 		if(typeof document.querySelectorAll('[focus="true"]')[0] != 'undefined')
 		{
 			var focused = document.querySelectorAll('[focus="true"]')[0];
 			$(focused).focus();
-			setEndOfContenteditable(focused);
+
+			//setEndOfContenteditable(focused);
 		}
   	}
 
@@ -336,14 +377,19 @@
 	  		getLists(user.uid, snap => console.log(snap.val()));
 
 	  		$(document).on("input",".firebase-search-friends",function(e) {
-				var dInput = this.value;
+				var dInput = this.value,
+					listId = $('#js-invite-friends').attr('data-list');
 
 				if(typeof dInput == 'undefined') {
 					dInput = $(this).text();
 				}
 
-				if(dInput.trim() != '') {
-					searchFriends(dInput);
+				if(typeof listId == 'undefined') {
+					listId = $(this).text();
+				}
+
+				if(dInput.trim() != '' && typeof listId != 'undefined') {
+					searchFriends(dInput, listId);
 				}
 	  		});
 

@@ -15,6 +15,7 @@
 			$('#search_field_users').focus();
             $('#js-user-invite-confirmation').hide();
             $('#js-invite-users').show();
+            $('.js-modal-cancel').show();
         });
     });
 </script>

@@ -54,23 +54,59 @@ function invertColor(bgColor) {
 }
 
 function setEndOfContenteditable(contentEditableElement){
-    var range,selection;
-    if(document.createRange)//Firefox, Chrome, Opera, Safari, IE 9+
-    {
-        range = document.createRange();//Create a range (a range is a like the selection but invisible)
-        range.selectNodeContents(contentEditableElement);//Select the entire contents of the element with the range
-        range.collapse(false);//collapse the range to the end point. false means collapse to end rather than the start
-        selection = window.getSelection();//get the selection object (allows you to change selection)
-        selection.removeAllRanges();//remove any selections already made
-        selection.addRange(range);//make the range you have just created the visible selection
+    // var range,selection;
+    // if(document.createRange)//Firefox, Chrome, Opera, Safari, IE 9+
+    // {
+    //     range = document.createRange();//Create a range (a range is a like the selection but invisible)
+    //     range.selectNodeContents(contentEditableElement);//Select the entire contents of the element with the range
+    //     range.collapse(false);//collapse the range to the end point. false means collapse to end rather than the start
+    //     selection = window.getSelection();//get the selection object (allows you to change selection)
+    //     selection.removeAllRanges();//remove any selections already made
+    //     selection.addRange(range);//make the range you have just created the visible selection
+    // }
+    // else if(document.selection)//IE 8 and lower
+    // { 
+    //     range = document.body.createTextRange();//Create a range (a range is a like the selection but invisible)
+    //     range.moveToElementText(contentEditableElement);//Select the entire contents of the element with the range
+    //     range.collapse(false);//collapse the range to the end point. false means collapse to end rather than the start
+    //     range.select();//Select the range (make it the visible selection
+    // }
+    //setCaretPosition(contentEditableElement, 3);
+}
+
+function setCaretPosition(el, pos) {
+	var range = document.createRange();
+	var sel = window.getSelection();
+	range.setStart(el.childNodes[0], pos);
+	range.collapse(true);
+	sel.removeAllRanges();
+	sel.addRange(range);
+	el.focus();
+}
+
+function getCaretPosition(editableDiv) {
+  var caretPos = 0,
+    sel, range;
+  if (window.getSelection) {
+    sel = window.getSelection();
+    if (sel.rangeCount) {
+      range = sel.getRangeAt(0);
+      if (range.commonAncestorContainer.parentNode == editableDiv) {
+        caretPos = range.endOffset;
+      }
     }
-    else if(document.selection)//IE 8 and lower
-    { 
-        range = document.body.createTextRange();//Create a range (a range is a like the selection but invisible)
-        range.moveToElementText(contentEditableElement);//Select the entire contents of the element with the range
-        range.collapse(false);//collapse the range to the end point. false means collapse to end rather than the start
-        range.select();//Select the range (make it the visible selection
+  } else if (document.selection && document.selection.createRange) {
+    range = document.selection.createRange();
+    if (range.parentElement() == editableDiv) {
+      var tempEl = document.createElement("span");
+      editableDiv.insertBefore(tempEl, editableDiv.firstChild);
+      var tempRange = range.duplicate();
+      tempRange.moveToElementText(tempEl);
+      tempRange.setEndPoint("EndToEnd", range);
+      caretPos = tempRange.text.length;
     }
+  }
+  return caretPos;
 }
 
 function scrollToAnchor(aid){
@@ -149,12 +185,16 @@ $(document).on("click","#modal-search-friends .card",function(){
 $(document).on("click","#js-invite-friends", function(){
 	if ($(".invite").length) {
 		$(".invite").each(function() {
-	    	var id = $(this).attr('id').replace('userfriend-', '');
+	    	var id = $(this).attr('id').replace('userfriend-', ''),
+	    		listId = $('#js-invite-friends').attr('data-list');
+
+	    	$.fn.firebase_invite_friends(id, listId);
 		});
 
 		$('#js-invite-friend-search').hide();
 		$('#js-friend-invite-confirmation').show();
 		$('#js-invite-friends').hide();
+		$('.js-modal-cancel').hide();
 
 		setTimeout(function(){
 			$('#modal-search-friends').modal('hide');
@@ -176,6 +216,7 @@ $(document).on("click","#js-invite-users", function(){
 		$('#js-invite-user-search').hide();
 		$('#js-user-invite-confirmation').show();
 		$('#js-invite-users').hide();
+		$('.js-modal-cancel').hide();
 
 		setTimeout(function(){
 			$('#modal-search-users').modal('hide');
@@ -193,6 +234,11 @@ $(document).on("keypress","[contenteditable]", function(evt){
 
 //This will sign-out the user
 function logout() {
+	//Set online status
+	firebase.database().ref("Users/"+ firebase.auth().currentUser.uid).update({ 
+		online: Date.now()
+	});
+
 	firebase.auth().signOut().then(function() {
 	  	// Sign-out successful.
 		var token = $('meta[name="csrf-token"]').attr('content'),
@@ -200,7 +246,7 @@ function logout() {
 			data = '';
 
 		$.ajax({
-			type: 'POST',
+			method: 'POST',
 			url: url,
 			headers: {'X-CSRF-TOKEN': token},
 			data: data,

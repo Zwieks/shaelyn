@@ -30,17 +30,17 @@ function HTMLcreateUserProfile(snap) {
 	return HTML_user_image_wrapper;
 }
 
-function HTMLcreateFriend(snap) {
+function HTMLcreateFriend(snap, type) {
 	var HTML_friends_overview_wrapper = document.createElement("div");
 		HTML_friends_overview_wrapper.className = "card-wrapper";
-		HTML_friends_overview_wrapper.setAttribute("id", "userfriend-"+snap.key);
+		HTML_friends_overview_wrapper.setAttribute("id", type+"userfriend-"+snap.key);
 
 	var HTML_friends_overview_inner  = document.createElement("div");
 
-		if(snap.val().online != 'online') {
+		if(snap.val().online != true) {
 			HTML_friends_overview_inner.className = "card";
 		}else {
-			HTML_friends_overview_inner.className = "card "+snap.val().online;
+			HTML_friends_overview_inner.className = "card online";
 		}
 
 	var HTML_friends_image_wrapper = document.createElement("figure");
@@ -146,7 +146,7 @@ function HTMLcreateListOverviewItem(snap) {
 
 	var HTML_list_overview_title = document.createElement("span");
 		HTML_list_overview_title.className = "card-title";	
-		
+
 		if(snap.val().name) {
 			HTML_list_overview_title.appendChild(document.createTextNode(snap.val().name));
 		}else {
@@ -224,6 +224,12 @@ function HTMLcreateListMainTitle(snap, focus, show) {
 			HTML_main_title_list.setAttribute("focus", false);
 		}
 
+		if(focus == "title-"+snap.key) {
+			HTML_main_title_list.setAttribute("focus", true);
+		}else{
+			HTML_main_title_list.setAttribute("focus", false);
+		}
+
 		if(show != true) {
 			HTML_main_title_list.className = "firebase-set list-item-title title-"+snap.key;
 		}else{
@@ -286,9 +292,11 @@ function HTMLcreateListItemsWrapper(listId) {
 		HTML_list_items_wrapper.className = 'card-main';
 
 	var HTML_list_items_wrapper_unchecked = document.createElement("ul");
+		HTML_list_items_wrapper_unchecked.className = "list-unchecked";
 		HTML_list_items_wrapper_unchecked.setAttribute("id", listId+"-items-unchecked");
 
 	var HTML_list_items_wrapper_checked = document.createElement("ul");
+		HTML_list_items_wrapper_checked.className = "list-checked";
 		HTML_list_items_wrapper_checked.setAttribute("id", listId+"-items-checked");
 
 	HTML_list_items_wrapper.appendChild(HTML_list_items_wrapper_unchecked);

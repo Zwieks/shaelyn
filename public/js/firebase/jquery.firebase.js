@@ -6,6 +6,11 @@ firebase.auth().onAuthStateChanged(function(user) {
     if(user != null){
     	var email_id = user.email;
 
+    	//Set online status
+    	firebase.database().ref("Users/"+ user.uid).update({ 
+    		online: true
+    	});
+
     	handleUserSession(user.uid);
     }
   } else {

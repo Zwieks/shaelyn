@@ -32,6 +32,6 @@
 
 {{--Modal FOOTER--}}
 <div class="modal-footer">
-	<button type="button" class="btn btn-default" data-dismiss="modal">{{ Lang::get('buttons.cancel') }}</button>
+	<button type="button" class="btn btn-default js-modal-cancel" data-dismiss="modal">{{ Lang::get('buttons.cancel') }}</button>
 	<button type="button" class="btn btn-primary" id="js-invite-users">{{ Lang::get('buttons.invite') }}</button>
 </div>

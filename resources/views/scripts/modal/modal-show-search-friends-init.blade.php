@@ -12,9 +12,15 @@
 
         //Click on the agenda item
         $( "#modal-search-friends" ).on('shown.bs.modal', function(e){
+
+            //Get the listId of the active list
+            var listId = $("#firebase-list-details").find(".show").attr("ref");
+
+            $('#js-invite-friends').attr('data-list',listId);
 			$('#search_field_friends').focus();
             $('#js-friend-invite-confirmation').hide();
             $('#js-invite-friends').show();
+            $('.js-modal-cancel').show();
         });
     });
 </script>

@@ -5,13 +5,15 @@
 ;(function($) {
 	//Removes single LIST
 	$.fn.firebase_removeList = function(listId) {
-		$('#list-'+listId).slideUp();
+		$('#list-'+listId).slideUp("normal", function() { 
+			$(this).remove(); 
+		});
 
-	  	var updates = {};
+	  	var updates = {},
+	  		currentUser = firebase.auth().currentUser.uid;
 
-	  	updates['lists/' + listId] = null;
-	  	updates['listAttendees/' + listId] = null;
-	  	updates['listItems/' + listId] = null;
+	  	updates['UsersLists/' + currentUser + '/' + listId] = null;
+	  	updates['listAttendees/' + listId  + '/' + currentUser] = null;
 
 	 	return firebase.database().ref().update(updates);
 	};
@@ -21,6 +23,13 @@
 			writeNewUserInvite(inviteUserId, firebase.auth().currentUser.uid);
 	 	}
 	};
+
+	$.fn.firebase_invite_friends = function(inviteUserId, listId) {
+	 	if (typeof inviteUserId != 'undefined') {
+			writeNewFriendsInvite(inviteUserId, firebase.auth().currentUser.uid, listId);
+	 	}
+	};
+
 
 	//Removes single LIST ITEM
 	$.fn.firebase_removeListItem = function(listId, itemId) {
@@ -173,6 +182,16 @@
 		firebase.database().ref().update(updates);
 
 		return newPostKey;
+	}
+
+	function writeNewFriendsInvite(inviteUserId, uId, listId) {
+	  	// Write the new post's data simultaneously in the posts list and the user's post list.
+	  	var updates = {};
+
+		updates['UsersLists/'+ inviteUserId +'/'+ listId] = true;
+		updates['listAttendees/'+ listId +'/'+ inviteUserId] = true;
+
+		return firebase.database().ref().update(updates);		
 	}
 
 	function writeNewUserInvite(inviteUserId, uId) {

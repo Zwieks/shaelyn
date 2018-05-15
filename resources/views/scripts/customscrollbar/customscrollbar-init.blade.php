@@ -13,6 +13,20 @@
                 theme:"light-3",
                 autoHideScrollbar: true
             });
-        }        
+        }  
+
+        if($('#firebase-chat-friends').length) {
+            $("#firebase-chat-friends").mCustomScrollbar({
+                theme:"light-3",
+                autoHideScrollbar: true
+            });
+        }
+
+        if($('#firebase-chat-window').length) {
+            $("#firebase-chat-window").mCustomScrollbar({
+                theme:"light-3",
+                autoHideScrollbar: true
+            });
+        }             
     });
 </script>
