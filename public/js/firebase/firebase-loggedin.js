@@ -17,6 +17,11 @@
   	const user_setting_notifications = document.getElementById('firebase-setting-notifications');  	
   	const image = document.getElementById('firebase-image-wrapper');
   	const friends = document.getElementById('firebase-friends');
+  	const friends_online = document.getElementById('firebase-online-users');
+  	const friends_offline = document.getElementById('firebase-offline-users');  	
+  	const chat_friends_online = document.getElementById('firebase-online-users-chat');
+  	const chat_friends_offline = document.getElementById('firebase-offline-users-chat');
+  	const chat_meta = document.getElementById('firebase-chat-meta');
   	const chat_friends = document.getElementById('firebase-chat-friends');
   	const chat_window = document.getElementById('firebase-chat-window');
   	const feeds = document.getElementById('firebase-feeds');
@@ -33,6 +38,12 @@
   	const userListsRef = ref.child('UsersLists');
   	const listItemsRef = ref.child('listItems');
   	const friendsRef = ref.child('Friends');
+
+  	function getChats(userId, cb) {
+  		//Future Chat stuff here
+  		var meta = HTMLcreateChatMeta();
+  		updateOrAppendHTML("chat-meta", meta, chat_meta);
+  	}
 
   	function searchUsers(search) {
   		usersRef
@@ -126,13 +137,35 @@
   			userRef.on('value', snap => {
 				if(snap.val() != null) {
 	  				//Renders the friends that are invited for the specific list
-	  				var friend = HTMLcreateFriend(snap, '');
+	  				var friend = HTMLcreateFriend(snap, ''),
+	  					parent = document.getElementById(chat_friends.childNodes[0].id+'_container');
 
-					updateOrAppendHTML("userfriend-"+snap.key, friend, document.getElementById(friends.childNodes[0].id+'_container'));
+	  				if (parent == null) {
+	  					parent = lists;
+	  				}
 
-					if(document.getElementById(chat_friends.childNodes[0].id+'_container')) {
+	  				if(document.getElementById("userfriend-"+snap.key) != null) {
+						document.getElementById("userfriend-"+snap.key).remove();
+					}  
+
+	  				if(document.getElementById("chat-userfriend-"+snap.key) != null) {
+						document.getElementById("chat-userfriend-"+snap.key).remove();
+					}  
+
+	  				if(snap.val().online != true){
+						updateOrAppendHTML("userfriend-"+snap.key, friend, friends_offline);
+	  				}else {
+	  					updateOrAppendHTML("userfriend-"+snap.key, friend, friends_online);
+	  				}
+
+					if(parent) {
 						friend = HTMLcreateFriend(snap, 'chat-');
-						updateOrAppendHTML("chat-userfriend-"+snap.key, friend, document.getElementById(chat_friends.childNodes[0].id+'_container'));	
+
+						if(snap.val().online != true){
+							updateOrAppendHTML("chat-userfriend-"+snap.key, friend, chat_friends_offline);
+		  				}else {
+		  					updateOrAppendHTML("chat-userfriend-"+snap.key, friend, chat_friends_online);
+		  				}	
 					}
 					
 				};	
@@ -143,6 +176,7 @@
   	function getLists(user, cb) {
   		userListsRef.child(user).on('child_added', snap => {
   			let listRef = listsRef.child(snap.key);
+
   			//Get the list items
   			getListDetailItems(snap.key, snap => console.log(snap.val()));
   			//Get the Friends
@@ -152,15 +186,22 @@
 
   			listRef.on('value', snap => {
   				if(snap.val() != null) {
+  					let userRef = usersRef.child(snap.val().listOwner);
+  					var ownerImage = '';
+  					userRef.on('value', snap => {
+  						if(snap.val() != null) {
+  							if(snap.key != user) {
+  								ownerImage = snap.val().thumb_image;
+  							}
+  						}
+
+  						return ownerImage;
+  					});		
+
 	  				//Renders the list overview
-	  				var list_overview_item = HTMLcreateListOverviewItem(snap),
+	  				var list_overview_item = HTMLcreateListOverviewItem(snap, ownerImage),
 	  					focusCheck = checkFocus(),
 	  					show = false;
-
-					//Set the focus position of the cursor
-					if(focusCheck != '') {
-						var contentEditable = getCaretPosition(document.querySelectorAll('[uni='+focusCheck+']')[0]);
-					}
 
 	  				//HTML for the main title of the list
 	  				if($("#list-title-"+snap.key).children().hasClass('show')) {
@@ -168,9 +209,20 @@
 	  				}
 	  				var list_main_title = HTMLcreateListMainTitle(snap, focusCheck, show);
 
+					//Set the focus position of the cursor
+					if(focusCheck != '') {
+						var contentEditable = doGetCaretPosition(document.querySelectorAll('[uni='+focusCheck+']')[0]);
+					}
+
 	  				//$(lists).mCustomScrollbar("scrollTo","top");
+	  				var parent = document.getElementById(lists.childNodes[0].id+'_container');
+
+	  				if (parent == null) {
+	  					parent = lists;
+	  				}
+
 	  				//Put the HTML in the container
-	  				updateOrAppendHTML("list-"+snap.key, list_overview_item, document.getElementById(lists.childNodes[0].id+'_container'));
+	  				updateOrAppendHTML("list-"+snap.key, list_overview_item, parent);
 	  				updateOrAppendHTML("list-title-"+snap.key, list_main_title, lists_title);
 
 	  				//Set the cursor position
@@ -233,7 +285,10 @@
   		listItemsRef.child(listId).on('child_added', snap => {
   			active_remove = false;  			
 
+  			
+
   			listItemsRef.child(listId+'/'+snap.key).on('value', snap => {
+
   				if(snap.val() != null) {
   					let userRef = usersRef.child(snap.val().changedBy);
   					if(document.getElementById(snap.key) != null){
@@ -252,20 +307,26 @@
 
 						//Set the focus position of the cursor
 						if(focusCheck != '') {
-							var contentEditable = getCaretPosition(document.querySelectorAll('[uni='+focusCheck+']')[0]);
+							var contentEditable = doGetCaretPosition(document.querySelectorAll('[uni='+focusCheck+']')[0]);
 						}
 
-						//Init the scrollbar
-						$(items_wrapper).mCustomScrollbar({
-				            theme:"light-3",
-				            autoHideScrollbar: true
-				        });
+		  				var parent = document.getElementById(items_wrapper.childNodes[0].id+'_container');
 
-						if(document.getElementById(items_wrapper.childNodes[0].id+'_container') != null) {
+		  				if ($(window).width()<768 && parent == null) {
+		  					parent = lists;
+		  				}else {
+			  				//Init the scrollbar
+							$(items_wrapper).mCustomScrollbar({
+					            theme:"light-3",
+					            autoHideScrollbar: true
+					        });
+		  				}
+
+						if(parent != null) {
 				        	//$(items_wrapper).mCustomScrollbar("scrollTo","top");   	
 
 							if(focusCheck != '') {
-								if(document.getElementById(items_wrapper.childNodes[0].id+'_container') != null) {
+								if(parent != null) {
 									updateOrAppendHTML(snap.key, item, document.getElementById(listId+"-items-unchecked"));
 								}
 
@@ -284,6 +345,9 @@
 					        		updateOrAppendHTML(snap.key, item, document.getElementById(listId+"-items-unchecked"));
 					        	}
 							}
+
+							//Reset the textarea height
+							autosize(document.querySelectorAll('textarea'));
 						}else {
 							//updateOrAppendHTML(snap.key, item, document.getElementById(listId+"-items-unchecked"));
 						}
@@ -376,6 +440,8 @@
 
 	  		getLists(user.uid, snap => console.log(snap.val()));
 
+	  		getChats(user.uid, snap => console.log(snap.val()));
+
 	  		$(document).on("input",".firebase-search-friends",function(e) {
 				var dInput = this.value,
 					listId = $('#js-invite-friends').attr('data-list');
@@ -411,6 +477,7 @@
 					itemid = $(this).attr('itd'),
 					fieldid = $(this).attr('sub'),
 					owner = $(this).attr('own'),
+					value = $(this).attr('value'),
 					changer = false,
 					dInput = this.value;
 

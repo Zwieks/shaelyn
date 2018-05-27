@@ -6,10 +6,10 @@
 
 		</figure>
 
-		<fieldset class="editable-firebase-wrapper">
-			<div class="feedback">{{ Lang::get('forms.editable') }}</div>
-			<input class="ghost-input firebase-set" value="{{$user['name']}}" type="text" name="" field="Users" item="name" id="firebase-username" placeholder="{{ Lang::get('firebase.placeholder.noname') }}">
-		</fieldset>
+<!-- 		<fieldset class="editable-firebase-wrapper"> -->
+<!-- 			<div class="feedback">{{ Lang::get('forms.editable') }}</div> -->
+			<textarea class="firebase-set" value="{{$user['name']}}" name="" rows=1 field="Users" item="name" id="firebase-username" placeholder="{{ Lang::get('firebase.placeholder.noname') }}">{{$user['name']}}</textarea>
+<!-- 		</fieldset> -->
 
 <!-- 		<button type="button" class="btn btn-primary" id="js-logout">{{ Lang::get('buttons.login') }}</button> -->
 	</div>

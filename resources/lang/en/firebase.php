@@ -8,4 +8,7 @@ return [
         'notitledetail' => 'Add a list title here',
         'noname' => 'I haz no name..',
     ],
+    'titles' => [
+    	'chat' => 'Chat',
+    ],
 ];

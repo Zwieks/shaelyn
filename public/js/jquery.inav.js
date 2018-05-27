@@ -123,14 +123,39 @@
 
 			//If the user is loggedin the menu have to show
 			if($(settings.loggedin).length) {
-				$(this.settings.navTrigger).prop('checked', true);
+
+				if (document.documentElement.clientWidth < 1250) {
+					self.clearNav();
+				}else {
+					$(this.settings.navTrigger).prop('checked', true);
+				}
+
+				if (document.documentElement.clientWidth < 640) {
+					$('.dashboard-wrapper').addClass('owl-carousel');
+
+					$(".page-website-wrapper").on('click', function(){
+						if($(settings.navWrapper).length) {
+							self.clearNav();
+						}
+					});				
+				}else {
+					$('.dashboard-wrapper').removeClass('owl-carousel');
+				}
+
+				window.onresize = function(event,settings) {
+					if (document.documentElement.clientWidth < 1250) {
+						// scripts
+						self.clearNav();
+					}
+				};
+
 			}
 
 			// Close nav on click / touch outside the responsive menu
 			$(settings.navCloser).on('click', function(){
-				if(!$(settings.loggedin).length) {
+
 					self.clearNav();
-				}	
+					
 			});
 
 			// resetNav on resize (or orientationchange for touch devices)

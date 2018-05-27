@@ -30,6 +30,19 @@ function HTMLcreateUserProfile(snap) {
 	return HTML_user_image_wrapper;
 }
 
+function HTMLcreateChatMeta() {
+	var HTML_chat_title_wrapper = document.createElement("div");
+		HTML_chat_title_wrapper.className = "title-wrapper";
+	
+	var HTML_chat_title = document.createElement("h3");
+		HTML_chat_title.className = "item-title";
+		HTML_chat_title.appendChild(document.createTextNode(i18n.firebase.titles.chat));
+
+		HTML_chat_title_wrapper.appendChild(HTML_chat_title);
+
+		return HTML_chat_title_wrapper;
+}
+
 function HTMLcreateFriend(snap, type) {
 	var HTML_friends_overview_wrapper = document.createElement("div");
 		HTML_friends_overview_wrapper.className = "card-wrapper";
@@ -132,7 +145,7 @@ function HTMLcreateListOverviewControls() {
 	return HTML_list_button_wrapper;
 }
 
-function HTMLcreateListOverviewItem(snap) {
+function HTMLcreateListOverviewItem(snap, ownerImage) {
 	var HTML_overview_remove_list = document.createElement("div");
 		HTML_overview_remove_list.className = "firebase-remove-list remove-list";
 
@@ -164,6 +177,10 @@ function HTMLcreateListOverviewItem(snap) {
 		HTML_list_overview_meta_items.className = "card-meta items";
 		HTML_list_overview_meta_items.appendChild(document.createTextNode(snap.val().itemCount));	
 
+	var HTML_list_overview_meta_checked = document.createElement("span");
+		HTML_list_overview_meta_checked.className = "card-meta checked";
+		HTML_list_overview_meta_checked.appendChild(document.createTextNode(0));	
+
 	var HTML_list_overview_indicator_wrapper = document.createElement("div");
 		HTML_list_overview_indicator_wrapper.className = "card-indicator";
 
@@ -179,10 +196,10 @@ function HTMLcreateListOverviewItem(snap) {
 	   return image;
 	});
 
-	if(snap.val().ownerImage != image) {
+	if(ownerImage != '') {
 		var HTML_list_overview_indicator_owner_image = document.createElement("img");
 			HTML_list_overview_indicator_owner_image.className = "avatar";
-			HTML_list_overview_indicator_owner_image.setAttribute("src", snap.val().ownerImage);
+			HTML_list_overview_indicator_owner_image.setAttribute("src", ownerImage);
 			HTML_list_overview_indicator_owner_image.setAttribute("alt", "owner image");
 	}else {
 		var HTML_list_overview_indicator_owner_image = document.createElement("div");
@@ -197,6 +214,7 @@ function HTMLcreateListOverviewItem(snap) {
 	HTML_list_overview_items_wrapper.appendChild(HTML_list_overview_title);
 	HTML_list_overview_description.appendChild(HTML_list_overview_meta_friends);
 	HTML_list_overview_description.appendChild(HTML_list_overview_meta_items);
+    HTML_list_overview_description.appendChild(HTML_list_overview_meta_checked);
 	HTML_list_overview_items_wrapper.appendChild(HTML_list_overview_description);
 	HTML_list_overview_item.appendChild(HTML_list_overview_items_wrapper);
 	HTML_list_overview_item.appendChild(HTML_list_overview_indicator_wrapper);
@@ -208,20 +226,12 @@ function HTMLcreateListMainTitle(snap, focus, show) {
 	var HTML_main_title_list_wrapper = document.createElement("div");
 		HTML_main_title_list_wrapper.setAttribute("id", "list-title-"+snap.key);
 
-	var HTML_main_title_list = document.createElement("h3");
+	var HTML_main_title_list = document.createElement("input");
 
 		if(snap.val().name) {
-			HTML_main_title_list.appendChild(document.createTextNode(snap.val().name));
+			HTML_main_title_list.setAttribute("value", snap.val().name);
 		}else {
 			HTML_main_title_list.setAttribute("placeholder", i18n.firebase.placeholder.notitledetail);
-		}
-
-		HTML_main_title_list.setAttribute("contentEditable", true);
-
-		if(focus == "title-"+snap.key) {
-			HTML_main_title_list.setAttribute("focus", true);
-		}else{
-			HTML_main_title_list.setAttribute("focus", false);
 		}
 
 		if(focus == "title-"+snap.key) {
@@ -375,9 +385,11 @@ function HTMLcreateListItem(listId, snap, focus, changer, active_remove) {
  			HTML_list_item_wrapper.className = 'list-wrapper';
 
 	 	//Create the list item title elementW
-	 	var HTML_list_item_title = document.createElement("div");
-			HTML_list_item_title.className = 'list-item-title firebase-set';
-			HTML_list_item_title.setAttribute("contentEditable", true);
+	 	var HTML_list_item_title = document.createElement("textarea");
+	 		HTML_list_item_title.type = "text";
+			HTML_list_item_title.className = 'list-item-title firebase-set js-auto-size';
+			HTML_list_item_title.setAttribute("value", snap.val().title);
+			HTML_list_item_title.setAttribute("rows", 1);
 			
 			if(focus == "title-"+snap.key) {
 				HTML_list_item_title.setAttribute("focus", true);
@@ -394,15 +406,17 @@ function HTMLcreateListItem(listId, snap, focus, changer, active_remove) {
 			HTML_list_item_title.appendChild(document.createTextNode(snap.val().title));
 
 		//Create the list item details element
-		var HTML_list_item_detail = document.createElement("div");
-			HTML_list_item_detail.className = 'list-item-detail firebase-set';
-			HTML_list_item_detail.setAttribute("contentEditable", true);
+		var HTML_list_item_detail = document.createElement("textarea");
+			HTML_list_item_detail.type = "text";
+			HTML_list_item_detail.className = 'list-item-detail firebase-set js-auto-size';
+			HTML_list_item_detail.setAttribute("value", snap.val().detail);
+			HTML_list_item_detail.setAttribute("rows", 1);
 
 			if(focus == "detail-"+snap.key) {
 				HTML_list_item_detail.setAttribute("focus", true);
 			}else{
 				HTML_list_item_detail.setAttribute("focus", false);
-			} 
+			}
 				
 			HTML_list_item_detail.setAttribute("uni", "detail-"+snap.key);
 			HTML_list_item_detail.setAttribute("field", "listItems");

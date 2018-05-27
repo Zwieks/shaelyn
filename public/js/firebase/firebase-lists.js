@@ -3,6 +3,22 @@
 */
 
 ;(function($) {
+	$.fn.resetHeightTextarea =  function(ta) {
+
+			ta.style.display = 'none';
+			autosize(ta);
+
+			ta.removeAttribute("style");
+
+			// Change layout
+			ta.style.display = 'block';
+			autosize.update(ta);
+
+			// Change value
+			ta.value = ta.value;
+			autosize.update(ta);
+	};
+
 	//Removes single LIST
 	$.fn.firebase_removeList = function(listId) {
 		$('#list-'+listId).slideUp("normal", function() { 
@@ -92,25 +108,18 @@
 
 	// Add a new LIST
 	$(document).on("click","#js-add-list",function() {
-		var image = '';
+		var id = '';
 		
 		$(this).parent().parent().find('.remove-list').removeClass('show');
 		$("#js-remove-list").removeClass('active');
 
-		//Get the user image
-		firebase.database().ref("Users/"+firebase.auth().currentUser.uid).once('value', snap => {
-		   image = snap.val().thumb_image;
-
-		   return image;
-		});
-
 		var itemCount = 0,
 			name = "",
-			ownerImage = image,
+			listOwner = firebase.auth().currentUser.uid,
 			time = '',
 			userCount = 1;
 
-		var newPostKey = writeNewList(itemCount, name, ownerImage, time, userCount);
+		var newPostKey = writeNewList(itemCount, name, listOwner, time, userCount);
 			writeNewListItem(newPostKey, "", 0, false, "");
 	});
 
@@ -135,6 +144,12 @@
 			$('#js-add-list').attr("id","js-add-list-items");
 			$('#js-remove-list-items').removeClass('active');
 			$(this).parent().parent().find('.remove-item').removeClass('show');
+
+			setTimeout(function(e){ 
+				$('.detail-item.show .card-main').children().find('textarea').each(function(){
+				  	autosize($(this));
+				});
+			}, 200);
 		};	
 	});
 
@@ -159,12 +174,12 @@
 		$('#focus').removeAttr('id');
 	});
 
-	function writeNewList(itemCount, name, ownerImage, time, userCount) {
+	function writeNewList(itemCount, name, listOwner, time, userCount) {
 		// A post entry.
 		var postData = {
 	    	itemCount: itemCount,
 	    	name: name,
-	    	ownerImage : ownerImage,
+	    	listOwner : listOwner,
 	    	time : time,
 	    	userCount : userCount
 		};

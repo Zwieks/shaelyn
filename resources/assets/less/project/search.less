@@ -4,8 +4,12 @@
 		margin-bottom: @spacing/2;
 	}
 
-	.velden > li{
+	.velden > li {
 		width: @spacing*31;
+
+		@media @bp-TabletL {
+			width: 100%;
+		}
 	}
 
 	.image-wrapper {
@@ -31,6 +35,14 @@
 			max-width: @spacing*16;
 	    	padding: @spacing/2;
 	    	margin: 0;
+
+	    	@media @bp-TabletL {
+	    		width: 50%;
+	    	}
+
+	    	@media @bp-MobileM {
+	    		width: 100%;
+	    	}
 		}
 
 		.card {

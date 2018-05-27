@@ -8,7 +8,7 @@
         @include('pages.basicpage.head-socials')
 
         <link rel="stylesheet" href="{{ URL::asset('css/site.css') }}" type="text/css" media="screen">
-                <link rel="stylesheet" href="{{ URL::asset('css/CustomScrollbar.css') }}" />
+        <link rel="stylesheet" href="{{ URL::asset('css/CustomScrollbar.css') }}" />
         <link href="https://fonts.googleapis.com/css?family=Montserrat:400,600,700,800,900" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css?family=Pacifico" rel="stylesheet">
         
@@ -44,6 +44,7 @@
             <div class="nav-wrapper" id="js-nav-wrapper">
                 @include('pages.homepage.loggedin.sidebar.layout')
             </div>
+            <div class="nav-closer" id="js-nav-closer"></div>
         </div>
 
         <a id='js-backtotop' href='#' data-icon='m' class='btn-to-top'></a>

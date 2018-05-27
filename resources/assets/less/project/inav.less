@@ -46,18 +46,47 @@
 		border-left:0;
 	}
 
+	.level-1-item {
+		> div {
+			.displayflex;
+			.align-items(center);
+			cursor: pointer;
+			padding: 1.6rem @spacing;
+			background: #5e35ba45;
+
+			img {
+				width: 2rem;
+				height: 2rem;
+				margin-right: 1.6rem;
+			}
+
+			span {
+				color: @white;
+			}
+		}
+
+		.mobile-only {
+			display: block;
+		}
+	}
+
 	.particles-animation-wrapper {
 		.transform(none);
 		width: auto;
     	height: auto;
     	min-height: 0;
     	margin: -@spacing/2 -@spacing/2 @spacing/2;
-    	padding-top: @headerHeight*0.6;
-    	padding-bottom: @spacing/2;
+    	padding: @headerHeight*0.6 @spacing/2 @spacing/2 @spacing/2;
    		left: auto;
     	right: auto;
     	background: #0d0d0d;
     	overflow: hidden;
+
+    	@media @bp-MobileL {
+			margin-bottom: 0;
+			padding-top: @spacing*1.5;
+			padding-bottom: 0;
+		}
 	}
 
 	.particles-animation,
@@ -76,6 +105,10 @@
 
     	figure {
     		margin-bottom: @spacing;
+
+    		@media @bp-MobileL {
+				margin-bottom: @spacing/2;
+			}
     	}
 
     	img {
@@ -202,12 +235,22 @@
 
 	.nav-toggle {
 		left: 0;
-		width: @spacing*3z;
+		width: @spacing*3;
+		height: 5.4rem;
 	}
 
 	.page-mobile-nav-container {
 		width: 0;
 		left: 0;
+	}
+
+	.page-mainmenu {
+		.level-1-item {
+			img {
+				height: 3.5rem;
+				width: 3.5rem;
+			}
+		}
 	}
 
 	.nav-wrapper {
@@ -216,13 +259,38 @@
 		width: @navWidth;
 		left: 0;
 
+		@media @bp-MobileL {
+			width: 25rem;
+		}
+
 		&:before {
 			right: 0;
 		}
 	}
 
 	.nav-closer {
+		display: none;
 		left: 0;
+
+		@media @bp-MobileL {
+			display: block;
+			background: rgba(0, 0, 0, 0.85);
+		}		
+	}
+
+	.nav-toggle:not(.active) {
+		@media @bp-MobileL {
+			&:hover {
+				span {
+					background: @white;
+
+					&:before,
+					&:after {
+						background: @white;
+					}
+				}
+			}
+		}	
 	}
 
 	.nav-trigger:checked {
@@ -232,6 +300,10 @@
 			.transition(@navSpeed ease-in-out);
 			transition-delay: 0.02s;
 			margin-left: @navWidth;
+
+			@media @bp-MobileL {
+				margin-left: 25rem;
+			}
 		}
 
 		~ .page-mobile-nav-container .nav-wrapper {
@@ -262,6 +334,13 @@
 			visibility: visible;
 		}
 	}
+
+	@media @navBreakPoint {
+		// @TODO: Complete this list with all the elements that are pushed into the responsive navigation
+		.page-mainmenu {
+			display: block;
+		}
+	}	
 }
 
 @media @navBreakPoint {

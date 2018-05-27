@@ -17,6 +17,29 @@
 	@media @bp-MobileM {
 		min-height: 39rem;
 	}
+
+	textarea {
+	    box-sizing: border-box;
+	    max-height: 9.4rem;
+	    min-height: 1.9rem;
+	    overflow: hidden;
+	    border: none;
+		padding: 0;
+		height: auto;
+		background: transparent;
+		resize: none;
+		width: 100%;
+		max-width: 100%;
+		color: @white;
+		text-align: center;
+		font-family: @secondaryFont;
+		font-size: @mediumSmallHeadingSize;
+		margin-bottom: @spacing/2;
+
+		@media @bp-MobileL {
+			margin-bottom: @spacing;
+		}		
+	}
 }
 
 .particles-animation {
@@ -46,20 +69,19 @@
 	@media @bp-MobileL {
 		width: 100%;
 		height: 100%;
-		padding: @spacing*3 @spacing 0;
+		padding: 0 @spacing 0;
 	}
 
 	@media @bp-MobileM {
 		.justify-content(center);
 	    .flex-direction(row);
 	    .transform(none);
-		padding-bottom: @spacing;
 	    left: 0;
 	    top: 0;
 	}
 
 	figure {
-		margin-bottom: @spacing;
+		margin-bottom: @spacing;	
 	}
 
 	img,

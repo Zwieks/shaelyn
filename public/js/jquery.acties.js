@@ -53,60 +53,54 @@ function invertColor(bgColor) {
     return (parseInt(bgColor.replace('#', ''), 16) > 0xffffff / 2) ? '#000' : '#fff';
 }
 
-function setEndOfContenteditable(contentEditableElement){
-    // var range,selection;
-    // if(document.createRange)//Firefox, Chrome, Opera, Safari, IE 9+
-    // {
-    //     range = document.createRange();//Create a range (a range is a like the selection but invisible)
-    //     range.selectNodeContents(contentEditableElement);//Select the entire contents of the element with the range
-    //     range.collapse(false);//collapse the range to the end point. false means collapse to end rather than the start
-    //     selection = window.getSelection();//get the selection object (allows you to change selection)
-    //     selection.removeAllRanges();//remove any selections already made
-    //     selection.addRange(range);//make the range you have just created the visible selection
-    // }
-    // else if(document.selection)//IE 8 and lower
-    // { 
-    //     range = document.body.createTextRange();//Create a range (a range is a like the selection but invisible)
-    //     range.moveToElementText(contentEditableElement);//Select the entire contents of the element with the range
-    //     range.collapse(false);//collapse the range to the end point. false means collapse to end rather than the start
-    //     range.select();//Select the range (make it the visible selection
-    // }
-    //setCaretPosition(contentEditableElement, 3);
+function setCaretPosition(ctrl, pos)
+{
+	if(ctrl.setSelectionRange)
+	{
+		ctrl.focus();
+		ctrl.setSelectionRange(pos,pos);
+	}
+	else if (ctrl.createTextRange) {
+		var range = ctrl.createTextRange();
+		range.collapse(true);
+		range.moveEnd('character', pos);
+		range.moveStart('character', pos);
+		range.select();
+	}
 }
+ 
 
-function setCaretPosition(el, pos) {
-	var range = document.createRange();
-	var sel = window.getSelection();
-	range.setStart(el.childNodes[0], pos);
-	range.collapse(true);
-	sel.removeAllRanges();
-	sel.addRange(range);
-	el.focus();
-}
+/*
+** Returns the caret (cursor) position of the specified text field.
+** Return value range is 0-oField.value.length.
+*/
+function doGetCaretPosition (oField) {
 
-function getCaretPosition(editableDiv) {
-  var caretPos = 0,
-    sel, range;
-  if (window.getSelection) {
-    sel = window.getSelection();
-    if (sel.rangeCount) {
-      range = sel.getRangeAt(0);
-      if (range.commonAncestorContainer.parentNode == editableDiv) {
-        caretPos = range.endOffset;
-      }
-    }
-  } else if (document.selection && document.selection.createRange) {
-    range = document.selection.createRange();
-    if (range.parentElement() == editableDiv) {
-      var tempEl = document.createElement("span");
-      editableDiv.insertBefore(tempEl, editableDiv.firstChild);
-      var tempRange = range.duplicate();
-      tempRange.moveToElementText(tempEl);
-      tempRange.setEndPoint("EndToEnd", range);
-      caretPos = tempRange.text.length;
-    }
+  // Initialize
+  var iCaretPos = 0;
+
+  // IE Support
+  if (document.selection) {
+
+    // Set focus on the element
+    oField.focus();
+
+    // To get cursor position, get empty selection range
+    var oSel = document.selection.createRange();
+
+    // Move selection start to 0 position
+    oSel.moveStart('character', -oField.value.length);
+
+    // The caret position is selection length
+    iCaretPos = oSel.text.length;
   }
-  return caretPos;
+
+  // Firefox support
+  else if (oField.selectionStart || oField.selectionStart == '0')
+    iCaretPos = oField.selectionStart;
+
+  // Return results
+  return iCaretPos;
 }
 
 function scrollToAnchor(aid){

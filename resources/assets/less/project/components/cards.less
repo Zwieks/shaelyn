@@ -1,10 +1,6 @@
 .card-wrapper {
 	margin-bottom: @spacing/2;
 
-	&:last-child {
-		margin-bottom: 0;
-	}
-
 	&.invite {
 		.card {
 			.transition;
@@ -149,8 +145,10 @@
 	.card-meta {
 		position: relative;
 		padding-left: 2.5rem;
-		margin-right: @spacing;
+		margin-right: @spacing/2;
 		margin-top: @spacing/4;
+		display: inline-block;
+		min-width: 4rem;
 
 		&:last-child {
 			margin-right: 0;
@@ -173,11 +171,23 @@
 				height: 1.5rem;
 			}
 		}
+
+		&.checked {
+			&:before {
+				background-image: url('/img/checked.svg');
+				width: 1.6rem;
+				height: 1.6rem;
+			}
+		}		
 	}
 
 	&.list {
 		.justify-content(space-between);
 		cursor: pointer;
+
+		@media @bp-MobileL {
+			margin-bottom: @spacing*0.75;
+		}	
 
 		.card-description {
 			font-style: normal;

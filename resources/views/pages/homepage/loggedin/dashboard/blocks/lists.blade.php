@@ -8,8 +8,8 @@
 		<div class="title-wrapper">
 			<h3 class="item-title">My Lists</h3>
 			<div id="firebase-list-title"></div>
-		</div>	
-		<div id="firebase-lists" class="content mCustomScrollbar">
+		</div>
+		<div id="firebase-lists" class="content">
 
 		</div>
 

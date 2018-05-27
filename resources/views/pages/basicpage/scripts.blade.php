@@ -19,9 +19,16 @@
 <script type="text/javascript" src="{{ URL::asset('js/HTML.creator.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/jquery.CustomScrollbar.js') }}"></script>
 
+<!-- OWL SLIDER -->
+<script type="text/javascript" src="{{ URL::asset('js/jquery.owl.carousel.min.js') }}"></script>
+
+<!-- TEXTAREA AUTOSIZE -->
+<script type="text/javascript" src="{{ URL::asset('js/jquery.textarea_autosize.min.js') }}"></script>
+
 <!-- FIREBASE DOM FUNCTIONALITES -->
-<script type="text/javascript" src="{{ URL::asset('js/firebase/firebase-lists.js') }}"></script>
 <script src="/js/lang.js"></script>
+<script type="text/javascript" src="{{ URL::asset('js/firebase/firebase-lists.js') }}"></script>
+<script type="text/javascript" src="{{ URL::asset('js/firebase/firebase-chats.js') }}"></script>
 
 @hasSection('headeranimation')
 	@yield('headeranimation')

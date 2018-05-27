@@ -64,6 +64,10 @@
 	.page-wrapper {
 		> .inner {
 			max-width: 100%;
+
+			@media @bp-MobileL {
+				padding: 0;
+			}
 		}
 	}
 
@@ -74,6 +78,10 @@
 
 	.page-middle {
 		padding: @spacing/2 @spacing @spacing/2;
+
+		@media @bp-MobileL {
+			padding: 0;
+		}
 	}
 }
 

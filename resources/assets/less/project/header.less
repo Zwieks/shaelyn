@@ -21,7 +21,7 @@
 
         .inner {
             max-width: 100%;
-            padding: 0 @spacing 0 @spacing*2;
+            padding: 0 2rem 0 @spacing*2;
             height: @headerHeight*0.6;
         }
     }
@@ -69,6 +69,11 @@
 .page-logo {
     height: @headerHeight;
     padding: @spacing 0;
+
+    @media @bp-MobileL {
+        height: @responsiveHeaderHeight;
+        padding: 0;
+    }
 
     a {
         .displayflex;

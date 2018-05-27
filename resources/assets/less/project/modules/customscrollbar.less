@@ -1,8 +1,16 @@
 .mCSB_container {
 	padding: 0 @spacing;
+
+	@media @bp-MobileL {
+		padding: 0 @spacing*2;
+	}
 }
 
 .mCSB_scrollTools {
     left: 0!important;
     right: auto!important;
+
+	@media @bp-MobileL {
+		left: @spacing/2!important;
+	}    
 }
