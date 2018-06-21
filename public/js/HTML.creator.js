@@ -30,23 +30,107 @@ function HTMLcreateUserProfile(snap) {
 	return HTML_user_image_wrapper;
 }
 
-function HTMLcreateChatMeta() {
+function HTMLcreateChatMeta(snap) {
 	var HTML_chat_title_wrapper = document.createElement("div");
+		HTML_chat_title_wrapper.setAttribute("id", "chat-meta-"+snap.key);
 		HTML_chat_title_wrapper.className = "title-wrapper";
 	
 	var HTML_chat_title = document.createElement("h3");
 		HTML_chat_title.className = "item-title";
-		HTML_chat_title.appendChild(document.createTextNode(i18n.firebase.titles.chat));
+		HTML_chat_title.appendChild(document.createTextNode(snap.val().name));
 
 		HTML_chat_title_wrapper.appendChild(HTML_chat_title);
 
 		return HTML_chat_title_wrapper;
 }
 
-function HTMLcreateFriend(snap, type) {
+function HTMLcreateChatWindow(snap) {
+	var HTML_chat_window = document.createElement("div");
+		HTML_chat_window.setAttribute("id", "chat-window-"+snap.key);
+		HTML_chat_window.className = "chat-window";
+
+	return HTML_chat_window;
+}
+
+function HTMLcreateChatMessage(listId, snapuser, snap) {
+	var HTML_chat_message_wrapper = document.createElement("div");
+		HTML_chat_message_wrapper.setAttribute("id", "chat-message-"+snap.key);
+
+		if(snapuser.key != firebase.auth().currentUser.uid) {
+			HTML_chat_message_wrapper.className = "chat-message";
+		}else {
+			HTML_chat_message_wrapper.className = "chat-message user";
+		}
+
+	var HTML_chat_window = document.createElement("div");
+		HTML_chat_window.className = "message-wrapper";	
+
+	var HTML_chat_meta = document.createElement("div");
+		HTML_chat_meta.className = "message-meta";
+
+	var HTML_chat_text = document.createElement("p");
+		HTML_chat_text.className = "message-text";
+		HTML_chat_text.appendChild(document.createTextNode(snap.val().message));	
+
+	HTML_chat_window.appendChild(HTML_chat_meta);
+	HTML_chat_window.appendChild(HTML_chat_text);
+
+	HTML_chat_message_wrapper.appendChild(HTML_chat_window);
+
+	return HTML_chat_message_wrapper;
+}
+
+function HTMLcreateGroup(snap) {
+	var HTML_chat_group_overview_wrapper = document.createElement("div");
+		HTML_chat_group_overview_wrapper.className = "card-wrapper";
+		HTML_chat_group_overview_wrapper.setAttribute("id", "chat-"+snap.key);
+
+	var HTML_chat_group_overview_inner  = document.createElement("div");
+		HTML_chat_group_overview_inner.className = "card";
+	
+
+	var HTML_chat_group_image_wrapper = document.createElement("figure");
+		HTML_chat_group_image_wrapper.className = "card-image-wrapper";
+
+	var HTML_chat_group_image = document.createElement("img");
+		HTML_chat_group_image.className = "avatar";
+		HTML_chat_group_image.setAttribute("title", snap.name);
+		HTML_chat_group_image.setAttribute("alt", "chat group");
+
+		if(snap.groupImage != '') {
+			HTML_chat_group_image.setAttribute("src", snap.groupImage);
+		}else{
+			HTML_chat_group_image.setAttribute("src", "/img/chat.svg");
+		}
+
+	var HTML_chat_group_overview_content_wrapper = document.createElement("div");
+		HTML_chat_group_overview_content_wrapper.className = "card-content-wrapper";	
+
+	var HTML_chat_group_overview_title = document.createElement("span");
+		HTML_chat_group_overview_title.className = "card-title";
+		HTML_chat_group_overview_title.appendChild(document.createTextNode(snap.name));	
+
+	var HTML_chat_group_overview_description = document.createElement("span");
+		HTML_chat_group_overview_description.className = "card-description";
+		HTML_chat_group_overview_description.appendChild(document.createTextNode(snap.description));	
+
+	HTML_chat_group_image_wrapper.appendChild(HTML_chat_group_image);
+
+	HTML_chat_group_overview_content_wrapper.appendChild(HTML_chat_group_overview_title);
+	HTML_chat_group_overview_content_wrapper.appendChild(HTML_chat_group_overview_description);
+
+	HTML_chat_group_overview_inner.appendChild(HTML_chat_group_image_wrapper);
+	HTML_chat_group_overview_inner.appendChild(HTML_chat_group_overview_content_wrapper);
+
+	HTML_chat_group_overview_wrapper.appendChild(HTML_chat_group_overview_inner);
+
+	return HTML_chat_group_overview_wrapper;
+}
+
+function HTMLcreateFriend(snap) {
 	var HTML_friends_overview_wrapper = document.createElement("div");
 		HTML_friends_overview_wrapper.className = "card-wrapper";
-		HTML_friends_overview_wrapper.setAttribute("id", type+"userfriend-"+snap.key);
+		HTML_friends_overview_wrapper.setAttribute("id", "userfriend-"+snap.key);
 
 	var HTML_friends_overview_inner  = document.createElement("div");
 
@@ -133,13 +217,24 @@ function HTMLcreateListOverviewControls() {
 		HTML_list_button_item_add_list_image.setAttribute("src", "/img/plus.svg");
 		HTML_list_button_item_add_list_image.setAttribute("alt", "Add list");
 
+	var HTML_list_button_item_paste_list = document.createElement("li");
+		HTML_list_button_item_paste_list.className = "icon paste";
+		HTML_list_button_item_paste_list.setAttribute("id", "js-paste-list");
+
+	var HTML_list_button_item_paste_list_image = document.createElement("img");
+		HTML_list_button_item_paste_list_image.className = "js-";
+		HTML_list_button_item_paste_list_image.setAttribute("src", "/img/clipboard.svg");
+		HTML_list_button_item_paste_list_image.setAttribute("alt", "Paste list");
+
 		//Create buttons
 		HTML_list_button_item_delete_list.appendChild(HTML_list_button_item_delete_list_image);
 		HTML_list_button_item_add_list.appendChild(HTML_list_button_item_add_list_image);
+		HTML_list_button_item_paste_list.appendChild(HTML_list_button_item_paste_list_image);
 		//HTML_list_button_item_add_item.appendChild(HTML_list_button_item_add_item_image);
 
 		HTML_list_button_wrapper.appendChild(HTML_list_button_item_delete_list);
 		HTML_list_button_wrapper.appendChild(HTML_list_button_item_add_list);
+		HTML_list_button_wrapper.appendChild(HTML_list_button_item_paste_list);
 		// HTML_list_button_wrapper.appendChild(HTML_list_button_item_add_user);
 
 	return HTML_list_button_wrapper;

@@ -18,9 +18,11 @@
   	const image = document.getElementById('firebase-image-wrapper');
   	const friends = document.getElementById('firebase-friends');
   	const friends_online = document.getElementById('firebase-online-users');
-  	const friends_offline = document.getElementById('firebase-offline-users');  	
+  	const friends_offline = document.getElementById('firebase-offline-users'); 
+  	const chat_list = document.getElementById('firebase-chats'); 	
   	const chat_friends_online = document.getElementById('firebase-online-users-chat');
   	const chat_friends_offline = document.getElementById('firebase-offline-users-chat');
+  	const chat_conversation_wrapper = document.getElementById('firebase-chat-conversations');
   	const chat_meta = document.getElementById('firebase-chat-meta');
   	const chat_friends = document.getElementById('firebase-chat-friends');
   	const chat_window = document.getElementById('firebase-chat-window');
@@ -36,14 +38,286 @@
   	const listAttendeesRef = ref.child('listAttendees');
   	const listsRef = ref.child('lists');
   	const userListsRef = ref.child('UsersLists');
+  	const ChatsRef = ref.child('BetaChat');
+ 	const chatAttendeesRef = ref.child('ChatAttendees');
+ 	const chatMessagesRef = ref.child('ChatMessages'); 	
+  	const userChatsRef = ref.child('UsersChat'); 	
   	const listItemsRef = ref.child('listItems');
   	const friendsRef = ref.child('Friends');
 
-  	function getChats(userId, cb) {
-  		//Future Chat stuff here
-  		var meta = HTMLcreateChatMeta();
-  		updateOrAppendHTML("chat-meta", meta, chat_meta);
+  	function getChatMessages(listId, cb, chat_window) {
+  		var chat_window = document.getElementById(chat_window),
+  			parent = document.getElementById(chat_window.childNodes[0].id+'_container');
+
+		if (parent == null) {
+			parent = chat_window;
+		}
+
+  		chatMessagesRef.child(listId).orderByChild('order').limitToLast(50).on('child_added', snap => {
+  			let userRef = usersRef.child(snap.val().from);
+  			userRef.on('value', snapuser => {
+				if(snapuser.val() != null) {
+					var message = HTMLcreateChatMessage(listId, snapuser, snap);
+
+		  			//Put the HTML in the container
+					updateOrPrependHTML("chat-message-"+snap.key, message, parent);					
+				}
+  			});
+  		});
   	}
+
+  	function getChatAttendees(listId, cb) {
+  		chatAttendeesRef.child(listId).on('child_added', snap => {
+  			let userRef = usersRef.child(snap.key);
+
+  			userRef.on('value', snap => {
+  				if(snap.val() != null) {
+	  				//Renders the friends that are invited for the specific list
+	  				var friend = HTMLcreateListFriend(listId, snap);
+					//Put the HTML in the container
+					var friends_list = document.getElementById('friends-'+listId);
+					//console.log(snap.val());
+					//updateOrPrependHTML(listId+"friend-"+snap.key, friend, friends_list);
+				}	
+  			});
+  		});
+
+  		listAttendeesRef.on('child_removed', snap => {
+  			var removed_list = snap.key;
+  			Object.keys(snap.val()).forEach(function(key, index) {
+  				if(listId == removed_list){
+	  				let userListRef = userListsRef.child(key+'/'+listId);
+	  				userListRef.remove();
+  				}
+  			});	
+  		});
+  	}
+
+  	function getChatOverviewItem(snap) {
+  		//Check if the chat is a single or a group
+  	// 	if(snap.type != 'group') {
+  	// 		let userRef = chatAttendeesRef.child(snap.key);
+
+  	// 		userRef.on('value', snapuser => {
+	  // 			snapuser.forEach(function(childSnapshot) {
+	  // 				if(childSnapshot.key != firebase.auth().currentUser.uid) {
+	  // 					let userRef = usersRef.child(childSnapshot.key);
+
+			//   			userRef.on('value', snap => {
+			//   				//Renders the friends that are invited for the specific list
+			//   				var friend = HTMLcreateFriend(snap, 'chat-');
+			// 				//Put the HTML in the container
+			// 				updateOrPrependHTML("chat-userfriend-"+snap.key, friend, chat_list);
+			//   			});	  					
+	  // 				}
+  	// 			});
+  	// 		});
+  	// 	}else {
+			var group = HTMLcreateGroup(snap);
+			// //Put the HTML in the container
+  	// 	}	
+
+  		updateOrPrependHTML("chat-"+snap.key, group, chat_list);
+  	}
+
+  	// function getChatOverviewItem(snap,cb) {
+  	// 	//Check if the chat is a single or a group
+  	// 	if(snap.val().type != 'group') {
+  	// 		let userRef = chatAttendeesRef.child(snap.key);
+
+  	// 		userRef.on('value', snapuser => {
+	  // 			snapuser.forEach(function(childSnapshot) {
+	  // 				if(childSnapshot.key != firebase.auth().currentUser.uid) {
+	  // 					let userRef = usersRef.child(childSnapshot.key);
+
+			//   			userRef.on('value', snap => {
+			//   				if(snap.val() != null) {
+			// 	  				//Renders the friends that are invited for the specific list
+			// 	  				var friend = HTMLcreateFriend(snap, 'chat-');
+			// 					//Put the HTML in the container
+			// 					updateOrPrependHTML("chat-userfriend-"+snap.key, friend, chat_list);
+			// 				}	
+			//   			});	  					
+	  // 				}
+  	// 			});
+  	// 		});
+  	// 	}else {
+  	// 		if(snap.val() != null) {
+			// 	var group = HTMLcreateGroup(snap);
+			// 	//Put the HTML in the container
+			// 	updateOrPrependHTML("chat-"+snap.key, group, chat_list);
+  	// 		}
+  	// 	}	
+  	// }
+
+  	function getChats(user, cb) {
+	 //  	var array = [];
+	 //  	var count = 0;
+
+  // 		userChatsRef.child(user).once('value', snap => {
+	 //  		var chat_window = HTMLcreateChatWindow(snap);
+
+		// }).then(snap => {
+	 //  		const promises = [];
+	 //  		snap.forEach(function(childSnapshot) {
+	 //  			let Chat = ChatsRef.child(childSnapshot.key);
+
+	 //  			var promise = Chat.once('value', function(friendshot) {
+	 //  				if(friendshot.val() != '') {
+		// 		      	array[count] = friendshot.val();
+		//   				array[count]['key'] = friendshot.key;
+
+
+		// 		  		if(friendshot.val().type != 'group') {
+		// 		  			let userRef = chatAttendeesRef.child(friendshot.key);
+		// 		  			userRef.once('value', snapuser => {
+		// 		  				const sec_promises = [];
+
+		// 			  			snapuser.forEach(function(childSnapshot) {
+		// 			  				if(childSnapshot.key != firebase.auth().currentUser.uid) {
+		// 			  					let userRef = usersRef.child(childSnapshot.key);
+
+		// 					  			var promisess = userRef.once('value', snaper => {
+		// 					  				console.log(count);
+		// 					  				//console.log(array[count]);
+		// 					  				array[count]['user'] = snap.val();
+		// 					  				//return snaper.val();
+		// 					  			}).then(snaps => {
+		// 					  				//HERE IS THE USER INFORMATION NOW PUT THIS IN THE RIGHT PLACE
+		// 					  				//array[count]['user'] = snaps.val();
+		// 					  			});		
+		// 			  				}
+
+		// 			  				sec_promises.push(promisess);
+		// 		  				});
+
+		// 		  				return Promise.all(sec_promises);
+		// 		  			});
+		// 		  		}
+
+		// 				array.sort(function(a,b){
+		// 				  	return new Date(a.time) - new Date(b.time);
+		// 				});
+
+		// 				count++;
+	 //  				}
+	 //  			});
+	  							
+	 //  			promises.push(promise);
+	 //  		});
+
+	 //  		return Promise.all(promises);
+		// }).then(snaps => {
+		// 	console.log(array);
+		// 	//updateOrPrependHTML("chat-window-"+childSnapshot.key, chat_window, chat_conversation_wrapper);
+
+		// 	//Check the window width
+		// 	// if ($(window).width()>768) {
+		// 	// 	//Init the scrollbar
+	 //  //           $("#chat-window-"+childSnapshot.key).mCustomScrollbar({
+	 //  //               theme:"light-3",
+	 //  //               autoHideScrollbar: true
+	 //  //           }).mCustomScrollbar("scrollTo","bottom",{scrollInertia:0});
+		// 	// }
+		// 	array.forEach(function(item) {
+		// 		getChatOverviewItem(item);
+		// 	});
+		// });
+	}
+  		      		//console.log(array);
+
+
+  		
+  		// 		let Chat = ChatsRef.child(childSnapshot.key);
+  		// 		var chat_window = HTMLcreateChatWindow(childSnapshot);
+
+  	 // 			//Put the HTML in the container
+				// updateOrPrependHTML("chat-window-"+childSnapshot.key, chat_window, chat_conversation_wrapper);
+
+				// //Check the window width
+				// if ($(window).width()>768) {
+				// 	//Init the scrollbar
+	   //              $("#chat-window-"+childSnapshot.key).mCustomScrollbar({
+	   //                  theme:"light-3",
+	   //                  autoHideScrollbar: true
+	   //              }).mCustomScrollbar("scrollTo","bottom",{scrollInertia:0});
+				// }
+
+
+				// Chat.on('value', snapchat => {
+	  	// 			if(snapchat.val() != null) {
+	  	// 		// 		test[snapchat.val().time] = snapchat;
+	  	// 		// 		// Get the array of keys
+				// 		// var keys = Object.keys( test );
+
+				// 		// // Sort the keys in descending order
+				// 		// keys.sort( function ( a, b ) { return b - a; } );
+				// 		// keys.reverse();
+
+				// 		// // Iterate through the array of keys and access the corresponding object properties
+				// 		// for ( var i = 0; i < keys.length; i++ ) {
+				// 		//     getChatOverviewItem(test[ keys[i] ], snap => console.log(snap.val()));
+				// 		// }
+
+				// 		console.log(snapchat.val());
+
+				// 		var meta = HTMLcreateChatMeta(snapchat);
+				//   		updateOrPrependHTML("chat-meta-"+snap.key, meta, chat_meta);
+		  // 			}
+	  	// 		});
+  		// 	});	
+
+
+  	// 		let Chat = ChatsRef.child(snap.key);
+
+  	// 		var chat_window = HTMLcreateChatWindow(snap);
+
+  	// 		//Put the HTML in the container
+			// updateOrPrependHTML("chat-window-"+snap.key, chat_window, chat_conversation_wrapper);
+
+			// if ($(window).width()>768) {
+			// 	//Init the scrollbar
+   //              $("#chat-window-"+snap.key).mCustomScrollbar({
+   //                  theme:"light-3",
+   //                  autoHideScrollbar: true
+   //              }).mCustomScrollbar("scrollTo","bottom",{scrollInertia:0});
+			// }
+
+  	// 		Chat.on('value', snapchat => {
+  	// 			if(snapchat.val() != null) {
+  	// 				test[snapchat.val().time] = snapchat;
+  	// 				// Get the array of keys
+			// 		var keys = Object.keys( test );
+
+			// 		// Sort the keys in descending order
+			// 		keys.sort( function ( a, b ) { return b - a; } );
+			// 		keys.reverse();
+
+			// 		// Iterate through the array of keys and access the corresponding object properties
+			// 		for ( var i = 0; i < keys.length; i++ ) {
+			// 		    getChatOverviewItem(test[ keys[i] ], snap => console.log(snap.val()));
+			// 		}
+
+			// 		var meta = HTMLcreateChatMeta(snapchat);
+			//   		updateOrPrependHTML("chat-meta-"+snap.key, meta, chat_meta);
+	  // 			}
+  	// 		});
+
+
+
+  	// 		//TODO:
+  	// 		//Function above needs to send back test otherwise the object will be empty, now the order of the chat overview is always the same..
+  	// 		//LAST CHANGED have to be on top
+
+
+
+
+  	// 		//Get the chat attendees
+  	// 		getChatAttendees(snap.key, snap => console.log(snap.val()));
+
+
+  	// 		//Get the chat messages
+  	// 		getChatMessages(snap.key, snap => console.log(snap.val()), "chat-window-"+snap.key);
 
   	function searchUsers(search) {
   		usersRef
@@ -52,18 +326,19 @@
   			.startAt(search.toLowerCase())
   			.endAt(search.toLowerCase() + "\uf8ff")
   			.on("value", function(snapshot) {
-  				if(snapshot.val() != null) {	
+  				if(snapshot.val() != null && snapshot.key != firebase.auth().currentUser.uid) {	
   					var search_users_results = document.getElementById('firebase-search-users-results');
   					search_users_results.innerHTML = '';
 	  				snapshot.forEach(function(childSnapshot) {
-
-	  					friendsRef.child(firebase.auth().currentUser.uid+'/'+childSnapshot.key).once('value', function(friendshot) {
-	  						if (!friendshot.exists()) {
-	  							var searchItem = HTMLcreateFriend(childSnapshot);
-	  					
-	  							search_users_results.appendChild(searchItem);
-	  						};
-	  					});
+	  					if(childSnapshot.key != firebase.auth().currentUser.uid) {
+		  					friendsRef.child(firebase.auth().currentUser.uid+'/'+childSnapshot.key).once('value', function(friendshot) {
+		  						if (!friendshot.exists()) {
+		  							var searchItem = HTMLcreateFriend(childSnapshot);
+		  					
+		  							search_users_results.appendChild(searchItem);
+		  						};
+		  					});
+		  				}	
 	  				});
   				}
 			});
@@ -113,7 +388,7 @@
 
   	function getUserProfileImage(snap) {
 		var userImage = HTMLcreateUserProfile(snap);
-		updateOrAppendHTML("firebase-image-wrapper", userImage, image);
+		updateOrPrependHTML("firebase-image-wrapper", userImage, image);
   	}
 
   	function getUserSettings(user) {
@@ -153,20 +428,10 @@
 					}  
 
 	  				if(snap.val().online != true){
-						updateOrAppendHTML("userfriend-"+snap.key, friend, friends_offline);
+						updateOrPrependHTML("userfriend-"+snap.key, friend, friends_offline);
 	  				}else {
-	  					updateOrAppendHTML("userfriend-"+snap.key, friend, friends_online);
+	  					updateOrPrependHTML("userfriend-"+snap.key, friend, friends_online);
 	  				}
-
-					if(parent) {
-						friend = HTMLcreateFriend(snap, 'chat-');
-
-						if(snap.val().online != true){
-							updateOrAppendHTML("chat-userfriend-"+snap.key, friend, chat_friends_offline);
-		  				}else {
-		  					updateOrAppendHTML("chat-userfriend-"+snap.key, friend, chat_friends_online);
-		  				}	
-					}
 					
 				};	
   			});	
@@ -222,8 +487,8 @@
 	  				}
 
 	  				//Put the HTML in the container
-	  				updateOrAppendHTML("list-"+snap.key, list_overview_item, parent);
-	  				updateOrAppendHTML("list-title-"+snap.key, list_main_title, lists_title);
+	  				updateOrPrependHTML("list-"+snap.key, list_overview_item, parent);
+	  				updateOrPrependHTML("list-title-"+snap.key, list_main_title, lists_title);
 
 	  				//Set the cursor position
 					if(contentEditable != 0 && focusCheck != '') {
@@ -248,7 +513,7 @@
 					//Put the HTML in the container
 					var friends_list = document.getElementById('friends-'+listId);
 
-					updateOrAppendHTML(listId+"friend-"+snap.key, friend, friends_list);
+					updateOrPrependHTML(listId+"friend-"+snap.key, friend, friends_list);
 				}	
   			});
   		});
@@ -327,7 +592,7 @@
 
 							if(focusCheck != '') {
 								if(parent != null) {
-									updateOrAppendHTML(snap.key, item, document.getElementById(listId+"-items-unchecked"));
+									updateOrPrependHTML(snap.key, item, document.getElementById(listId+"-items-unchecked"));
 								}
 
 								//Set the cursor position
@@ -340,16 +605,16 @@
 								}  
 
 					        	if(snap.val().ticked != false) {
-									updateOrAppendHTML(snap.key, item, document.getElementById(listId+"-items-checked"));
+									updateOrPrependHTML(snap.key, item, document.getElementById(listId+"-items-checked"));
 					        	}else {
-					        		updateOrAppendHTML(snap.key, item, document.getElementById(listId+"-items-unchecked"));
+					        		updateOrPrependHTML(snap.key, item, document.getElementById(listId+"-items-unchecked"));
 					        	}
 							}
 
 							//Reset the textarea height
-							autosize(document.querySelectorAll('textarea'));
+							autosize(document.querySelectorAll('textarea:not(.chat-message-input)'));
 						}else {
-							//updateOrAppendHTML(snap.key, item, document.getElementById(listId+"-items-unchecked"));
+							//updateOrPrependHTML(snap.key, item, document.getElementById(listId+"-items-unchecked"));
 						}
  					});
 				}
@@ -414,12 +679,30 @@
 		});
 	};
 
-  	function updateOrAppendHTML(id, HTML_object, parent) {
+  	function updateOrPrependHTML(id, HTML_object, parent) {
 		if(document.getElementById(id) != null) {
 			var update_item_list = document.getElementById(id);
 				update_item_list.innerHTML = HTML_object.innerHTML;
 		}else {
 			parent.prepend(HTML_object);
+		}
+
+		//Set focus if element got class FOCUS
+		if(typeof document.querySelectorAll('[focus="true"]')[0] != 'undefined')
+		{
+			var focused = document.querySelectorAll('[focus="true"]')[0];
+			$(focused).focus();
+
+			//setEndOfContenteditable(focused);
+		}
+  	}
+
+  	function updateOrAppendHTML(id, HTML_object, parent) {
+		if(document.getElementById(id) != null) {
+			var update_item_list = document.getElementById(id);
+				update_item_list.innerHTML = HTML_object.innerHTML;
+		}else {
+			parent.append(HTML_object);
 		}
 
 		//Set focus if element got class FOCUS

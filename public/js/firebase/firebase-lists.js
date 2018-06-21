@@ -123,6 +123,26 @@
 			writeNewListItem(newPostKey, "", 0, false, "");
 	});
 
+	$.fn.firebase_addList = function(items, title) {
+		var id = '';
+
+		$('.remove-list').removeClass('show');
+		$("#js-remove-list").removeClass('active');
+
+		var itemCount = items.length,
+			name = title,
+			listOwner = firebase.auth().currentUser.uid,
+			time = '',
+			userCount = 1;
+
+		var newPostKey = writeNewList(itemCount, name, listOwner, time, userCount);
+
+		$.each(items, function( index, value ) {
+			writeNewListItem(newPostKey, "", 0, false, value);
+		});
+	};
+
+
 
 	/**
 		LIST DETAILS

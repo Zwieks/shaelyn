@@ -143,7 +143,6 @@ jQuery(document).ready(function(){
 		event.preventDefault();
 		var hash = window.location.hash;
 	}
-
 	 
 	if ($('#js-backtotop').length) {
 	    var scrollTrigger = 500, // px
@@ -168,8 +167,76 @@ jQuery(document).ready(function(){
 	}
 });
 
+function getMostUsedWord(array)
+{
+    if(array.length == 0)
+        return null;
+    var modeMap = {};
+    var maxEl = array[0], maxCount = 1;
+    for(var i = 0; i < array.length; i++)
+    {
+        var el = array[i];
+        if(modeMap[el] == null)
+            modeMap[el] = 1;
+        else
+            modeMap[el]++;  
+        if(modeMap[el] > maxCount)
+        {
+            maxEl = el;
+            maxCount = modeMap[el];
+        }
+    }
+    return maxEl;
+}
+
+//IMPORT LIST FUNCTIONALITY
+function ImportCreatList(text) {
+	var max_items = 100,
+		list_items_array = text.split('\n').slice(0, max_items),
+		most_used_word = getMostUsedWord(text.split(' ').slice(0, max_items));
+
+	$.fn.firebase_addList(list_items_array, most_used_word);
+}
+
+$(document).on("paste",".js-item-dialog",function(e) {
+	//Get the data from the clipboard
+    var pastedData = e.originalEvent.clipboardData.getData('text');
+
+    if(pastedData != '') {
+	    //Create list items from the text of the clipboard
+	    ImportCreatList(pastedData);
+
+	    $("#paste-wrapper").removeClass('active');
+    }
+});
+
+$( ".js-importlist" ).contextmenu(function() {
+ 	alert( "Handler for .contextmenu() called." );
+});
+
+
+//LOGOUT
 $(document).on("click","#js-logout",function() {
 	logout();
+});
+
+//CLOSE ITEM DIALOG
+$(document).bind( "mouseup touchend", function(e) {
+    var container = $(".js-item-dialog");
+
+    // if the target of the click isn't the container nor a descendant of the container
+    if (!container.is(e.target) && container.has(e.target).length === 0) {
+        $("#paste-wrapper").removeClass('active');
+    }
+});
+
+$(document).on('click', "#js-paste-list" ,function(e) {
+	$("#paste-wrapper").addClass('active');
+	$('.list-paste').focus();
+});
+
+$(document).on('click', '.js-close-item-dialog',function(e) {
+	$(this).closest('.js-item-dialog').removeClass('active');
 });
 
 $(document).on("click","#modal-search-friends .card",function(){

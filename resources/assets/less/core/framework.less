@@ -21,7 +21,10 @@ body {
 
             &#js-loggedin {
                 padding-top: @headerHeight*0.6;
-                overflow: hidden;
+                
+                @media @bp-MobileL {
+                    overflow: hidden;
+                }
             }
 
             @media @navBreakPoint {

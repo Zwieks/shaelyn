@@ -22,13 +22,6 @@
                     autoHideScrollbar: true
                 });
             }
-
-            if($('#firebase-chat-window').length) {
-                $("#firebase-chat-window").mCustomScrollbar({
-                    theme:"light-3",
-                    autoHideScrollbar: true
-                }).mCustomScrollbar("scrollTo","bottom",{scrollInertia:0});
-            }
         }               
     });
 </script>
