@@ -190,35 +190,27 @@ function getMostUsedWord(array)
 }
 
 //IMPORT LIST FUNCTIONALITY
-function ImportCreatList(text) {
+function ImportCreatList(text, type) {
 	var max_items = 100,
 		list_items_array = text.split('\n').slice(0, max_items),
-		most_used_word = getMostUsedWord(text.split(' ').slice(0, max_items));
+		most_used_word = getMostUsedWord(text.split(' ').slice(0, max_items)),
+		listId = null;
 
-	$.fn.firebase_addList(list_items_array, most_used_word);
+	if(type == 'js-paste-list-items'){
+		listId = $('#firebase-list-details').find('.show').attr('ref');
+	};
+
+	$.fn.firebase_addList(list_items_array, most_used_word, listId);
+
 }
-
-$(document).on("paste",".js-item-dialog",function(e) {
-	//Get the data from the clipboard
-    var pastedData = e.originalEvent.clipboardData.getData('text');
-
-    if(pastedData != '') {
-	    //Create list items from the text of the clipboard
-	    ImportCreatList(pastedData);
-
-	    $("#paste-wrapper").removeClass('active');
-    }
-});
-
-$( ".js-importlist" ).contextmenu(function() {
- 	alert( "Handler for .contextmenu() called." );
-});
 
 
 //LOGOUT
 $(document).on("click","#js-logout",function() {
 	logout();
 });
+
+//PASTE FUNCTIONALITIES
 
 //CLOSE ITEM DIALOG
 $(document).bind( "mouseup touchend", function(e) {
@@ -230,7 +222,21 @@ $(document).bind( "mouseup touchend", function(e) {
     }
 });
 
-$(document).on('click', "#js-paste-list" ,function(e) {
+$(document).on("paste",".js-item-dialog",function(e) {
+	//Get the data from the clipboard
+    var pastedData = e.originalEvent.clipboardData.getData('text'),
+    	type = $(this).attr('data-type');
+
+    if(pastedData != '') {
+	    //Create list items from the text of the clipboard
+	    ImportCreatList(pastedData, type);
+
+	    $("#paste-wrapper").removeClass('active');
+    }
+});
+
+$(document).on('click', "#js-paste-list, #js-paste-list-items" ,function(e) {
+	$("#paste-wrapper").attr('data-type', $(this).attr('id'));
 	$("#paste-wrapper").addClass('active');
 	$('.list-paste').focus();
 });
@@ -238,6 +244,36 @@ $(document).on('click', "#js-paste-list" ,function(e) {
 $(document).on('click', '.js-close-item-dialog',function(e) {
 	$(this).closest('.js-item-dialog').removeClass('active');
 });
+
+$(document).on('input', '#firebase-message-input',function(e) {
+	$('.chat-fieldset').removeClass('hide');
+	
+	if($(this).val() != '') {
+		$('#js-chat-image-input').addClass('hide');
+	}else {
+		$('#js-chat-text-input').addClass('hide');
+	}
+});
+
+
+$(document).on("click",".js-switch-chat",function(){
+	var chatGroupId = $(this).attr('id').replace('chat-', '');
+	
+	$('#firebase-chat-conversations').addClass('hide');
+	$(this).parent().find('.js-switch-chat').removeClass("active");
+	$('#firebase-chat-conversations').find('.chat-window').removeClass("active");
+	$('#firebase-chat-meta').find('.title-wrapper').removeClass("active");
+	
+	$(this).addClass('active');
+	$('#chat-window-'+chatGroupId).addClass('active');
+	$('#chat-meta-'+chatGroupId).addClass('active');
+	$("#chat-window-"+chatGroupId).mCustomScrollbar("scrollTo", "bottom", {scrollInertia:0});
+
+	setTimeout(function(){
+		$('#firebase-chat-conversations').removeClass('hide');
+	}, 100);
+});
+
 
 $(document).on("click","#modal-search-friends .card",function(){
 	$(this).parent().toggleClass("invite");

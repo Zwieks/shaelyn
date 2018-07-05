@@ -1,0 +1,22 @@
+{
+  "version": "1.0.0",
+  "name": "Shaelyn Chat",
+  "launch_path": "/",
+  "description": "Chat with friends using Shaelyn",
+  "developer": {
+    "name": "Google inc.",
+    "url": "https://shaelyn.io"
+  },
+  "installs_allowed_from": [
+    "*"
+  ],
+  "default_locale": "en",
+  "permissions": {
+  },
+  "locales": {
+    "en": {
+      "name": "Shaelyn Chat",
+      "description": "Chat with friends using Shaelyn"
+    }
+  }
+}

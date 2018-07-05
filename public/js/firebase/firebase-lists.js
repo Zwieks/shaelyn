@@ -21,17 +21,19 @@
 
 	//Removes single LIST
 	$.fn.firebase_removeList = function(listId) {
-		$('#list-'+listId).slideUp("normal", function() { 
-			$(this).remove(); 
-		});
-
 	  	var updates = {},
 	  		currentUser = firebase.auth().currentUser.uid;
+
+		$('#list-'+listId).slideUp("normal", function() {
+			$(this).remove(); 
+		});
 
 	  	updates['UsersLists/' + currentUser + '/' + listId] = null;
 	  	updates['listAttendees/' + listId  + '/' + currentUser] = null;
 
-	 	return firebase.database().ref().update(updates);
+	 	return firebase.database().ref().update(updates).then(snap => {
+
+	 	});
 	};
 
 	$.fn.firebase_invite_user = function(inviteUserId) {
@@ -49,6 +51,7 @@
 
 	//Removes single LIST ITEM
 	$.fn.firebase_removeListItem = function(listId, itemId) {
+		console.log("listId: "+listId+' en itemId: '+itemId);
 		$('#'+itemId).slideUp();
 		return firebase.database().ref().child('listItems/'+listId+'/'+itemId).remove();
 	};
@@ -65,7 +68,7 @@
 	//Triggerd when clicked on remove icon and REMOVING the item from DB
 	$(document).on("click",".firebase-remove-list",function() {
 		var listId = $(this).closest('.js-list').attr('sub');
-		
+
 		$.fn.firebase_removeList(listId);
 	});
 
@@ -117,13 +120,14 @@
 			name = "",
 			listOwner = firebase.auth().currentUser.uid,
 			time = '',
-			userCount = 1;
+			tickedCount = 0,
+			userCount = 0;
 
-		var newPostKey = writeNewList(itemCount, name, listOwner, time, userCount);
+		var newPostKey = writeNewList(itemCount, name, listOwner, time, userCount, tickedCount);
 			writeNewListItem(newPostKey, "", 0, false, "");
 	});
 
-	$.fn.firebase_addList = function(items, title) {
+	$.fn.firebase_addList = function(items, title, newPostKey) {
 		var id = '';
 
 		$('.remove-list').removeClass('show');
@@ -133,9 +137,12 @@
 			name = title,
 			listOwner = firebase.auth().currentUser.uid,
 			time = '',
-			userCount = 1;
+			tickedCount = 0,
+			userCount = 0;
 
-		var newPostKey = writeNewList(itemCount, name, listOwner, time, userCount);
+		if(newPostKey == null) {
+			newPostKey = writeNewList(itemCount, name, listOwner, time, userCount, tickedCount);
+		}
 
 		$.each(items, function( index, value ) {
 			writeNewListItem(newPostKey, "", 0, false, value);
@@ -153,26 +160,30 @@
 			var list_id = 'detail-'+$(this).attr('sub');
 			var title_id = 'title-'+$(this).attr('sub');
 
-			$(this).closest('.item-wrapper').find('.item').addClass('details').delay(100).queue(function(next){
-		    	$(this).addClass("active");
-		    	next();
-			});
-			$(this).closest('.item-wrapper').find('.'+list_id).addClass('show');
-			$(this).closest('.item-wrapper').find('.'+title_id).addClass('show');
-
-			$('#js-remove-list').attr("id","js-remove-list-items");
-			$('#js-add-list').attr("id","js-add-list-items");
-			$('#js-remove-list-items').removeClass('active');
-			$(this).parent().parent().find('.remove-item').removeClass('show');
-
-			setTimeout(function(e){ 
-				$('.detail-item.show .card-main').children().find('textarea').each(function(){
-				  	autosize($(this));
-				});
-			}, 200);
+			openListDetails(list_id, title_id);
 		};	
 	});
 
+	function openListDetails(list_id, title_id) {
+		var object = $('#firebase-list-details').closest('.item-wrapper');
+		object.find('.item').addClass('details').delay(100).queue(function(next){
+	    	$(this).addClass("active");
+	    	next();
+		});
+		object.find('.'+list_id).addClass('show');
+		object.find('.'+title_id).addClass('show');
+
+		$('#js-remove-list').attr("id","js-remove-list-items");
+		$('#js-add-list').attr("id","js-add-list-items");
+		$('#js-remove-list-items').removeClass('active');
+		object.parent().parent().find('.remove-item').removeClass('show');
+
+		setTimeout(function(e){ 
+			$('.detail-item.show .card-main').children().find('textarea').each(function(){
+			  	autosize($(this));
+			});
+		}, 200);
+	}
 
 	/**
 		BACK TO LIST OVERVIEW
@@ -194,14 +205,15 @@
 		$('#focus').removeAttr('id');
 	});
 
-	function writeNewList(itemCount, name, listOwner, time, userCount) {
+	function writeNewList(itemCount, name, listOwner, time, userCount, tickedCount) {
 		// A post entry.
 		var postData = {
 	    	itemCount: itemCount,
 	    	name: name,
 	    	listOwner : listOwner,
 	    	time : time,
-	    	userCount : userCount
+	    	userCount : userCount,
+	    	tickedCount: tickedCount
 		};
 
 	  	// Get a key for a new Post.
@@ -217,6 +229,32 @@
 		firebase.database().ref().update(updates);
 
 		return newPostKey;
+	}
+
+	function writeNewListItem(listId, detail, orderNumber, ticked, title) {
+	  	// A post entry.
+	  	var postData = {
+    		detail: detail,
+    		orderNumber: orderNumber,
+    		ticked : ticked,
+    		changedBy : firebase.auth().currentUser.uid,
+    		title : title
+	  	};
+
+	  	// Get a key for a new Post.
+	  	var newPostKey = firebase.database().ref().child('listItems/'+listId).push().key;
+
+	  	// Write the new post's data simultaneously in the posts list and the user's post list.
+	  	var updates = {};
+
+		updates['listItems/'+ listId +'/'+ newPostKey] = postData;
+	  	//updates['/user-posts/' + uid + '/' + newPostKey] = postData;
+
+		return firebase.database().ref().update(updates).then(snap => {
+				setTimeout(function(){
+					openListDetails('detail-'+listId, 'title-'+listId)
+				},500);
+		});
 	}
 
 	function writeNewFriendsInvite(inviteUserId, uId, listId) {
@@ -243,28 +281,6 @@
 	  	var updates = {};
 
 		updates['notifications/'+ inviteUserId +'/'+ newPostKey] = postData;
-
-		return firebase.database().ref().update(updates);
-	}
-
-	function writeNewListItem(listId, detail, orderNumber, ticked, title) {
-	  	// A post entry.
-	  	var postData = {
-    		detail: detail,
-    		orderNumber: orderNumber,
-    		ticked : ticked,
-    		changedBy : firebase.auth().currentUser.uid,
-    		title : title
-	  	};
-
-	  	// Get a key for a new Post.
-	  	var newPostKey = firebase.database().ref().child('listItems/'+listId).push().key;
-
-	  	// Write the new post's data simultaneously in the posts list and the user's post list.
-	  	var updates = {};
-
-		updates['listItems/'+ listId +'/'+ newPostKey] = postData;
-	  	//updates['/user-posts/' + uid + '/' + newPostKey] = postData;
 
 		return firebase.database().ref().update(updates);
 	}

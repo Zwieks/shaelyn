@@ -30,11 +30,16 @@ function HTMLcreateUserProfile(snap) {
 	return HTML_user_image_wrapper;
 }
 
-function HTMLcreateChatMeta(snap) {
+function HTMLcreateChatMeta(snap, count, totalNum) {
 	var HTML_chat_title_wrapper = document.createElement("div");
 		HTML_chat_title_wrapper.setAttribute("id", "chat-meta-"+snap.key);
-		HTML_chat_title_wrapper.className = "title-wrapper";
-	
+		
+		if(count != totalNum) {
+			HTML_chat_title_wrapper.className = "title-wrapper";
+		}else {
+			HTML_chat_title_wrapper.className = "title-wrapper active";
+		}
+
 	var HTML_chat_title = document.createElement("h3");
 		HTML_chat_title.className = "item-title";
 		HTML_chat_title.appendChild(document.createTextNode(snap.val().name));
@@ -44,19 +49,24 @@ function HTMLcreateChatMeta(snap) {
 		return HTML_chat_title_wrapper;
 }
 
-function HTMLcreateChatWindow(snap) {
+function HTMLcreateChatWindow(snap, count, totalNum) {
 	var HTML_chat_window = document.createElement("div");
 		HTML_chat_window.setAttribute("id", "chat-window-"+snap.key);
-		HTML_chat_window.className = "chat-window";
+		if(count != totalNum) {
+			HTML_chat_window.className = "chat-window";
+		}else {
+			HTML_chat_window.className = "chat-window active";
+		}
 
 	return HTML_chat_window;
 }
 
-function HTMLcreateChatMessage(listId, snapuser, snap) {
+function HTMLcreateChatMessage(listId, userid, snap) {
 	var HTML_chat_message_wrapper = document.createElement("div");
 		HTML_chat_message_wrapper.setAttribute("id", "chat-message-"+snap.key);
+		HTML_chat_message_wrapper.setAttribute("data-group", listId);
 
-		if(snapuser.key != firebase.auth().currentUser.uid) {
+		if(userid != firebase.auth().currentUser.uid) {
 			HTML_chat_message_wrapper.className = "chat-message";
 		}else {
 			HTML_chat_message_wrapper.className = "chat-message user";
@@ -68,22 +78,50 @@ function HTMLcreateChatMessage(listId, snapuser, snap) {
 	var HTML_chat_meta = document.createElement("div");
 		HTML_chat_meta.className = "message-meta";
 
-	var HTML_chat_text = document.createElement("p");
-		HTML_chat_text.className = "message-text";
-		HTML_chat_text.appendChild(document.createTextNode(snap.val().message));	
+	if(snap.val().type != 'image') {
+		var HTML_chat_text = document.createElement("p");
+			HTML_chat_text.className = "message-text";
+			HTML_chat_text.appendChild(document.createTextNode(snap.val().message));
+
+		HTML_chat_window.appendChild(HTML_chat_text);
+	}else {
+		var HTML_chat_image_wrapper = document.createElement("figure");
+			HTML_chat_image_wrapper.className = "message-image";
+
+		var HTML_chat_image = document.createElement("img");
+			HTML_chat_image.className = "chat-image";
+			HTML_chat_image.setAttribute("title", "");
+			HTML_chat_image.setAttribute("alt", "");
+			HTML_chat_image.setAttribute("src", snap.val().imageUrl);
+
+		HTML_chat_image_wrapper.appendChild(HTML_chat_image);	
+		HTML_chat_window.appendChild(HTML_chat_image_wrapper);
+	}
 
 	HTML_chat_window.appendChild(HTML_chat_meta);
-	HTML_chat_window.appendChild(HTML_chat_text);
 
 	HTML_chat_message_wrapper.appendChild(HTML_chat_window);
 
 	return HTML_chat_message_wrapper;
 }
 
-function HTMLcreateGroup(snap) {
+function HTMLcreateGroup(key, snap, count, totalNum, activeGroupId) {
 	var HTML_chat_group_overview_wrapper = document.createElement("div");
-		HTML_chat_group_overview_wrapper.className = "card-wrapper";
-		HTML_chat_group_overview_wrapper.setAttribute("id", "chat-"+snap.key);
+		if(activeGroupId == false) {
+			if(count != totalNum) {
+				HTML_chat_group_overview_wrapper.className = "card-wrapper chat js-switch-chat";
+			}else {
+				HTML_chat_group_overview_wrapper.className = "card-wrapper chat js-switch-chat active";
+			}
+		}else {
+			if(activeGroupId == key) {
+				HTML_chat_group_overview_wrapper.className = "card-wrapper chat js-switch-chat active";
+			}else {
+				HTML_chat_group_overview_wrapper.className = "card-wrapper chat js-switch-chat";
+			}	
+		}
+		
+		HTML_chat_group_overview_wrapper.setAttribute("id", "chat-"+key);
 
 	var HTML_chat_group_overview_inner  = document.createElement("div");
 		HTML_chat_group_overview_inner.className = "card";
@@ -114,13 +152,22 @@ function HTMLcreateGroup(snap) {
 		HTML_chat_group_overview_description.className = "card-description";
 		HTML_chat_group_overview_description.appendChild(document.createTextNode(snap.description));	
 
+	var HTML_chat_group_overview_indicator = document.createElement("div");
+		HTML_chat_group_overview_indicator.className = "card-indicator";
+
+	var HTML_chat_group_overview_indicator_number = document.createElement("span");
+		HTML_chat_group_overview_indicator_number.className = "card-indicator-number";
+
 	HTML_chat_group_image_wrapper.appendChild(HTML_chat_group_image);
+
+	HTML_chat_group_overview_indicator.appendChild(HTML_chat_group_overview_indicator_number);
 
 	HTML_chat_group_overview_content_wrapper.appendChild(HTML_chat_group_overview_title);
 	HTML_chat_group_overview_content_wrapper.appendChild(HTML_chat_group_overview_description);
 
 	HTML_chat_group_overview_inner.appendChild(HTML_chat_group_image_wrapper);
 	HTML_chat_group_overview_inner.appendChild(HTML_chat_group_overview_content_wrapper);
+	HTML_chat_group_overview_inner.appendChild(HTML_chat_group_overview_indicator);
 
 	HTML_chat_group_overview_wrapper.appendChild(HTML_chat_group_overview_inner);
 
@@ -274,7 +321,7 @@ function HTMLcreateListOverviewItem(snap, ownerImage) {
 
 	var HTML_list_overview_meta_checked = document.createElement("span");
 		HTML_list_overview_meta_checked.className = "card-meta checked";
-		HTML_list_overview_meta_checked.appendChild(document.createTextNode(0));	
+		HTML_list_overview_meta_checked.appendChild(document.createTextNode(snap.val().tickedCount));	
 
 	var HTML_list_overview_indicator_wrapper = document.createElement("div");
 		HTML_list_overview_indicator_wrapper.className = "card-indicator";
@@ -450,14 +497,25 @@ function HTMLcreateListItemControls() {
 		HTML_list_button_item_add_item_image.setAttribute("src", "/img/plus.svg");
 		HTML_list_button_item_add_item_image.setAttribute("alt", "Add item");
 
+	var HTML_list_button_item_paste_items = document.createElement("li");
+		HTML_list_button_item_paste_items.className = "icon paste";
+		HTML_list_button_item_paste_items.setAttribute("id", "js-paste-list-items");
+
+	var HTML_list_button_item_paste_item_image = document.createElement("img");
+		HTML_list_button_item_paste_item_image.className = "js-";
+		HTML_list_button_item_paste_item_image.setAttribute("src", "/img/clipboard.svg");
+		HTML_list_button_item_paste_item_image.setAttribute("alt", "Paste list");
+
 	//Create buttons
 	HTML_list_button_item_delete_item.appendChild(HTML_list_button_item_delete_item_image);
 	HTML_list_button_item_add_user.appendChild(HTML_list_button_item_add_user_image);
 	HTML_list_button_item_add_item.appendChild(HTML_list_button_item_add_item_image);
+	HTML_list_button_item_paste_items.appendChild(HTML_list_button_item_paste_item_image);
 
 	HTML_list_button_wrapper.appendChild(HTML_list_button_item_delete_item);
 	HTML_list_button_wrapper.appendChild(HTML_list_button_item_add_item);
 	HTML_list_button_wrapper.appendChild(HTML_list_button_item_add_user);
+	HTML_list_button_wrapper.appendChild(HTML_list_button_item_paste_items);
 
 	return	HTML_list_button_wrapper;
 }

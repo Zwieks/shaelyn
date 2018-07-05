@@ -60,7 +60,7 @@
 					var message = HTMLcreateChatMessage(listId, snapuser, snap);
 
 		  			//Put the HTML in the container
-					updateOrPrependHTML("chat-message-"+snap.key, message, parent);					
+					$.fn.updateOrPrependHTML("chat-message-"+snap.key, message, parent);					
 				}
   			});
   		});
@@ -77,7 +77,7 @@
 					//Put the HTML in the container
 					var friends_list = document.getElementById('friends-'+listId);
 					//console.log(snap.val());
-					//updateOrPrependHTML(listId+"friend-"+snap.key, friend, friends_list);
+					//$.fn.updateOrPrependHTML(listId+"friend-"+snap.key, friend, friends_list);
 				}	
   			});
   		});
@@ -95,29 +95,29 @@
 
   	function getChatOverviewItem(snap) {
   		//Check if the chat is a single or a group
-  	// 	if(snap.type != 'group') {
-  	// 		let userRef = chatAttendeesRef.child(snap.key);
+  		if(snap.type != 'group') {
+  			let userRef = chatAttendeesRef.child(snap.key);
 
-  	// 		userRef.on('value', snapuser => {
-	  // 			snapuser.forEach(function(childSnapshot) {
-	  // 				if(childSnapshot.key != firebase.auth().currentUser.uid) {
-	  // 					let userRef = usersRef.child(childSnapshot.key);
+  			userRef.on('value', snapuser => {
+	  			snapuser.forEach(function(childSnapshot) {
+	  				if(childSnapshot.key != firebase.auth().currentUser.uid) {
+	  					let userRef = usersRef.child(childSnapshot.key);
 
-			//   			userRef.on('value', snap => {
-			//   				//Renders the friends that are invited for the specific list
-			//   				var friend = HTMLcreateFriend(snap, 'chat-');
-			// 				//Put the HTML in the container
-			// 				updateOrPrependHTML("chat-userfriend-"+snap.key, friend, chat_list);
-			//   			});	  					
-	  // 				}
-  	// 			});
-  	// 		});
-  	// 	}else {
+			  			userRef.on('value', snap => {
+			  				//Renders the friends that are invited for the specific list
+			  				var friend = HTMLcreateFriend(snap, 'chat-');
+							//Put the HTML in the container
+							$.fn.updateOrPrependHTML("chat-userfriend-"+snap.key, friend, chat_list);
+			  			});	  					
+	  				}
+  				});
+  			});
+  		}else {
 			var group = HTMLcreateGroup(snap);
-			// //Put the HTML in the container
-  	// 	}	
+			//Put the HTML in the container
+  		}	
 
-  		updateOrPrependHTML("chat-"+snap.key, group, chat_list);
+  		$.fn.updateOrPrependHTML("chat-"+snap.key, group, chat_list);
   	}
 
   	// function getChatOverviewItem(snap,cb) {
@@ -135,7 +135,7 @@
 			// 	  				//Renders the friends that are invited for the specific list
 			// 	  				var friend = HTMLcreateFriend(snap, 'chat-');
 			// 					//Put the HTML in the container
-			// 					updateOrPrependHTML("chat-userfriend-"+snap.key, friend, chat_list);
+			// 					$.fn.updateOrPrependHTML("chat-userfriend-"+snap.key, friend, chat_list);
 			// 				}	
 			//   			});	  					
 	  // 				}
@@ -145,12 +145,24 @@
   	// 		if(snap.val() != null) {
 			// 	var group = HTMLcreateGroup(snap);
 			// 	//Put the HTML in the container
-			// 	updateOrPrependHTML("chat-"+snap.key, group, chat_list);
+			// 	$.fn.updateOrPrependHTML("chat-"+snap.key, group, chat_list);
   	// 		}
   	// 	}	
   	// }
 
   	function getChats(user, cb) {
+  		// Make sure we remove all previous listeners.
+  // 		ChatsRef.off();
+
+  // 		// Loads the last 12 messages and listen for new ones.
+		// var setMessage = function(data) {
+		// 	var val = data.val();
+		//     this.displayMessage(data.key, val.name, val.text, val.photoUrl, val.imageUrl);
+		// }.bind(this);
+		// this.messagesRef.limitToLast(12).on('child_added', setMessage);
+		//this.messagesRef.limitToLast(12).on('child_changed', setMessage);
+
+
 	 //  	var array = [];
 	 //  	var count = 0;
 
@@ -209,7 +221,7 @@
 	 //  		return Promise.all(promises);
 		// }).then(snaps => {
 		// 	console.log(array);
-		// 	//updateOrPrependHTML("chat-window-"+childSnapshot.key, chat_window, chat_conversation_wrapper);
+		// 	//$.fn.updateOrPrependHTML("chat-window-"+childSnapshot.key, chat_window, chat_conversation_wrapper);
 
 		// 	//Check the window width
 		// 	// if ($(window).width()>768) {
@@ -232,7 +244,7 @@
   		// 		var chat_window = HTMLcreateChatWindow(childSnapshot);
 
   	 // 			//Put the HTML in the container
-				// updateOrPrependHTML("chat-window-"+childSnapshot.key, chat_window, chat_conversation_wrapper);
+				// $.fn.updateOrPrependHTML("chat-window-"+childSnapshot.key, chat_window, chat_conversation_wrapper);
 
 				// //Check the window width
 				// if ($(window).width()>768) {
@@ -262,7 +274,7 @@
 				// 		console.log(snapchat.val());
 
 				// 		var meta = HTMLcreateChatMeta(snapchat);
-				//   		updateOrPrependHTML("chat-meta-"+snap.key, meta, chat_meta);
+				//   		$.fn.updateOrPrependHTML("chat-meta-"+snap.key, meta, chat_meta);
 		  // 			}
 	  	// 		});
   		// 	});	
@@ -273,7 +285,7 @@
   	// 		var chat_window = HTMLcreateChatWindow(snap);
 
   	// 		//Put the HTML in the container
-			// updateOrPrependHTML("chat-window-"+snap.key, chat_window, chat_conversation_wrapper);
+			// $.fn.updateOrPrependHTML("chat-window-"+snap.key, chat_window, chat_conversation_wrapper);
 
 			// if ($(window).width()>768) {
 			// 	//Init the scrollbar
@@ -299,7 +311,7 @@
 			// 		}
 
 			// 		var meta = HTMLcreateChatMeta(snapchat);
-			//   		updateOrPrependHTML("chat-meta-"+snap.key, meta, chat_meta);
+			//   		$.fn.updateOrPrependHTML("chat-meta-"+snap.key, meta, chat_meta);
 	  // 			}
   	// 		});
 
@@ -388,7 +400,7 @@
 
   	function getUserProfileImage(snap) {
 		var userImage = HTMLcreateUserProfile(snap);
-		updateOrPrependHTML("firebase-image-wrapper", userImage, image);
+		$.fn.updateOrPrependHTML("firebase-image-wrapper", userImage, image);
   	}
 
   	function getUserSettings(user) {
@@ -428,9 +440,9 @@
 					}  
 
 	  				if(snap.val().online != true){
-						updateOrPrependHTML("userfriend-"+snap.key, friend, friends_offline);
+						$.fn.updateOrPrependHTML("userfriend-"+snap.key, friend, friends_offline);
 	  				}else {
-	  					updateOrPrependHTML("userfriend-"+snap.key, friend, friends_online);
+	  					$.fn.updateOrPrependHTML("userfriend-"+snap.key, friend, friends_online);
 	  				}
 					
 				};	
@@ -461,9 +473,8 @@
   						}
 
   						return ownerImage;
-  					});		
+  					});	
 
-	  				//Renders the list overview
 	  				var list_overview_item = HTMLcreateListOverviewItem(snap, ownerImage),
 	  					focusCheck = checkFocus(),
 	  					show = false;
@@ -474,26 +485,30 @@
 	  				}
 	  				var list_main_title = HTMLcreateListMainTitle(snap, focusCheck, show);
 
-					//Set the focus position of the cursor
-					if(focusCheck != '') {
-						var contentEditable = doGetCaretPosition(document.querySelectorAll('[uni='+focusCheck+']')[0]);
-					}
+	  				//Renders the list overview
+	  				if(snap.val().userCount != 0) {
 
-	  				//$(lists).mCustomScrollbar("scrollTo","top");
-	  				var parent = document.getElementById(lists.childNodes[0].id+'_container');
+						//Set the focus position of the cursor
+						if(focusCheck != '') {
+							var contentEditable = doGetCaretPosition(document.querySelectorAll('[uni='+focusCheck+']')[0]);
+						}
 
-	  				if (parent == null) {
-	  					parent = lists;
+		  				//$(lists).mCustomScrollbar("scrollTo","top");
+		  				var parent = document.getElementById(lists.childNodes[0].id+'_container');
+
+		  				if (parent == null) {
+		  					parent = lists;
+		  				}
+
+		  				//Put the HTML in the container
+		  				$.fn.updateOrPrependHTML("list-"+snap.key, list_overview_item, parent);
+		  				$.fn.updateOrPrependHTML("list-title-"+snap.key, list_main_title, lists_title);
+
+		  				//Set the cursor position
+						if(contentEditable != 0 && focusCheck != '') {
+							setCaretPosition(document.querySelectorAll('[uni='+focusCheck+']')[0],contentEditable);	
+						}
 	  				}
-
-	  				//Put the HTML in the container
-	  				updateOrPrependHTML("list-"+snap.key, list_overview_item, parent);
-	  				updateOrPrependHTML("list-title-"+snap.key, list_main_title, lists_title);
-
-	  				//Set the cursor position
-					if(contentEditable != 0 && focusCheck != '') {
-						setCaretPosition(document.querySelectorAll('[uni='+focusCheck+']')[0],contentEditable);	
-					}
 	  			}	
   			});
   		});
@@ -513,7 +528,7 @@
 					//Put the HTML in the container
 					var friends_list = document.getElementById('friends-'+listId);
 
-					updateOrPrependHTML(listId+"friend-"+snap.key, friend, friends_list);
+					$.fn.updateOrPrependHTML(listId+"friend-"+snap.key, friend, friends_list);
 				}	
   			});
   		});
@@ -565,58 +580,60 @@
   						}
   					}
 
-					userRef.on('value', snapshot => {
-						var focusCheck = checkFocus();
- 						user = snapshot.val();
-						var item = HTMLcreateListItem(listId, snap, focusCheck, user, active_remove);
+					userRef.once('value', snapshot => {
+						user = snapshot.val();
+					}).then(snap => {
+						return user;
+					});
 
-						//Set the focus position of the cursor
+					var focusCheck = checkFocus();
+					var item = HTMLcreateListItem(listId, snap, focusCheck, user, active_remove);
+
+					//Set the focus position of the cursor
+					if(focusCheck != '') {
+						var contentEditable = doGetCaretPosition(document.querySelectorAll('[uni='+focusCheck+']')[0]);
+					}
+
+	  				var parent = document.getElementById(items_wrapper.childNodes[0].id+'_container');
+
+	  				if ($(window).width()<768 && parent == null) {
+	  					parent = lists;
+	  				}else {
+		  				//Init the scrollbar
+						$(items_wrapper).mCustomScrollbar({
+				            theme:"light-3",
+				            autoHideScrollbar: true
+				        });
+
+				        parent = true;
+	  				}
+
+					if(parent != null) {
+			        	//$(items_wrapper).mCustomScrollbar("scrollTo","top");   	
+
 						if(focusCheck != '') {
-							var contentEditable = doGetCaretPosition(document.querySelectorAll('[uni='+focusCheck+']')[0]);
-						}
+							$.fn.updateOrPrependHTML(snap.key, item, document.getElementById(listId+"-items-unchecked"));
 
-		  				var parent = document.getElementById(items_wrapper.childNodes[0].id+'_container');
-
-		  				if ($(window).width()<768 && parent == null) {
-		  					parent = lists;
-		  				}else {
-			  				//Init the scrollbar
-							$(items_wrapper).mCustomScrollbar({
-					            theme:"light-3",
-					            autoHideScrollbar: true
-					        });
-		  				}
-
-						if(parent != null) {
-				        	//$(items_wrapper).mCustomScrollbar("scrollTo","top");   	
-
-							if(focusCheck != '') {
-								if(parent != null) {
-									updateOrPrependHTML(snap.key, item, document.getElementById(listId+"-items-unchecked"));
-								}
-
-								//Set the cursor position
-								if(contentEditable != 0) {
-									setCaretPosition(document.querySelectorAll('[uni='+focusCheck+']')[0],contentEditable);	
-								}
-							}else {
-								if(document.getElementById(snap.key) != null) {
-									document.getElementById(snap.key).remove();
-								}  
-
-					        	if(snap.val().ticked != false) {
-									updateOrPrependHTML(snap.key, item, document.getElementById(listId+"-items-checked"));
-					        	}else {
-					        		updateOrPrependHTML(snap.key, item, document.getElementById(listId+"-items-unchecked"));
-					        	}
+							//Set the cursor position
+							if(contentEditable != 0) {
+								setCaretPosition(document.querySelectorAll('[uni='+focusCheck+']')[0],contentEditable);	
 							}
-
-							//Reset the textarea height
-							autosize(document.querySelectorAll('textarea:not(.chat-message-input)'));
 						}else {
-							//updateOrPrependHTML(snap.key, item, document.getElementById(listId+"-items-unchecked"));
+							if(document.getElementById(snap.key) != null) {
+								document.getElementById(snap.key).remove();
+							}  
+
+				        	if(snap.val().ticked != false) {
+								$.fn.updateOrPrependHTML(snap.key, item, document.getElementById(listId+"-items-checked"));
+				        	}else {
+				        		$.fn.updateOrPrependHTML(snap.key, item, document.getElementById(listId+"-items-unchecked"));
+				        	}
 						}
- 					});
+
+						//Reset the textarea height
+						autosize(document.querySelectorAll('textarea:not(.chat-message-input)'));
+					}
+ 					
 				}
 			});
   		});
@@ -679,10 +696,13 @@
 		});
 	};
 
-  	function updateOrPrependHTML(id, HTML_object, parent) {
+	$.fn.updateOrPrependHTML = function(id, HTML_object, parent) {
 		if(document.getElementById(id) != null) {
 			var update_item_list = document.getElementById(id);
 				update_item_list.innerHTML = HTML_object.innerHTML;
+		}else if($('#firebase-chat-conversations').hasClass('loaded') &&
+				id.toLowerCase().indexOf("chat-message-") >= 0){
+			parent.append(HTML_object);
 		}else {
 			parent.prepend(HTML_object);
 		}
@@ -696,6 +716,8 @@
 			//setEndOfContenteditable(focused);
 		}
   	}
+
+
 
   	function updateOrAppendHTML(id, HTML_object, parent) {
 		if(document.getElementById(id) != null) {

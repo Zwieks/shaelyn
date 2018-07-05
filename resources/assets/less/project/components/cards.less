@@ -29,6 +29,41 @@
 			}
 		}
 	}
+
+	&.chat {
+		padding: @spacing/2 0;
+    	margin: 0;
+
+    	.card-content-wrapper {
+    		max-width: 100%;
+    	}
+
+    	.card-indicator {
+    		.border-radius(50%);
+    		position: relative;
+    		width: @spacing;
+		    height: @spacing;
+		    color: @white;
+		    background: @primColor;
+		    margin-right: @spacing/2;
+		    opacity: 0;
+
+		    &.show {
+		    	opacity: 1;
+		    	position: relative;
+		    }
+    	}
+
+    	.card-indicator-number {
+    		.center;
+    		font-weight: bold;
+    		font-size: 1.2rem;
+    	}
+	}
+
+	&.active {
+		background: @ligtestGrey;
+	}
 }
 
 .card {

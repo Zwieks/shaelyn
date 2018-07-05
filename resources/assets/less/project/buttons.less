@@ -33,6 +33,25 @@ a {
     }
 }
 
+.chat-input-btn {
+    cursor: pointer;
+    background: transparent;
+    position: relative;
+    width: 3rem;
+    height: @spacing*2;
+    margin: @spacing/2;
+
+    &:hover,
+    &:focus {
+        color: inherit;
+    }
+
+    img {
+        .center;
+        width: @spacing*1.5;
+    }
+}
+
 // Bigger button
 .call-to-action {
     &:extend(.btn all);
