@@ -110,16 +110,30 @@ ShaelynChat.prototype.loadGroups = function(groupId, groupsnap, count, totalNum,
     parent = this.chat_list_wrapper;
   }
 
-  if(groupsnap.val().chatOwner != firebase.auth().currentUser.uid && groupId != activeGroupId && !$(loaded).hasClass('loaded')) {
-    console.log('test');
-  }else {
-    console.log('hell no');
-  }
-
   setTimeout(function(){
     $('#firebase-chat-friends').removeClass('hide');
   }, 100);
 };  
+
+ShaelynChat.prototype.seenMessages = function(oldGroupId, newGroupId) {
+  const userId = firebase.auth().currentUser.uid;
+  const ref = firebase.database().ref();
+  const oldChat = ref.child('ChatAttendees').child(oldGroupId).child(userId);
+  const newChat = ref.child('ChatAttendees').child(newGroupId).child(userId);
+
+  let timestamp = firebase.database.ServerValue.TIMESTAMP;
+  oldChat.once('value').then(function(snapshot) {
+    oldChat.update({ 
+      time: timestamp
+    })
+  });
+
+  newChat.once('value').then(function(snapshot) {
+    newChat.update({ 
+      time: "active"
+    })
+  });
+};
 
 // Loads chat messages history and listens for upcoming ones.
 ShaelynChat.prototype.loadMessages = function(groupId, groupsnap) {
@@ -140,12 +154,11 @@ ShaelynChat.prototype.loadMessages = function(groupId, groupsnap) {
 
     $("#chat-window-"+groupId).mCustomScrollbar("update");
     $("#chat-window-"+groupId).mCustomScrollbar("scrollTo", "bottom");
-
   }.bind(this);
+
   this.messagesRef.orderByChild('time').limitToLast(12).on('child_added', setMessage);
   this.messagesRef.orderByChild('time').limitToLast(12).on('child_changed', setMessage);
 };
-
 
 ShaelynChat.prototype.init = function() {
   //Get the current user ID
@@ -193,6 +206,45 @@ ShaelynChat.prototype.init = function() {
   });
 };
 
+ShaelynChat.prototype.seenCheck = function(active_groupId, messageId) {
+  const userId = firebase.auth().currentUser.uid;
+  const ref = firebase.database().ref();
+  const chatAttendeesRef = ref.child('ChatAttendees').child(active_groupId);
+
+  chatAttendeesRef.once('value', snap => {
+    snap.forEach(function(childSnapshot) {
+      if(childSnapshot.val().time != 'active') {
+        const promise = firebase.database().ref().child('ChatNotSeenMessages').child(childSnapshot.key).child(active_groupId).child(messageId).set(true);
+
+        promise.then(function() {
+          //console.log(childSnapshot.key);
+        }.bind(this)).catch(function(error) {
+          console.error('Error writing new message to Firebase Database', error);
+        });
+      }
+    });
+  }).then(snap => {
+    const postRef = firebase.database().ref().child('ChatNotSeenMessages').child(userId).child(active_groupId);
+    postRef.once('value').then(function(snapCount) {
+      console.log(snapCount.numChildren());
+    });
+  });
+};
+
+ShaelynChat.prototype.removeUnSeenMessages = function(active_groupId) {
+  const userId = firebase.auth().currentUser.uid;
+  const ref = firebase.database().ref();
+  const chatNotSeenRef = ref.child('ChatNotSeenMessages');
+
+  const promise = chatNotSeenRef.child(userId).child(active_groupId).remove();
+
+  promise.then(function() {
+    //console.log(childSnapshot.key);
+  }.bind(this)).catch(function(error) {
+    console.error('Error writing new message to Firebase Database', error);
+  });
+};
+
 //Saves a new message on the Firebase DB.
 ShaelynChat.prototype.saveMessage = function(e) {
   e.preventDefault();
@@ -223,27 +275,16 @@ ShaelynChat.prototype.saveMessage = function(e) {
       const key = promise.key
 
       promise.then(function() {
-        const chatAttendees = chatAttendeesRef.child(active_groupId);
-        chatAttendees.once('value').then(function(snapshot) {
-            console.log(snapshot.val());
-        });  
-
         const postRef = this.messagesRef.child(key)
         postRef.once('value').then(function(snapshot) {
           timestamp = snapshot.val().order * -1
           postRef.update({ 
-            order: timestamp 
+            order: timestamp
           })
         });
 
-        // const postRef = this.messagesRef.child(key).child('notSeenBy').child(userId)
-        // postRef.once('value').then(function(snapshot) {
-        //   timestamp = snapshot.val().order * -1
-        //   postRef.update({ 
-        //     order: timestamp 
-        //   })
-        // });
-        // child(List_id).child(User_id).setValue(true)
+        //Check if the message is already seen by other users
+        ShaelynChat.seenCheck(active_groupId, key);
 
         //Update the UserChat Timestamp for sorting the ChatGroups
         this.updateUserChatTimestamp(active_groupId);

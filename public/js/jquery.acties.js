@@ -257,8 +257,16 @@ $(document).on('input', '#firebase-message-input',function(e) {
 
 
 $(document).on("click",".js-switch-chat",function(){
-	var chatGroupId = $(this).attr('id').replace('chat-', '');
+	var chatGroupId = $(this).attr('id').replace('chat-', ''),
+		old_reference = $(this).parent().find('.active').attr('id').replace('chat-', ''),
+		new_reference = $(this).attr('id').replace('chat-', '');
 	
+	// Update user last active group and remove the old one
+	ShaelynChat.seenMessages(old_reference, new_reference);
+
+	// If the user got unseen messages but the group is now active.. remove them
+	ShaelynChat.removeUnSeenMessages(new_reference);
+
 	$('#firebase-chat-conversations').addClass('hide');
 	$(this).parent().find('.js-switch-chat').removeClass("active");
 	$('#firebase-chat-conversations').find('.chat-window').removeClass("active");
