@@ -1,6 +1,4 @@
 // part 24 in tutorial
- 
- 
 'use strict'
 const gcs = require('@google-cloud/storage')();
 const Vision = require('@google-cloud/vision');
@@ -244,9 +242,10 @@ exports.blurOffensiveImages = functions.storage.object().onFinalize(object => {
 // Blurs the given image located in the given bucket using ImageMagick.
 function blurImage(filePath, bucketName, metadata) {
   const tempLocalFile = path.join(os.tmpdir(), path.basename(filePath));
-  const messageId = filePath.split(path.sep)[1];
+  const groupId = filePath.split(path.sep)[1];
+  const messageId = filePath.split(path.sep)[2];
   const bucket = gcs.bucket(bucketName);
-
+  console.log('Blurfunctie');
   // Download file from bucket.
   return bucket.file(filePath).download({destination: tempLocalFile}).then(() => {
     console.log('Image has been downloaded to', tempLocalFile);
@@ -262,7 +261,7 @@ function blurImage(filePath, bucketName, metadata) {
     fs.unlinkSync(tempLocalFile);
     console.log('Deleted local file.');
     // Indicate that the message has been moderated.
-    return admin.database().ref(`/messages/${messageId}`).update({moderated: true});
+    return admin.database().ref(`/ChatMessages/${groupId}/${messageId}`).update({moderated: true});
   }).then(() => {
     console.log('Marked the image as moderated in the database.');
     return null;

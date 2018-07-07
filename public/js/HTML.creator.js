@@ -61,16 +61,29 @@ function HTMLcreateChatWindow(snap, count, totalNum) {
 	return HTML_chat_window;
 }
 
-function HTMLcreateChatMessage(listId, userid, snap) {
+function HTMLcreateChatMessage(groupId, listId, userid, snap, userData) {
 	var HTML_chat_message_wrapper = document.createElement("div");
 		HTML_chat_message_wrapper.setAttribute("id", "chat-message-"+snap.key);
 		HTML_chat_message_wrapper.setAttribute("data-group", listId);
 
 		if(userid != firebase.auth().currentUser.uid) {
 			HTML_chat_message_wrapper.className = "chat-message";
+
+			if(snap.val().type == 'image') {
+				HTML_chat_message_wrapper.className = "chat-message image";
+			}
 		}else {
 			HTML_chat_message_wrapper.className = "chat-message user";
+
+			if(snap.val().type == 'image') {
+				HTML_chat_message_wrapper.className = "chat-message user image";
+			}
 		}
+
+	var HTML_chat_message_userinfo = document.createElement("span");
+		HTML_chat_message_userinfo.className = "chat-message-userinfo";
+		HTML_chat_message_userinfo.style.color = userData.val().color;
+		HTML_chat_message_userinfo.appendChild(document.createTextNode(userData.val().name));
 
 	var HTML_chat_window = document.createElement("div");
 		HTML_chat_window.className = "message-wrapper";	
@@ -83,18 +96,25 @@ function HTMLcreateChatMessage(listId, userid, snap) {
 			HTML_chat_text.className = "message-text";
 			HTML_chat_text.appendChild(document.createTextNode(snap.val().message));
 
+		HTML_chat_window.appendChild(HTML_chat_message_userinfo);
 		HTML_chat_window.appendChild(HTML_chat_text);
+
 	}else {
 		var HTML_chat_image_wrapper = document.createElement("figure");
 			HTML_chat_image_wrapper.className = "message-image";
 
-		var HTML_chat_image = document.createElement("img");
+	    var HTML_chat_image = document.createElement('img');
+		    HTML_chat_image.addEventListener('load', function() {
+			    $("#chat-window-"+groupId).mCustomScrollbar("update");
+			    $("#chat-window-"+groupId).mCustomScrollbar("scrollTo", "bottom");
+		    }.bind(this));
 			HTML_chat_image.className = "chat-image";
 			HTML_chat_image.setAttribute("title", "");
 			HTML_chat_image.setAttribute("alt", "");
-			HTML_chat_image.setAttribute("src", snap.val().imageUrl);
 
-		HTML_chat_image_wrapper.appendChild(HTML_chat_image);	
+	    ShaelynChat.setImageUrl(snap, snap.val().imageLocation, HTML_chat_image);
+		HTML_chat_image_wrapper.appendChild(HTML_chat_image);
+		HTML_chat_window.appendChild(HTML_chat_message_userinfo);	
 		HTML_chat_window.appendChild(HTML_chat_image_wrapper);
 	}
 
@@ -105,7 +125,7 @@ function HTMLcreateChatMessage(listId, userid, snap) {
 	return HTML_chat_message_wrapper;
 }
 
-function HTMLcreateGroup(key, snap, count, totalNum, activeGroupId) {
+function HTMLcreateGroup(key, snap, count, totalNum, activeGroupId, NotSeen) {
 	var HTML_chat_group_overview_wrapper = document.createElement("div");
 		if(activeGroupId == false) {
 			if(count != totalNum) {
@@ -157,6 +177,11 @@ function HTMLcreateGroup(key, snap, count, totalNum, activeGroupId) {
 
 	var HTML_chat_group_overview_indicator_number = document.createElement("span");
 		HTML_chat_group_overview_indicator_number.className = "card-indicator-number";
+
+		if(NotSeen > 0) {
+			HTML_chat_group_overview_indicator.className = "card-indicator show";
+			HTML_chat_group_overview_indicator_number.appendChild(document.createTextNode(NotSeen));
+		}	
 
 	HTML_chat_group_image_wrapper.appendChild(HTML_chat_group_image);
 

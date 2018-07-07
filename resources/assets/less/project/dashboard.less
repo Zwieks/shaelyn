@@ -250,11 +250,11 @@
 	}	
 
 	.title-wrapper {
+		.displayflex;
 		.justify-content(center);
 		border-bottom: 0.1rem solid @borderColor;
 		margin: 0 @spacing @spacing/2 @spacing;
 		position: relative;
-		display: none;
 
 		&.active {
 			.displayflex;
@@ -661,6 +661,14 @@
 
 .chat-meta {
 	height: @spacing*1.6;
+
+	.title-wrapper {
+		display: none;
+
+		&.active {
+			.displayflex;
+		}
+	}
 }
 
 .chat-window {
@@ -715,18 +723,27 @@
 	.justify-content(flex-start);
 
 	margin-bottom: @spacing/2;
+	margin-left: @spacing/2;
 
 	.message-wrapper {
 		.displayflex;
 		.justify-content(flex-start);
+		.flex-wrap(wrap);
+		.border-radius(0.7rem);
+		.box-shadow(0px 0px 1px #576b7b);
+
 		max-width: 90%;
+		background: @white;
+		position: relative;
+
+		&:extend(.arrow-down-border-left all);		
 	}
 
 	.message-image {
 		.border-radius(0.7rem);
-		.box-shadow(0px 0px 1px #576b7b);
-		max-width: 30%;
+		width: 100%;
     	overflow: hidden;
+    	padding: 0;
 	}
 
 	.chat-image {
@@ -740,13 +757,22 @@
 
 	&.user {
 		.justify-content(flex-end);
+		margin-left: 0;
 
 		.message-wrapper {
 			.justify-content(flex-end);
+			background: @chatUserBg;
+
+			&:extend(.arrow-down-border-right all);	
+		}
+
+		.chat-message-userinfo {
+			display: none;
 		}
 
 		.message-text {
-			background: @secColor;
+			color: @white;
+			padding: @spacing/2;
 
 			&:before {
 				border-bottom-color: @secColor;
@@ -766,6 +792,11 @@
 			margin-left: @spacing/2;
 			margin-right: 0;
 			background: @secColor;
+		}
+
+		.chat-image {
+			border-color: @chatUserBg;
+			background: @white;
 		}
 	}
 
@@ -793,23 +824,32 @@
 		color: @lightGrey;
 	}
 
+	.chat-message-userinfo {
+		width: 100%;
+		font-size: 1.1rem;
+		font-weight: bold;
+		padding: @spacing/2 @spacing/2 @spacing/4;
+	}
+
 	.message-text {
 		.border-radius(0.5rem);
 		position: relative;
-		padding: @spacing/2;
-		color: #fff;
+		padding: 0 @spacing/2 @spacing/2 @spacing/2;
+		color: contrast(#fff, @textColor, #fff);
 		margin: 0;
-		background: @primColor;
+		width: 100%;
 		font-size: @smallBaseFontSize;
+	}
 
-		&:before {
-			content: '';
-			position: absolute;
-			&:extend(.arrow-up all);
-			top: -0.6rem;			
-			left: @spacing;
-			border-bottom-color: @primColor;
+	&.image {
+		.chat-message-userinfo {
+			padding-bottom: @spacing/6;
 		}
+
+		.message-wrapper {
+			.justify-content(center);
+			max-width: @spacing*8;
+		}	
 	}
 }
 

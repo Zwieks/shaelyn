@@ -204,6 +204,56 @@
   border-top: 2rem solid #f00;
 }
 
+.arrow-down-border-right {
+	&:after,
+	&:before {
+	    content: '';
+	    display: block;
+	    position: absolute;
+	    left: calc(100% ~'-' 1rem);
+	    width: 0;
+	    height: 0;
+	    border-style: solid;		
+	}
+
+	&:after {
+	    top: 0px;
+	    border-color: @chatUserBg transparent transparent transparent;
+	    border-width: 10px;
+	}
+
+	&:before {
+	    top: -1px;
+	    border-color: #d5d2d2 transparent transparent transparent;
+	    border-width: 11px;
+	}
+}
+
+.arrow-down-border-left {
+	&:after,
+	&:before {
+	    content: '';
+	    display: block;
+	    position: absolute;
+	    right: calc(100% ~'-' 1rem);
+	    width: 0;
+	    height: 0;
+	    border-style: solid;		
+	}
+
+	&:after {
+	    top: 0px;
+	    border-color: #fff transparent transparent transparent;
+	    border-width: 10px;
+	}
+
+	&:before {
+	    top: -1px;
+	    border-color: #d5d2d2 transparent transparent transparent;
+	    border-width: 11px;
+	}
+}
+
 .arrow-right {
   width: 0; 
   height: 0; 

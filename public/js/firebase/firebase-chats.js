@@ -98,21 +98,27 @@ ShaelynChat.prototype.loadChatWindows = function(groupId, groupsnap, count, tota
 //Creates the chat overview with all the user groups or ividual chats
 ShaelynChat.prototype.loadGroups = function(groupId, groupsnap, count, totalNum, activeGroupId) {
   $('#firebase-chat-friends').addClass('hide');
+  this.tests = 'asdf';
+  const userId = firebase.auth().currentUser.uid;
+  const ref = firebase.database().ref();
+  const chatAttendeeRef = ref.child('ChatAttendees').child(groupId).child(userId);
 
-  //Put the HTML in the container
-  var group = HTMLcreateGroup(groupsnap.key, groupsnap.val(), count, totalNum, activeGroupId);
-  $.fn.updateOrPrependHTML("chat-"+groupId, group, this.chat_list_wrapper);
+  chatAttendeeRef.on('value', snapchat => {
+    //Put the HTML in the container
+    var group = HTMLcreateGroup(groupsnap.key, groupsnap.val(), count, totalNum, activeGroupId, snapchat.val().notseen);
+    $.fn.updateOrPrependHTML("chat-"+groupId, group, this.chat_list_wrapper);
 
-  var parent = document.getElementById(this.chat_list_wrapper.childNodes[0].id+'_container');
-      var loaded = document.getElementById("firebase-chat-conversations");
+    var parent = document.getElementById(this.chat_list_wrapper.childNodes[0].id+'_container');
+        var loaded = document.getElementById("firebase-chat-conversations");
 
-  if (parent == null) {
-    parent = this.chat_list_wrapper;
-  }
+    if (parent == null) {
+      parent = this.chat_list_wrapper;
+    }
 
-  setTimeout(function(){
-    $('#firebase-chat-friends').removeClass('hide');
-  }, 100);
+    setTimeout(function(){
+      $('#firebase-chat-friends').removeClass('hide');
+    }, 100);
+  });
 };  
 
 ShaelynChat.prototype.seenMessages = function(oldGroupId, newGroupId) {
@@ -140,24 +146,32 @@ ShaelynChat.prototype.loadMessages = function(groupId, groupsnap) {
   // Loads the last 12 messages and listen for new ones.
   var setMessage = function(data) {
     var val = data.val();
-    //Put the HTML in the container
-    var idObject = document.getElementById('chat-window-'+groupId);
-    var parent = document.getElementById(idObject.childNodes[0].id+'_container'); 
-    var message = HTMLcreateChatMessage(data.key, val.from, data);
 
-    if (parent == null) {
-      parent = this.chat_list_wrapper;
-    }
+    //Get the user information
+    this.database.ref('Users').child(val.from).once('value', usersnap => {
 
-    //Put the HTML in the container
-    $.fn.updateOrPrependHTML("chat-message-"+data.key, message, parent);
+    }).then(userData => {
+      //Put the HTML in the container
+      var idObject = document.getElementById('chat-window-'+groupId);
+      var parent = document.getElementById(idObject.childNodes[0].id+'_container'); 
+      var message = HTMLcreateChatMessage(groupId, data.key, val.from, data, userData);
 
-    $("#chat-window-"+groupId).mCustomScrollbar("update");
-    $("#chat-window-"+groupId).mCustomScrollbar("scrollTo", "bottom");
+      if (parent == null) {
+        parent = this.chat_list_wrapper;
+      }
+
+      //Put the HTML in the container
+      $.fn.updateOrPrependHTML("chat-message-"+data.key, message, parent);
+
+      $("#chat-window-"+groupId).mCustomScrollbar("update");
+      $("#chat-window-"+groupId).mCustomScrollbar("scrollTo", "bottom");
+    }).catch(function(error) {
+      console.error('Error getting the user information', error);
+    }); 
   }.bind(this);
 
-  this.messagesRef.orderByChild('time').limitToLast(12).on('child_added', setMessage);
-  this.messagesRef.orderByChild('time').limitToLast(12).on('child_changed', setMessage);
+  this.messagesRef.orderByChild('order').limitToFirst(12).on('child_added', setMessage);
+  this.messagesRef.orderByChild('order').limitToFirst(12).on('child_changed', setMessage);
 };
 
 ShaelynChat.prototype.init = function() {
@@ -211,22 +225,25 @@ ShaelynChat.prototype.seenCheck = function(active_groupId, messageId) {
   const ref = firebase.database().ref();
   const chatAttendeesRef = ref.child('ChatAttendees').child(active_groupId);
 
+  // Check if the user is current active in a group if not put the message in the ChatNotSeenMessages
   chatAttendeesRef.once('value', snap => {
     snap.forEach(function(childSnapshot) {
       if(childSnapshot.val().time != 'active') {
-        const promise = firebase.database().ref().child('ChatNotSeenMessages').child(childSnapshot.key).child(active_groupId).child(messageId).set(true);
+        const ref = firebase.database().ref();
+        const ChatNotSeenMessagesRef = ref.child('ChatNotSeenMessages').child(childSnapshot.key).child(active_groupId);
+        const promise = ChatNotSeenMessagesRef.child(messageId).set(true);
 
-        promise.then(function() {
-          //console.log(childSnapshot.key);
+        //Add the not viewed item with one for the user in childSnapshot.key
+        promise.then(function(ChatNotSeenMessagesRef, postRef) {
+          ref.child('ChatNotSeenMessages').child(childSnapshot.key).child(active_groupId).once('value', usersnap => {
+            ref.child('ChatAttendees').child(active_groupId).child(childSnapshot.key).update({ 
+              notseen: usersnap.numChildren()
+            })
+          });  
         }.bind(this)).catch(function(error) {
           console.error('Error writing new message to Firebase Database', error);
         });
       }
-    });
-  }).then(snap => {
-    const postRef = firebase.database().ref().child('ChatNotSeenMessages').child(userId).child(active_groupId);
-    postRef.once('value').then(function(snapCount) {
-      console.log(snapCount.numChildren());
     });
   });
 };
@@ -238,8 +255,13 @@ ShaelynChat.prototype.removeUnSeenMessages = function(active_groupId) {
 
   const promise = chatNotSeenRef.child(userId).child(active_groupId).remove();
 
+
   promise.then(function() {
-    //console.log(childSnapshot.key);
+    //Reset counter in the group of ChatAttendees
+    const postRef = firebase.database().ref().child('ChatAttendees').child(active_groupId).child(userId)
+    postRef.update({ 
+      notseen: 0
+    })
   }.bind(this)).catch(function(error) {
     console.error('Error writing new message to Firebase Database', error);
   });
@@ -316,18 +338,22 @@ ShaelynChat.prototype.updateUserChatTimestamp = function(active_groupId) {
   });
 };
 
-// // Sets the URL of the given img element with the URL of the image stored in Firebase Storage.
-// FriendlyChat.prototype.setImageUrl = function(imageUri, imgElement) {
-//   // If the image is a Firebase Storage URI we fetch the URL.
-//   if (imageUri.startsWith('gs://')) {
-//     imgElement.src = FriendlyChat.LOADING_IMAGE_URL; // Display a loading image first.
-//     this.storage.refFromURL(imageUri).getMetadata().then(function(metadata) {
-//       imgElement.src = metadata.downloadURLs[0];
-//     });
-//   } else {
-//     imgElement.src = imageUri;
-//   }
-// };
+// Sets the URL of the given img element with the URL of the image stored in Firebase Storage.
+ShaelynChat.prototype.setImageUrl = function(snap, imageUri, imgElement) {
+  // If the image is a Firebase Storage URI we fetch the URL.
+  if (imageUri.startsWith('gs://')) {
+    imgElement.src = ShaelynChat.LOADING_IMAGE_URL; // Display a loading image first.
+    this.storage.refFromURL(imageUri).getMetadata().then(function(metadata) {
+      imgElement.src = metadata.downloadURLs[0];
+
+      if ( $('#chat-message-'+snap.key).length ) {
+        $('#chat-message-'+snap.key).find('.chat-image').attr('src',metadata.downloadURLs[0]);
+      }  
+    });
+  } else {
+    imgElement.src = imageUri;
+  }
+};
 
 // Saves a new message containing an image URI in Firebase.
 // This first saves the image in Firebase storage.
@@ -381,7 +407,7 @@ ShaelynChat.prototype.saveImageMessage = function(event) {
       });
 
       // Upload the image to Firebase Storage.
-      var filePath = userId + '/' + data.key + '/' + file.name;
+      var filePath = userId + '/' + active_groupId + '/' + data.key + '/' + file.name;
       return this.storage.ref(filePath).put(file).then(function(snapshot) {
 
         // Get the file's Storage URI and update the chat message placeholder.
