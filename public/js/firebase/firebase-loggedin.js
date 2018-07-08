@@ -731,13 +731,29 @@
   	};
 
   	$.fn.checkTimestamp = function(timeStamp) {
-  		console.log();
 		var one_day=1000*60*60*24;    // Convert both dates to milliseconds
-		var date1_ms = new Date(parseInt(timeStamp));   
-		var date2_ms = new Date(Date.now());   // Calculate the difference in milliseconds  
-		var difference_ms = date2_ms - date1_ms;        // Convert back to days and return   
+		var date1_ms = new Date(Date.now());  
+		var date2_ms = new Date(timeStamp);    // Calculate the difference in milliseconds  
+		var yesterday = new Date(Date.now() - 864e5);
 
-		return Math.round(difference_ms/one_day); 
+		var date = new Date(timeStamp);
+		var day = date.getDate();
+		var month = date.getMonth()+1;
+		var year = date.getFullYear();
+
+		var date1 = new Date(year+'/'+month+'/'+day);
+
+		var date = new Date(Date.now());
+		var day = date.getDate();
+		var month = date.getMonth()+1;
+		var year = date.getFullYear();
+
+		var date2 = new Date(year+'/'+month+'/'+day);
+
+		var difference_ms = date2 - date1;        // Convert back to days and return   
+		var diffDays = Math.ceil(difference_ms / (1000 * 3600 * 24)); 
+
+		return diffDays; 
   	};
 
   	function updateOrAppendHTML(id, HTML_object, parent) {
