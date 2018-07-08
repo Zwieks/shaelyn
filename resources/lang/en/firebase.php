@@ -11,4 +11,9 @@ return [
     'titles' => [
     	'chat' => 'Chat',
     ],
+
+    'chat' => [
+        'today' => 'Today',
+        'yesterday' => 'Yesterday',
+    ]
 ];

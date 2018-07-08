@@ -65,20 +65,56 @@ function HTMLcreateChatMessage(groupId, listId, userid, snap, userData) {
 	var HTML_chat_message_wrapper = document.createElement("div");
 		HTML_chat_message_wrapper.setAttribute("id", "chat-message-"+snap.key);
 		HTML_chat_message_wrapper.setAttribute("data-group", listId);
+		HTML_chat_message_wrapper.setAttribute("data-time", snap.val().time);
 
-		if(userid != firebase.auth().currentUser.uid) {
-			HTML_chat_message_wrapper.className = "chat-message";
+	var dataAnnotation = '';	
+	var date = new Date(snap.val().time);
+  	var hours = date.getHours();
+  	var minutes = (date.getMinutes() < 10 ? '0' : '') + date.getMinutes();
+  	var seconds = date.getSeconds();
+	var day = date.getDay();
+	var month = date.getMonth()+1;
+	var year = date.getFullYear();
 
-			if(snap.val().type == 'image') {
-				HTML_chat_message_wrapper.className = "chat-message image";
-			}
-		}else {
-			HTML_chat_message_wrapper.className = "chat-message user";
+	var timeCheck = $.fn.checkTimestamp(snap.val().time);
 
-			if(snap.val().type == 'image') {
-				HTML_chat_message_wrapper.className = "chat-message user image";
-			}
+	var HTML_chat_date_wrapper = document.createElement("div");
+		HTML_chat_date_wrapper.className = "chat-message-date-wrapper";
+
+	var HTML_chat_date = document.createElement("span");
+		HTML_chat_date.className = "chat-message-date";
+
+	var HTML_chat_meta = document.createElement("span");
+		HTML_chat_meta.className = "message-time";
+		HTML_chat_meta.appendChild(document.createTextNode(hours+':'+minutes));
+		HTML_chat_meta.style.color = userData.val().color;
+
+	if(timeCheck == 1) {
+		HTML_chat_date.appendChild(document.createTextNode(i18n.firebase.chat.yesterday));
+		dataAnnotation = 'yesterday';
+	}else if (timeCheck > 1) {
+		HTML_chat_date.appendChild(document.createTextNode(day+'-'+month+'-'+year));
+		dataAnnotation = 'pastdate';
+	}else {
+		HTML_chat_date.appendChild(document.createTextNode(i18n.firebase.chat.today));
+		dataAnnotation = 'today';
+	}
+
+	HTML_chat_date_wrapper.appendChild(HTML_chat_date);
+
+	if(userid != firebase.auth().currentUser.uid) {
+		HTML_chat_message_wrapper.className = "chat-message "+dataAnnotation;
+
+		if(snap.val().type == 'image') {
+			HTML_chat_message_wrapper.className = "chat-message image "+dataAnnotation;
 		}
+	}else {
+		HTML_chat_message_wrapper.className = "chat-message user "+dataAnnotation;
+
+		if(snap.val().type == 'image') {
+			HTML_chat_message_wrapper.className = "chat-message user image "+dataAnnotation;
+		}
+	}
 
 	var HTML_chat_message_userinfo = document.createElement("span");
 		HTML_chat_message_userinfo.className = "chat-message-userinfo";
@@ -87,9 +123,6 @@ function HTMLcreateChatMessage(groupId, listId, userid, snap, userData) {
 
 	var HTML_chat_window = document.createElement("div");
 		HTML_chat_window.className = "message-wrapper";	
-
-	var HTML_chat_meta = document.createElement("div");
-		HTML_chat_meta.className = "message-meta";
 
 	if(snap.val().type != 'image') {
 		var HTML_chat_text = document.createElement("p");
@@ -120,12 +153,13 @@ function HTMLcreateChatMessage(groupId, listId, userid, snap, userData) {
 
 	HTML_chat_window.appendChild(HTML_chat_meta);
 
+	HTML_chat_message_wrapper.appendChild(HTML_chat_date_wrapper);
 	HTML_chat_message_wrapper.appendChild(HTML_chat_window);
 
 	return HTML_chat_message_wrapper;
 }
 
-function HTMLcreateGroup(key, snap, count, totalNum, activeGroupId, NotSeen) {
+function HTMLcreateGroup(groupId, key, snap, count, totalNum, activeGroupId, NotSeen, highestNumber) {
 	var HTML_chat_group_overview_wrapper = document.createElement("div");
 		if(activeGroupId == false) {
 			if(count != totalNum) {
@@ -142,6 +176,8 @@ function HTMLcreateGroup(key, snap, count, totalNum, activeGroupId, NotSeen) {
 		}
 		
 		HTML_chat_group_overview_wrapper.setAttribute("id", "chat-"+key);
+		HTML_chat_group_overview_wrapper.setAttribute("data-order", highestNumber);
+		HTML_chat_group_overview_wrapper.style.order = highestNumber;
 
 	var HTML_chat_group_overview_inner  = document.createElement("div");
 		HTML_chat_group_overview_inner.className = "card";
@@ -179,8 +215,10 @@ function HTMLcreateGroup(key, snap, count, totalNum, activeGroupId, NotSeen) {
 		HTML_chat_group_overview_indicator_number.className = "card-indicator-number";
 
 		if(NotSeen > 0) {
+			$('#chat-'+groupId).removeAttr("style");
 			HTML_chat_group_overview_indicator.className = "card-indicator show";
 			HTML_chat_group_overview_indicator_number.appendChild(document.createTextNode(NotSeen));
+			HTML_chat_group_overview_wrapper.style.order = -highestNumber;
 		}	
 
 	HTML_chat_group_image_wrapper.appendChild(HTML_chat_group_image);

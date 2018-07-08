@@ -570,7 +570,7 @@ textarea {
 .arrow-down-border-left:before,
 .chat-message .message-wrapper:before {
   top: -1px;
-  border-color: #d5d2d2 transparent transparent transparent;
+  border-color: #e9e9e9 transparent transparent transparent;
   border-width: 11px;
 }
 .arrow-right {
@@ -8284,6 +8284,7 @@ form ol {
 }
 .card-wrapper.chat {
   padding: 1.2rem 0;
+  width: 100%;
   margin: 0;
 }
 .card-wrapper.chat .card-content-wrapper {
@@ -8750,6 +8751,7 @@ form ol {
       -ms-flex-positive: 1;
           flex-grow: 1;
   width: auto;
+  max-width: calc(100% - 7.2rem);
   height: 4.8rem;
   background: #ebebeb;
   padding: 1.2rem;
@@ -9366,6 +9368,20 @@ form ol {
 .chat-friends .card .card-description {
   display: none;
 }
+.user-chats-wrapper {
+  display: -webkit-box;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: -ms-flex;
+  display: flex;
+  -moz-flex-direction: column;
+  -ms-flex-direction: column;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+          flex-direction: column;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+}
 .chat-conversation {
   display: -webkit-box;
   display: -moz-flex;
@@ -9511,6 +9527,8 @@ form ol {
   display: -ms-flexbox;
   display: -ms-flex;
   display: flex;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
   -moz-justify-content: flex-start;
   -ms-justify-content: flex-start;
   -webkit-box-pack: start;
@@ -9518,6 +9536,26 @@ form ol {
           justify-content: flex-start;
   margin-bottom: 1.2rem;
   margin-left: 1.2rem;
+}
+.chat-message .chat-message-date-wrapper {
+  -moz-justify-content: center;
+  -ms-justify-content: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  width: 100%;
+  margin-bottom: 1.2rem;
+  display: none;
+}
+.chat-message .chat-message-date {
+  border-radius: 0.7rem;
+  -webkit-box-shadow: 0px 0px 1px #cecece;
+  box-shadow: 0px 0px 1px #cecece;
+  font-weight: bold;
+  font-size: 1.1rem;
+  color: #fff;
+  padding: 0.6rem 1.2rem;
+  background-color: #2db99b;
 }
 .chat-message .message-wrapper {
   display: -webkit-box;
@@ -9530,14 +9568,27 @@ form ol {
   -webkit-box-pack: start;
       -ms-flex-pack: start;
           justify-content: flex-start;
+  -moz-flex-direction: column;
+  -ms-flex-direction: column;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+          flex-direction: column;
   -ms-flex-wrap: wrap;
   flex-wrap: wrap;
   border-radius: 0.7rem;
-  -webkit-box-shadow: 0px 0px 1px #576b7b;
-  box-shadow: 0px 0px 1px #576b7b;
+  -webkit-box-shadow: 0px 0px 1px #cecece;
+  box-shadow: 0px 0px 1px #cecece;
   max-width: 90%;
   background: #fff;
   position: relative;
+  padding-right: 3.6rem;
+}
+.chat-message .message-time {
+  position: absolute;
+  right: 0.6rem;
+  bottom: 0.2rem;
+  font-size: 0.9rem;
+  opacity: 0.7;
 }
 .chat-message .message-image {
   border-radius: 0.7rem;
@@ -9560,12 +9611,20 @@ form ol {
           justify-content: flex-end;
   margin-left: 0;
 }
+.chat-message.user .message-time {
+  color: #fff !important;
+}
 .chat-message.user .message-wrapper {
   -moz-justify-content: flex-end;
   -ms-justify-content: flex-end;
   -webkit-box-pack: end;
       -ms-flex-pack: end;
           justify-content: flex-end;
+  -moz-flex-direction: inherit;
+  -ms-flex-direction: inherit;
+  -webkit-box-orient: inherit;
+  -webkit-box-direction: inherit;
+          flex-direction: inherit;
   background: #8240f7;
 }
 .chat-message.user .chat-message-userinfo {
@@ -9604,19 +9663,9 @@ form ol {
   background: #fff;
 }
 .chat-message .message-meta {
-  display: -webkit-box;
-  display: -moz-flex;
-  display: -ms-flexbox;
-  display: -ms-flex;
-  display: flex;
-  -moz-align-items: center;
-  -ms-align-items: center;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  font-size: 1.2rem;
-  font-weight: 600;
-  margin-bottom: 0.6rem;
+  position: absolute;
+  right: 0;
+  bottom: 0;
 }
 .chat-message .chat-indication {
   border-radius: 50%;
@@ -9635,12 +9684,12 @@ form ol {
   width: 100%;
   font-size: 1.1rem;
   font-weight: bold;
-  padding: 1.2rem 1.2rem 0.6rem;
+  padding: 1.2rem 1.2rem 0.4rem;
 }
 .chat-message .message-text {
   border-radius: 0.5rem;
   position: relative;
-  padding: 0 1.2rem 1.2rem 1.2rem;
+  padding: 0 1.2rem 0.8rem 1.2rem;
   color: #333;
   margin: 0;
   width: 100%;
@@ -9656,6 +9705,36 @@ form ol {
       -ms-flex-pack: center;
           justify-content: center;
   max-width: 19.2rem;
+}
+.chat-message.yesterday .chat-message-date-wrapper {
+  display: -webkit-box;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: -ms-flex;
+  display: flex;
+}
+.chat-message.yesterday ~ .yesterday .chat-message-date-wrapper {
+  display: none;
+}
+.chat-message.pastdate .chat-message-date-wrapper {
+  display: -webkit-box;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: -ms-flex;
+  display: flex;
+}
+.chat-message.pastdate ~ .pastdate .chat-message-date-wrapper {
+  display: none;
+}
+.chat-message.today .chat-message-date-wrapper {
+  display: -webkit-box;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: -ms-flex;
+  display: flex;
+}
+.chat-message.today ~ .today .chat-message-date-wrapper {
+  display: none;
 }
 .list-checked .list-wrapper {
   opacity: 0.3;

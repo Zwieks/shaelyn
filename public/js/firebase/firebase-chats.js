@@ -97,27 +97,30 @@ ShaelynChat.prototype.loadChatWindows = function(groupId, groupsnap, count, tota
 
 //Creates the chat overview with all the user groups or ividual chats
 ShaelynChat.prototype.loadGroups = function(groupId, groupsnap, count, totalNum, activeGroupId) {
-  $('#firebase-chat-friends').addClass('hide');
-  this.tests = 'asdf';
   const userId = firebase.auth().currentUser.uid;
   const ref = firebase.database().ref();
-  const chatAttendeeRef = ref.child('ChatAttendees').child(groupId).child(userId);
+  const chatAttendeesRef = ref.child('ChatAttendees');
 
-  chatAttendeeRef.on('value', snapchat => {
-    //Put the HTML in the container
-    var group = HTMLcreateGroup(groupsnap.key, groupsnap.val(), count, totalNum, activeGroupId, snapchat.val().notseen);
-    $.fn.updateOrPrependHTML("chat-"+groupId, group, this.chat_list_wrapper);
+  chatAttendeesRef.once('value', snap => {
+    const chatAttendeeRef = chatAttendeesRef.child(groupId).child(userId);
 
-    var parent = document.getElementById(this.chat_list_wrapper.childNodes[0].id+'_container');
-        var loaded = document.getElementById("firebase-chat-conversations");
+    chatAttendeeRef.on('value', snapchat => {
+      var highestNumber = 0;
+      if($('.js-switch-chat').length) {
+        highestNumber = $.fn.getHeighestAttrNum($('.js-switch-chat'))+1;
+      }
 
-    if (parent == null) {
-      parent = this.chat_list_wrapper;
-    }
+      //Put the HTML in the container
+      var group = HTMLcreateGroup(groupId, groupsnap.key, groupsnap.val(), count, totalNum, activeGroupId, snapchat.val().notseen, highestNumber.toString());
+      $.fn.updateOrPrependHTML("chat-"+groupId, group, this.chat_list_wrapper);
 
-    setTimeout(function(){
-      $('#firebase-chat-friends').removeClass('hide');
-    }, 100);
+      var parent = document.getElementById(this.chat_list_wrapper.childNodes[0].id+'_container');
+          var loaded = document.getElementById("firebase-chat-conversations");
+
+      if (parent == null) {
+        parent = this.chat_list_wrapper;
+      }
+    });
   });
 };  
 
@@ -163,8 +166,10 @@ ShaelynChat.prototype.loadMessages = function(groupId, groupsnap) {
       //Put the HTML in the container
       $.fn.updateOrPrependHTML("chat-message-"+data.key, message, parent);
 
-      $("#chat-window-"+groupId).mCustomScrollbar("update");
-      $("#chat-window-"+groupId).mCustomScrollbar("scrollTo", "bottom");
+      setTimeout(function(){
+        $("#chat-window-"+groupId).mCustomScrollbar("update");
+        $("#chat-window-"+groupId).mCustomScrollbar("scrollTo", "bottom");
+      }, 500);
     }).catch(function(error) {
       console.error('Error getting the user information', error);
     }); 
@@ -188,7 +193,6 @@ ShaelynChat.prototype.init = function() {
       activeGroupId = $('#firebase-chatgroups').find('.active').attr('id').replace('chat-', '');
     }
   this.chatsRef.on('value', snap => {
-
     $('#firebase-chatgroups').empty();
     //Needed for iteration and setting of the active class
     var count = 1;
@@ -209,12 +213,13 @@ ShaelynChat.prototype.init = function() {
         }  
       }).then(snaper => {
         //Add one to the counter after all other things are done
-        count++;
         if (snap.numChildren() == count) {
            setTimeout(function(){
             $('#firebase-chat-conversations').addClass('loaded');
           }, 500);
         }
+
+        count++;
       }); 
     });
   });
@@ -271,7 +276,7 @@ ShaelynChat.prototype.removeUnSeenMessages = function(active_groupId) {
 ShaelynChat.prototype.saveMessage = function(e) {
   e.preventDefault();
   // Check that the user entered a message and is signed in.
-  if (this.messageInput.value) {
+  if (this.messageInput.value && $.trim(this.messageInput.value) != '') {
     const userId = firebase.auth().currentUser.uid;
     const ref = firebase.database().ref();
     const userRef = ref.child('Users').child(userId);
@@ -429,8 +434,6 @@ ShaelynChat.prototype.saveImageMessage = function(event) {
       console.error('Error writing new message to Firebase Database', error);
     });
   });
-
-
 
   // this.messagesRef.push({
   //   name: currentUser.displayName,

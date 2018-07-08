@@ -696,6 +696,19 @@
 		});
 	};
 
+	$.fn.getHeighestAttrNum = function(item) {
+		var num = item.map(function() {
+		    return $(this).data('order');
+		}).get();//get all data values in an array
+
+		var highest = Math.max.apply(Math, num);//find the highest value from them
+		item.filter(function(){
+		    return $(this).data('order') == highest;//return the highest div
+		});
+
+		return highest;
+	};
+
 	$.fn.updateOrPrependHTML = function(id, HTML_object, parent) {
 		if(document.getElementById(id) != null) {
 			var update_item_list = document.getElementById(id);
@@ -715,9 +728,17 @@
 
 			//setEndOfContenteditable(focused);
 		}
-  	}
+  	};
 
+  	$.fn.checkTimestamp = function(timeStamp) {
+  		console.log();
+		var one_day=1000*60*60*24;    // Convert both dates to milliseconds
+		var date1_ms = new Date(parseInt(timeStamp));   
+		var date2_ms = new Date(Date.now());   // Calculate the difference in milliseconds  
+		var difference_ms = date2_ms - date1_ms;        // Convert back to days and return   
 
+		return Math.round(difference_ms/one_day); 
+  	};
 
   	function updateOrAppendHTML(id, HTML_object, parent) {
 		if(document.getElementById(id) != null) {
