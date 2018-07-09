@@ -122,7 +122,17 @@ ShaelynChat.prototype.loadGroups = function(groupId, groupsnap, count, totalNum,
       }
     });
   });
+};
+
+ShaelynChat.prototype.getChatOptionsTitle = function(chatTitle, image) {
+  //$('#js-chat-title').text(chatTitle);
+  $('#js-chat-title:before').css('background-image',image);
 };  
+
+ShaelynChat.prototype.createChat = function(oldGroupId, newGroupId) {
+  const userId = firebase.auth().currentUser.uid;
+  const ref = firebase.database().ref();
+};
 
 ShaelynChat.prototype.seenMessages = function(oldGroupId, newGroupId) {
   const userId = firebase.auth().currentUser.uid;
@@ -141,6 +151,31 @@ ShaelynChat.prototype.seenMessages = function(oldGroupId, newGroupId) {
     newChat.update({ 
       time: "active"
     })
+  });
+};
+
+ShaelynChat.prototype.loadChatAttendees = function(groupId, count, totalNum) {
+  const ref = firebase.database().ref();
+  const chatAttendeesRef = ref.child('ChatAttendees').child(groupId);
+
+  //Create HTML for the friends list
+  var chatfriends_list_wrapper = HTMLcreateFriendsList('chat', groupId, count, totalNum);
+
+  var parent = document.getElementById('firebase-chat-attendees');
+  //Put the HTML in the container
+  $.fn.updateOrPrependHTML("chatfriends-"+groupId, chatfriends_list_wrapper, parent);
+
+  chatAttendeesRef.on('value', snap => {
+    snap.forEach(function(childSnapshot) {
+      ref.child('Users').child(childSnapshot.key).once('value', usersnap => {
+
+        var friend = HTMLcreateListFriend(groupId, usersnap);
+
+        var friends_list = document.getElementById('chatfriends-'+groupId);
+
+          $.fn.updateOrPrependHTML(groupId+"friend-"+usersnap.key, friend, friends_list);
+      });
+    });
   });
 };
 
@@ -205,11 +240,15 @@ ShaelynChat.prototype.init = function() {
         ShaelynChat.loadGroups(groupsnap.key, groupsnap, count, snap.numChildren(), activeGroupId);
 
         if($('#firebase-chat-conversations').find('.chat-window.active').length == 0) {
+
           //Create the Chat windows per Group for the messages
           ShaelynChat.loadChatWindows(groupsnap.key, groupsnap, count, snap.numChildren());
 
           //Create the messages and put them in the corresponding group
           ShaelynChat.loadMessages(groupsnap.key, groupsnap);
+
+          //Create the Chat windows per Group for the messages
+          ShaelynChat.loadChatAttendees(groupsnap.key, count, snap.numChildren());
         }  
       }).then(snaper => {
         //Add one to the counter after all other things are done

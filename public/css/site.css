@@ -8287,7 +8287,15 @@ form ol {
   width: 100%;
   margin: 0;
 }
+.card-wrapper.chat:hover .card-indicator.info,
+.card-wrapper.chat:focus .card-indicator.info {
+  opacity: 1;
+  visibility: visible;
+  cursor: pointer;
+  display: block;
+}
 .card-wrapper.chat .card-content-wrapper {
+  width: calc(100% - 6rem - 2.4rem);
   max-width: 100%;
 }
 .card-wrapper.chat .card-indicator {
@@ -8406,6 +8414,48 @@ form ol {
   width: 3.5rem;
   height: 3.5rem;
   margin-top: 1rem;
+}
+.card .card-indicator .indicator-image {
+  width: 2rem;
+}
+.card .card-indicator.chat-number-indicator {
+  position: absolute;
+  left: 3.7rem;
+  top: -0.8rem;
+  margin: 0;
+}
+.card .card-indicator.info {
+  display: -webkit-box;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: -ms-flex;
+  display: flex;
+  -moz-justify-content: center;
+  -ms-justify-content: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -moz-align-items: center;
+  -ms-align-items: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  position: relative;
+  opacity: 0.7;
+  background: transparent;
+  z-index: 1;
+  visibility: hidden;
+  opacity: 0;
+  display: block;
+  margin: 0 0.6rem;
+}
+.card .card-indicator-wrapper {
+  display: -webkit-box;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: -ms-flex;
+  display: flex;
+  width: 4.8rem;
 }
 .card.online .arc {
   -webkit-animation: rotate 0.5s linear forwards;
@@ -8708,6 +8758,12 @@ form ol {
   }
 }
 /* Dashboard */
+#js-loggedin {
+  background: #e8e8e8;
+}
+#js-loggedin .page-content {
+  background: #e8e8e8;
+}
 .dashboard-wrapper {
   display: -webkit-box;
   display: -moz-flex;
@@ -8716,7 +8772,7 @@ form ol {
   display: flex;
   -ms-flex-wrap: wrap;
   flex-wrap: wrap;
-  margin: 0 -1.2rem;
+  margin: 0 -2rem;
 }
 @media screen and (max-width: 640px) {
   .dashboard-wrapper {
@@ -8794,7 +8850,7 @@ form ol {
           flex-grow: 1;
   min-height: 48rem;
   max-height: 48rem;
-  padding: 1.2rem;
+  padding: 1.2rem 2rem;
   margin-bottom: 2.4rem;
 }
 @media screen and (max-width: 640px) {
@@ -9296,6 +9352,31 @@ form ol {
 .chats .item {
   padding: 0;
 }
+.chat-options-wrapper {
+  -webkit-transition: 0.15s ease-out;
+  transition: 0.15s ease-out;
+  position: absolute;
+  opacity: 0;
+  visibility: hidden;
+  display: none;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 0;
+  background: #f7f7f7;
+  z-index: 1;
+}
+.chat-options-wrapper.show {
+  opacity: 1;
+  visibility: visible;
+  display: block;
+}
+.chat-options-wrapper .back {
+  display: block;
+}
+.chat-options-wrapper .title-wrapper {
+  margin-top: 1.2rem;
+}
 .chat-image-input {
   display: none;
 }
@@ -9318,16 +9399,20 @@ form ol {
     padding: 1.2rem 2.4rem;
   }
 }
+.chat-controls {
+  width: 50%;
+  background: #e5e5e530;
+  position: relative;
+}
 .chat-friends {
   width: 19.2rem;
   background: #e5e5e530;
   padding: 2.4rem 0;
+  position: relative;
 }
 .chat-friends.content {
   opacity: 1;
-  height: 45.6rem;
-  width: 50%;
-  background: #e5e5e530;
+  height: 39.6rem;
 }
 @media screen and (max-width: 640px) {
   .chat-friends.content {
@@ -9345,11 +9430,12 @@ form ol {
   position: relative;
 }
 .chat-friends .mCSB_container {
-  padding: 0 2rem;
+  padding: 0 1.2rem;
 }
 .chat-friends .card {
   color: contrast(#e5e5e530 30, #333, #fff);
   cursor: pointer;
+  position: relative;
 }
 .chat-friends .card .card-title {
   font-size: 1.1rem;
@@ -9424,6 +9510,12 @@ form ol {
   height: 100%;
   background: transparent;
 }
+.chat-attendees .detail-members {
+  display: none;
+}
+.chat-attendees .detail-members.active {
+  display: block;
+}
 .chat-meta {
   height: 3.84rem;
 }
@@ -9491,7 +9583,7 @@ form ol {
       -ms-flex-pack: end;
           justify-content: flex-end;
   min-height: 100%;
-  padding: 1.2rem 2.4rem;
+  padding: 1.2rem 3.6rem 1.2rem 2.4rem;
 }
 .chat-message-wrapper {
   height: 6rem;
@@ -9595,10 +9687,27 @@ form ol {
   width: 100%;
   overflow: hidden;
   padding: 0;
+  position: relative;
+  margin: 0.5rem;
+}
+.chat-message .message-image:after {
+  border-radius: 0 0 0.7rem 0.7rem;
+  background: transparent;
+  /* For browsers that do not support gradients */
+  background: -webkit-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, 0)), to(#a2a2a2));
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0), #a2a2a2);
+  content: '';
+  position: absolute;
+  width: 100%;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 0;
+  height: 2.4rem;
 }
 .chat-message .chat-image {
   border-radius: 1rem;
-  border: 0.5rem solid #fff;
+  position: relative;
 }
 .chat-message:last-child {
   margin-bottom: 0;
@@ -9613,6 +9722,7 @@ form ol {
 }
 .chat-message.user .message-time {
   color: #fff !important;
+  text-shadow: 1px 1px 1px #595959;
 }
 .chat-message.user .message-wrapper {
   -moz-justify-content: flex-end;
@@ -9705,6 +9815,11 @@ form ol {
       -ms-flex-pack: center;
           justify-content: center;
   max-width: 19.2rem;
+  padding-right: 0;
+}
+.chat-message.image .message-time {
+  right: 1rem;
+  bottom: 0.7rem;
 }
 .chat-message.yesterday .chat-message-date-wrapper {
   display: -webkit-box;

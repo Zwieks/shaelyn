@@ -1,18 +1,33 @@
 <!-- {{$debugpath}} -->
 <div class="item-wrapper {{$size}} chats">
 	<div class="item">
-
-<!-- 		<div class="comingsoon">
-			<figure>
-				<img src="{{ URL::asset('img/ComingSoon.png') }}">
-			</figure>
-		</div> -->
-
+		<div class="icon back js-chat-back">
+			<img src="{{ asset('img/back.svg') }}" alt="Back" />
+		</div>
 		<div class="chat-wrapper">
-			<div class="chat-friends content" id="firebase-chat-friends">
-				<div id="firebase-chatgroups" class="user-chats-wrapper"></div>
-			</div>
+			<div class="chat-controls">
+				<div class="chat-friends content" id="firebase-chat-friends">
+					<div id="firebase-chatgroups" class="user-chats-wrapper"></div>
+				</div>
+
+				<ul class="btn-group-list">
+					<li class="icon add" id="js-add-chat">
+						<img class="js-" src="/img/plus.svg" alt="Add chat">
+					</li>
+				</ul>
+
+				<div id="firebase-chat-options" class="chat-options-wrapper">
+					<div class="title-wrapper">
+						<h3 class="item-title" id="js-chat-title">Options</h3>
+					</div>
+
+					<div class="icon back js-chat-options-back">
+						<img src="{{ asset('img/back.svg') }}" alt="Back" />
+					</div>
+				</div>	
+			</div>	
 			<div class="chat-conversation">
+				<div id="firebase-chat-attendees" class="chat-attendees"></div>
 				<div id="firebase-chat-meta" class="chat-meta"></div>
 				<div id="firebase-chat-conversations"></div>	
 				<div class="chat-message-wrapper">

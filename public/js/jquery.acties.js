@@ -255,12 +255,31 @@ $(document).on('input', '#firebase-message-input',function(e) {
 	}
 });
 
+$(document).on("click",".js-chat-options-back", function(e) {
+	e.preventDefault();
+	$('#firebase-chat-options').removeClass('show');
+
+	return false;
+});
 
 $(document).on("click",".js-switch-chat",function(){
 	var chatGroupId = $(this).attr('id').replace('chat-', ''),
 		old_reference = $(this).parent().find('.active').attr('id').replace('chat-', ''),
 		new_reference = $(this).attr('id').replace('chat-', '');
 	
+console.log( "clicked: " + $(event.target).attr('class') );
+
+	if($(event.target).attr('class') == 'indicator-image') {
+		console.log('test');
+
+		$('#firebase-chat-options').addClass('show');
+
+		var chat_title = $(this).parent().find('.card-title').text(),
+			image = $(this).parent().find('.avatar').attr("src");
+
+		ShaelynChat.getChatOptionsTitle(chat_title, image);		
+	}
+
 	// Update user last active group and remove the old one
 	ShaelynChat.seenMessages(old_reference, new_reference);
 
@@ -271,10 +290,21 @@ $(document).on("click",".js-switch-chat",function(){
 	$(this).parent().find('.js-switch-chat').removeClass("active");
 	$('#firebase-chat-conversations').find('.chat-window').removeClass("active");
 	$('#firebase-chat-meta').find('.title-wrapper').removeClass("active");
+	//Remove the Chat attendees active class
+	$('#firebase-chat-attendees').find('.detail-members').removeClass("active");
 	
 	$(this).addClass('active');
+
+	//Chat window
 	$('#chat-window-'+chatGroupId).addClass('active');
+
+	//Title etc
 	$('#chat-meta-'+chatGroupId).addClass('active');
+
+	//Attendees
+	$('#chatfriends-'+chatGroupId).addClass('active');
+
+	//Scroll the chat window to the bottom
 	$("#chat-window-"+chatGroupId).mCustomScrollbar("scrollTo", "bottom", {scrollInertia:0});
 
 	setTimeout(function(){

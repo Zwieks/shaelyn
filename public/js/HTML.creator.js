@@ -69,7 +69,7 @@ function HTMLcreateChatMessage(groupId, listId, userid, snap, userData) {
 
 	var dataAnnotation = '';	
 	var date = new Date(snap.val().time);
-  	var hours = date.getHours();
+  	var hours = (date.getHours() < 10 ? '0' : '') + date.getHours();
   	var minutes = (date.getMinutes() < 10 ? '0' : '') + date.getMinutes();
   	var seconds = date.getSeconds();
 	var day = date.getDay();
@@ -209,10 +209,22 @@ function HTMLcreateGroup(groupId, key, snap, count, totalNum, activeGroupId, Not
 		HTML_chat_group_overview_description.appendChild(document.createTextNode(snap.description));	
 
 	var HTML_chat_group_overview_indicator = document.createElement("div");
-		HTML_chat_group_overview_indicator.className = "card-indicator";
+		HTML_chat_group_overview_indicator.className = "card-indicator chat-number-indicator";
+
+	var HTML_chat_group_overview_indicator_info_wrapper = document.createElement("div");
+		HTML_chat_group_overview_indicator_info_wrapper.className = "card-indicator info js-chat-options";
 
 	var HTML_chat_group_overview_indicator_number = document.createElement("span");
 		HTML_chat_group_overview_indicator_number.className = "card-indicator-number";
+
+	var HTML_chat_group_overview_indicator_info = document.createElement("span");
+		HTML_chat_group_overview_indicator_info.className = "card-indicator-info";
+
+	var HTML_chat_group_overview_indicator_image = document.createElement("img");
+		HTML_chat_group_overview_indicator_image.className = "indicator-image";
+		HTML_chat_group_overview_indicator_image.setAttribute("src", "/img/chat-info.svg");
+		HTML_chat_group_overview_indicator_image.setAttribute("title", "Chat options");
+		HTML_chat_group_overview_indicator_image.setAttribute("alt", "Chat options");
 
 		if(NotSeen > 0) {
 			$('#chat-'+groupId).removeAttr("style");
@@ -224,6 +236,8 @@ function HTMLcreateGroup(groupId, key, snap, count, totalNum, activeGroupId, Not
 	HTML_chat_group_image_wrapper.appendChild(HTML_chat_group_image);
 
 	HTML_chat_group_overview_indicator.appendChild(HTML_chat_group_overview_indicator_number);
+	HTML_chat_group_overview_indicator_info.appendChild(HTML_chat_group_overview_indicator_image);
+	HTML_chat_group_overview_indicator_info_wrapper.appendChild(HTML_chat_group_overview_indicator_info);
 
 	HTML_chat_group_overview_content_wrapper.appendChild(HTML_chat_group_overview_title);
 	HTML_chat_group_overview_content_wrapper.appendChild(HTML_chat_group_overview_description);
@@ -231,6 +245,7 @@ function HTMLcreateGroup(groupId, key, snap, count, totalNum, activeGroupId, Not
 	HTML_chat_group_overview_inner.appendChild(HTML_chat_group_image_wrapper);
 	HTML_chat_group_overview_inner.appendChild(HTML_chat_group_overview_content_wrapper);
 	HTML_chat_group_overview_inner.appendChild(HTML_chat_group_overview_indicator);
+	HTML_chat_group_overview_inner.appendChild(HTML_chat_group_overview_indicator_info_wrapper);
 
 	HTML_chat_group_overview_wrapper.appendChild(HTML_chat_group_overview_inner);
 
@@ -462,10 +477,19 @@ function HTMLcreateListMainTitle(snap, focus, show) {
 		return HTML_main_title_list_wrapper;
 }
 
-function HTMLcreateFriendsList(listId) {
+function HTMLcreateFriendsList(type, listId, count, totalNum) {
 	var HTML_friendslist = document.createElement("ul");
 		HTML_friendslist.className = 'detail-members';
-		HTML_friendslist.setAttribute("id", 'friends-'+listId);
+
+		if(type == 'list') {
+			HTML_friendslist.setAttribute("id", 'friends-'+listId);
+		}else if(type == 'chat') {
+			HTML_friendslist.setAttribute("id", 'chatfriends-'+listId);
+
+			if(count == totalNum) {
+				HTML_friendslist.className = "detail-members active";
+			}
+		}
 		
 	return HTML_friendslist;
 }

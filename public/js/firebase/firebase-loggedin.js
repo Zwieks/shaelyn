@@ -549,7 +549,7 @@
   		var list = HTMLcreateList(listId);
 
   		//Create HTML for the friends list
-  		var friends_list = HTMLcreateFriendsList(listId);
+  		var friends_list = HTMLcreateFriendsList('list', listId, 0, 0);
 
   		//Create HTML for the list wrapper
   		var items_wrapper = HTMLcreateListItemsWrapper(listId);
