@@ -258,8 +258,26 @@ $(document).on('input', '#firebase-message-input',function(e) {
 $(document).on("click",".js-chat-options-back", function(e) {
 	e.preventDefault();
 	$('#firebase-chat-options').removeClass('show');
-
+	$("#dialog-chat-wrapper").removeClass('active');
+	$("#firebase-chat-attendees").show();
 	return false;
+});
+
+// OPEN the OPTIONS CHAT dialog
+$(document).on("click",".js-item-chat-dialog", function(e) {
+	e.preventDefault();
+	var type = $(this).attr('data-type');
+
+	if(type == 'chat-leave') {
+		ShaelynChat.openChatOptionsDialog(type);
+	}else if(type == 'chat-leave') {
+		ShaelynChat.openChatOptionsDialog(type);
+	}
+
+  	//Open dialog
+  	$('#dialog-chat-wrapper').addClass('active');
+
+  	$("#firebase-chat-attendees").hide();
 });
 
 $(document).on("click",".js-switch-chat",function(){

@@ -159,6 +159,21 @@ function HTMLcreateChatMessage(groupId, listId, userid, snap, userData) {
 	return HTML_chat_message_wrapper;
 }
 
+function HTMLcreateChatDialog(type) {
+	var HTML_chat_dialog_wrapper = document.createElement("div");
+
+	var HTML_chat_dialog_close = document.createElement("div");
+		HTML_chat_dialog_close.className = "close-dialog js-close-item-dialog";
+
+	var HTML_chat_content_wrapper = document.createElement("div")
+		HTML_chat_content_wrapper.className = "content-wrapper";
+
+	HTML_chat_dialog_wrapper.appendChild(HTML_chat_dialog_close);
+	HTML_chat_dialog_wrapper.appendChild(HTML_chat_content_wrapper);
+
+	return HTML_chat_dialog_wrapper;
+}
+
 function HTMLcreateGroup(groupId, key, snap, count, totalNum, activeGroupId, NotSeen, highestNumber) {
 	var HTML_chat_group_overview_wrapper = document.createElement("div");
 		if(activeGroupId == false) {

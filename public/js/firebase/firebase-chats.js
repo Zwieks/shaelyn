@@ -662,6 +662,17 @@ ShaelynChat.prototype.checkSetup = function() {
   }
 };
 
+ShaelynChat.prototype.openChatOptionsDialog = function(type) {
+  const userId = firebase.auth().currentUser.uid;
+
+  //Create the CHAT WINDOWS per GROUP
+  var chat_dialog_content = HTMLcreateChatDialog(type);
+
+  //Put the HTML in the container
+  $.fn.updateOrPrependHTML("dialog-chat-wrapper", chat_dialog_content, "dialog-chat-wrapper");
+};
+
+
 window.addEventListener('load' , function() {
   window.ShaelynChat = new ShaelynChat();
 });

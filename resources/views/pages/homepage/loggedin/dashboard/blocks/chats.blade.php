@@ -17,16 +17,33 @@
 				</ul>
 
 				<div id="firebase-chat-options" class="chat-options-wrapper">
-					<div class="title-wrapper">
-						<h3 class="item-title" id="js-chat-title">Options</h3>
-					</div>
-
 					<div class="icon back js-chat-options-back">
 						<img src="{{ asset('img/back.svg') }}" alt="Back" />
 					</div>
+
+					<div class="title-wrapper">
+						<h3 class="item-title" id="js-chat-title">{{ Lang::get('chats.options') }}</h3>
+					</div>
+
+					<div class="chat-options">
+						<ul class="chat-friends chat-options-list">
+							<li class="card js-item-chat-dialog" data-type="chat-leave">
+								<div class="card-content-wrapper">
+									<span class="card-title">Leave group</span>
+								</div>		
+							</li>
+							<li class="card js-item-chat-dialog" data-type="chat-notifications">
+								<div class="card-content-wrapper">
+									<span class="card-title">Disable notifications</span>
+								</div>		
+							</li>
+						</ul>	
+					</div>	
 				</div>	
 			</div>	
 			<div class="chat-conversation">
+				<div id="dialog-chat-wrapper" class="js-item-dialog close-dialog"></div>	
+
 				<div id="firebase-chat-attendees" class="chat-attendees"></div>
 				<div id="firebase-chat-meta" class="chat-meta"></div>
 				<div id="firebase-chat-conversations"></div>	

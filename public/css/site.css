@@ -6012,6 +6012,120 @@ form ol {
   top: 0;
   left: 0;
 }
+#paste-wrapper,
+#dialog-chat-wrapper {
+  display: block;
+  margin: auto;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: calc(100% - 2.4rem);
+  height: calc(100% - 2.4rem);
+  z-index: 1;
+  display: none;
+  overflow: hidden;
+}
+@media screen and (max-width: 640px) {
+  #paste-wrapper,
+  #dialog-chat-wrapper {
+    width: 100%;
+    height: 100%;
+  }
+}
+#paste-wrapper figure,
+#dialog-chat-wrapper figure {
+  margin: 2.4rem;
+}
+#paste-wrapper img,
+#dialog-chat-wrapper img {
+  max-height: 12rem;
+}
+#paste-wrapper.active,
+#dialog-chat-wrapper.active {
+  -webkit-animation: fade-in 0.5s;
+  animation: fade-in 0.5s;
+  -webkit-transition-delay: 0.1s;
+  transition-delay: 0.1s;
+  display: block;
+  opacity: 1;
+}
+#paste-wrapper.active .inner,
+#dialog-chat-wrapper.active .inner {
+  -webkit-animation: inner-item-dialog 1s;
+  animation: inner-item-dialog 1s;
+  -webkit-transition-delay: 0.5s;
+  transition-delay: 0.5s;
+  top: 0;
+}
+#paste-wrapper .close-paste,
+#dialog-chat-wrapper .close-paste,
+#paste-wrapper .close-dialog,
+#dialog-chat-wrapper .close-dialog {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 1.2rem;
+  background-image: url('/img/cursor-close.svg');
+  background-size: cover;
+  width: 2rem;
+  height: 2rem;
+  cursor: pointer;
+  z-index: 2;
+}
+#paste-wrapper .inner,
+#dialog-chat-wrapper .inner {
+  position: absolute;
+  left: 2.4rem;
+  top: -100%;
+  right: 2.4rem;
+  width: auto;
+}
+#paste-wrapper .content-wrapper,
+#dialog-chat-wrapper .content-wrapper {
+  display: -webkit-box;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: -ms-flex;
+  display: flex;
+  -moz-flex-direction: column;
+  -ms-flex-direction: column;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+          flex-direction: column;
+  -moz-justify-content: flex-start;
+  -ms-justify-content: flex-start;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+  padding: 1.2rem;
+  background: rgba(0, 0, 0, 0.9);
+  height: 100%;
+}
+#paste-wrapper .description,
+#dialog-chat-wrapper .description,
+#paste-wrapper .indication,
+#dialog-chat-wrapper .indication {
+  color: #fff;
+  font-weight: bold;
+  text-align: center;
+  text-transform: uppercase;
+}
+#paste-wrapper .description,
+#dialog-chat-wrapper .description {
+  font-size: 1.7rem;
+  margin-bottom: 2.4rem;
+}
+#paste-wrapper .indication,
+#dialog-chat-wrapper .indication {
+  font-size: 3rem;
+  opacity: 0.3;
+}
+#dialog-chat-wrapper {
+  width: calc(100%);
+  height: calc(100%);
+}
 .login-spinnerwrapper {
   border-radius: 50%;
   display: block;
@@ -9352,58 +9466,6 @@ form ol {
 .chats .item {
   padding: 0;
 }
-.chat-options-wrapper {
-  -webkit-transition: 0.15s ease-out;
-  transition: 0.15s ease-out;
-  position: absolute;
-  opacity: 0;
-  visibility: hidden;
-  display: none;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  top: 0;
-  background: #f7f7f7;
-  z-index: 1;
-}
-.chat-options-wrapper.show {
-  opacity: 1;
-  visibility: visible;
-  display: block;
-}
-.chat-options-wrapper .back {
-  display: block;
-}
-.chat-options-wrapper .title-wrapper {
-  margin-top: 1.2rem;
-}
-.chat-image-input {
-  display: none;
-}
-.chat-wrapper {
-  display: -webkit-box;
-  display: -moz-flex;
-  display: -ms-flexbox;
-  display: -ms-flex;
-  display: flex;
-  height: 100%;
-}
-@media screen and (max-width: 640px) {
-  .chat-wrapper {
-    -moz-flex-direction: row;
-    -ms-flex-direction: row;
-    -webkit-box-orient: horizontal;
-    -webkit-box-direction: normal;
-            flex-direction: row;
-    height: 100%;
-    padding: 1.2rem 2.4rem;
-  }
-}
-.chat-controls {
-  width: 50%;
-  background: #e5e5e530;
-  position: relative;
-}
 .chat-friends {
   width: 19.2rem;
   background: #e5e5e530;
@@ -9454,6 +9516,110 @@ form ol {
 .chat-friends .card .card-description {
   display: none;
 }
+.chat-options-wrapper {
+  -webkit-transition: 0.15s ease-out;
+  transition: 0.15s ease-out;
+  position: absolute;
+  opacity: 0;
+  visibility: hidden;
+  display: none;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 0;
+  background: #f7f7f7;
+  z-index: 1;
+}
+.chat-options-wrapper.show {
+  opacity: 1;
+  visibility: visible;
+  display: block;
+}
+.chat-options-wrapper .back {
+  display: block;
+}
+.chat-options-wrapper .title-wrapper {
+  margin-top: 1.2rem;
+  margin-bottom: 0;
+}
+.chat-options {
+  display: -webkit-box;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: -ms-flex;
+  display: flex;
+  height: 39.5rem;
+}
+.chat-options-list {
+  margin: 0;
+  padding: 0 2.4rem 2.4rem 2.4rem;
+}
+.chat-options-list .card {
+  padding: 1.2rem;
+  margin: 0;
+  border-bottom: 1px solid #e5e5e5;
+  width: auto;
+  position: relative;
+  z-index: 0;
+}
+.chat-options-list .card:before {
+  -webkit-transition: 0.15s ease-out;
+  transition: 0.15s ease-out;
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background: #ebebeb;
+  z-index: -1;
+  opacity: 0;
+  visibility: hidden;
+  display: none;
+}
+.chat-options-list .card:hover:before,
+.chat-options-list .card:focus:before {
+  opacity: 1;
+  visibility: visible;
+  display: block;
+}
+.chat-options-list .card .card-content-wrapper {
+  max-width: 100%;
+}
+.chat-options-list .card .avatar,
+.chat-options-list .card .particles-content-wrapper img {
+  margin-left: 0;
+}
+.chat-options-list .card .card-image-wrapper {
+  margin-right: 0;
+}
+.chat-image-input {
+  display: none;
+}
+.chat-wrapper {
+  display: -webkit-box;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: -ms-flex;
+  display: flex;
+  height: 100%;
+}
+@media screen and (max-width: 640px) {
+  .chat-wrapper {
+    -moz-flex-direction: row;
+    -ms-flex-direction: row;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+            flex-direction: row;
+    height: 100%;
+    padding: 1.2rem 2.4rem;
+  }
+}
+.chat-controls {
+  width: 50%;
+  background: #e5e5e530;
+  position: relative;
+}
 .user-chats-wrapper {
   display: -webkit-box;
   display: -moz-flex;
@@ -9485,6 +9651,7 @@ form ol {
       -ms-flex-positive: 1;
           flex-grow: 1;
   padding: 1.2rem 2.4rem;
+  position: relative;
 }
 @media screen and (max-width: 640px) {
   .chat-conversation {
@@ -9890,101 +10057,6 @@ form ol {
   .comingsoon img {
     width: 75%;
   }
-}
-#paste-wrapper {
-  display: block;
-  margin: auto;
-  -webkit-transform: translate(-50%, -50%);
-  transform: translate(-50%, -50%);
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: calc(100% - 2.4rem);
-  height: calc(100% - 2.4rem);
-  z-index: 1;
-  display: none;
-  overflow: hidden;
-}
-@media screen and (max-width: 640px) {
-  #paste-wrapper {
-    width: 100%;
-    height: 100%;
-  }
-}
-#paste-wrapper figure {
-  margin: 2.4rem;
-}
-#paste-wrapper img {
-  max-height: 12rem;
-}
-#paste-wrapper.active {
-  -webkit-animation: fade-in 0.5s;
-  animation: fade-in 0.5s;
-  -webkit-transition-delay: 0.1s;
-  transition-delay: 0.1s;
-  display: block;
-  opacity: 1;
-}
-#paste-wrapper.active .inner {
-  -webkit-animation: inner-item-dialog 1s;
-  animation: inner-item-dialog 1s;
-  -webkit-transition-delay: 0.5s;
-  transition-delay: 0.5s;
-  top: 0;
-}
-#paste-wrapper .close-paste {
-  position: absolute;
-  top: 0;
-  right: 0;
-  margin: 1.2rem;
-  background-image: url('/img/cursor-close.svg');
-  background-size: cover;
-  width: 2rem;
-  height: 2rem;
-  cursor: pointer;
-  z-index: 2;
-}
-#paste-wrapper .inner {
-  position: absolute;
-  left: 2.4rem;
-  top: -100%;
-  right: 2.4rem;
-  width: auto;
-}
-#paste-wrapper .content-wrapper {
-  display: -webkit-box;
-  display: -moz-flex;
-  display: -ms-flexbox;
-  display: -ms-flex;
-  display: flex;
-  -moz-flex-direction: column;
-  -ms-flex-direction: column;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-          flex-direction: column;
-  -moz-justify-content: flex-start;
-  -ms-justify-content: flex-start;
-  -webkit-box-pack: start;
-      -ms-flex-pack: start;
-          justify-content: flex-start;
-  padding: 1.2rem;
-  background: rgba(0, 0, 0, 0.9);
-  height: 100%;
-}
-#paste-wrapper .description,
-#paste-wrapper .indication {
-  color: #fff;
-  font-weight: bold;
-  text-align: center;
-  text-transform: uppercase;
-}
-#paste-wrapper .description {
-  font-size: 1.7rem;
-  margin-bottom: 2.4rem;
-}
-#paste-wrapper .indication {
-  font-size: 3rem;
-  opacity: 0.3;
 }
 @-webkit-keyframes inner-item-dialog {
   from {
