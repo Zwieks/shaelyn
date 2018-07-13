@@ -316,7 +316,6 @@ function HTMLcreateGroup(groupId, key, snap, count, totalNum, activeGroupId, Not
 
 		HTML_chat_group_overview_wrapper.setAttribute("id", "chat-"+key);
 
-		$('#chat-'+groupId).remove();
 		if(NotSeen > 0) {
 			HTML_chat_group_overview_indicator.className = "card-indicator chat-number-indicator show";
 			HTML_chat_group_overview_indicator_number.appendChild(document.createTextNode(NotSeen));
@@ -324,8 +323,8 @@ function HTMLcreateGroup(groupId, key, snap, count, totalNum, activeGroupId, Not
 
 		}
 
-			HTML_chat_group_overview_wrapper.setAttribute("data-order", parseInt(highestNumber));
-			HTML_chat_group_overview_wrapper.style.order = -parseInt(highestNumber);
+			HTML_chat_group_overview_wrapper.setAttribute("data-order", highestNumber);
+			HTML_chat_group_overview_wrapper.style.order = -highestNumber;
 
 	HTML_chat_group_image_wrapper.appendChild(HTML_chat_group_image);
 

@@ -100,11 +100,6 @@ ShaelynChat.prototype.loadGroups = function(groupId, groupsnap, count, totalNum,
   const chatAttendeesRef = ref.child('ChatAttendees').child(groupId);
   //const chatAttendeeRef = chatAttendeesRef.child(userId);
   var setChatGroup = function(data) {
-console.log(groupsnap.val());
-      console.log(data.key);
-      console.log(data.val());
-      console.log(groupId);
-
     ref.child('Users').child(data.key).once('value', usersnap => {
       var friend = HTMLcreateListFriend(groupId, usersnap);
 
@@ -113,22 +108,87 @@ console.log(groupsnap.val());
       $.fn.updateOrPrependHTML(groupId+"friend-"+usersnap.key, friend, friends_list);     
     });            
 
-    var highestNumber = 0;
-    if($('.js-switch-chat').length) {
-      highestNumber = $.fn.getHeighestAttrNum($('.js-switch-chat'))+1;
+    chatAttendeesRef.once('value', snapchat => {
+      //Put the HTML in the container
+      var group = HTMLcreateGroup(groupId, groupsnap.key, groupsnap.val(), count, totalNum, activeGroupId, snapchat.val().notseen);
+      $.fn.updateOrPrependHTML("chat-"+groupId, group, this.chat_list_wrapper);
+    }).then(userData => {
+
+
+    });
+  }.bind(this);
+
+  var setChatGroupChanged = function(data) {
+    var date = new Date($.now());
+
+    document.getElementById('chat-'+groupId).removeAttribute("style");
+
+    document.getElementById('chat-'+groupId).style.order = -date.getTime()/1000|0;
+    document.getElementById('chat-'+groupId).setAttribute('data-order', date.getTime()/1000|0);
+
+    if(!$('#chat-'+groupId).hasClass('active')) {
+      console.log('aaa');
+      $('#chat-'+groupId).find('.card-indicator-number').text(data.val().notseen);
+      $('#chat-'+groupId).find('.chat-number-indicator').addClass('show');
+    }else {
+      ShaelynChat.removeUnSeenMessages(groupId);
     }
 
-      chatAttendeesRef.once('value', snapchat => {
+  // Update user last active group and remove the old one,
+  // What this does is setting the timestamp or an active string
+  // When the user leaves a group it is setting a timestamp else the active string
+  //ShaelynChat.seenMessages(old_reference, new_reference);
 
-        //Put the HTML in the container
-        var group = HTMLcreateGroup(groupId, groupsnap.key, groupsnap.val(), count, totalNum, activeGroupId, snapchat.val().notseen, parseInt(highestNumber));
-        $.fn.updateOrPrependHTML("chat-"+groupId, group, this.chat_list_wrapper);
-      });
+    // if(data.key != userId) {
+    //   console.log(data.val());
+    // }
+    //console.log('Active group: '+groupId);
+    //ShaelynChat.updateUserChatTimestamp(groupId);
+    //var group = HTMLcreateGroup(groupId, groupsnap.key, groupsnap.val(), count, totalNum, activeGroupId, snapchat.val().notseen, parseInt(highestNumber));
+    //$.fn.updateOrPrependHTML("chat-"+groupId, group, this.chat_list_wrapper);
+    //When an field under CHATATTENDEES is changed this will be triggered
+    //E.G. Resetting the unseen to 0 (removeUnSeenMessages function) AND Update the active table (seenMessages function)
+        //TODO SET THE ORDER IF THE GROUPS!!!
+
+    // if($('#firebase-chatgroups').find('.active').length != 0){
+    //   // Get the user active group
+    //   var activeGroupId = $('#firebase-chatgroups').find('.active').attr('id').replace('chat-', '');
+      
+    //   const userId = firebase.auth().currentUser.uid;
+
+    //   // Reference to the /UserChat/ database path.
+    //   const chatsRef = this.database.ref('UsersChat').child(userId).child(groupId);
+
+    //   const promise = chatsRef.update({
+    //     time: firebase.database.ServerValue.TIMESTAMP
+    //   })
+
+    //   promise.then(function() {
+    //         this.orderChatGroups();
+    //   }.bind(this)).catch(function(error) {
+    //     console.error('Error writing new message to Firebase Database', error);
+    //   });  
+    // }
   }.bind(this);
 
   chatAttendeesRef.on('child_added', setChatGroup);
-  chatAttendeesRef.on('child_changed', setChatGroup);
+  chatAttendeesRef.on('child_changed', setChatGroupChanged);
 };
+
+
+// Loads chat messages history and listens for upcoming ones.
+// ShaelynChat.prototype.orderChatGroups = function() {
+//   const userId = firebase.auth().currentUser.uid;
+
+//   // Reference to the /UserChat/ database path.
+//   const chatsRef = this.database.ref('UsersChat').child(userId);
+
+//   chatsRef.orderByChild('time').once('value', groupsnap => {
+//     console.log(groupsnap.val());
+//   });
+// };
+
+
 
 ShaelynChat.prototype.getChatOptionsTitle = function(chatTitle, image) {
   //$('#js-chat-title').text(chatTitle);
@@ -140,12 +200,15 @@ ShaelynChat.prototype.createChat = function(oldGroupId, newGroupId) {
   const ref = firebase.database().ref();
 };
 
+
+// What this does is setting the timestamp or an active string
+// When the user leaves a group it is setting a timestamp else the active string
+// This TRIGGERING CHILD_CHANGED for CHATATTENDEES loacated in LOADGROUPS function
 ShaelynChat.prototype.seenMessages = function(oldGroupId, newGroupId) {
   const userId = firebase.auth().currentUser.uid;
   const ref = firebase.database().ref();
   const oldChat = ref.child('ChatAttendees').child(oldGroupId).child(userId);
   const newChat = ref.child('ChatAttendees').child(newGroupId).child(userId);
-
   let timestamp = firebase.database.ServerValue.TIMESTAMP;
   oldChat.once('value').then(function(snapshot) {
     oldChat.update({ 
@@ -215,9 +278,10 @@ ShaelynChat.prototype.init = function() {
 	// Make sure we remove all previous listeners.
 	this.chatsRef.off();
   var activeGroupId = false;
-    if($('#firebase-chatgroups').find('.active').length != 0){
-      activeGroupId = $('#firebase-chatgroups').find('.active').attr('id').replace('chat-', '');
-    }
+  if($('#firebase-chatgroups').find('.active').length != 0){
+    activeGroupId = $('#firebase-chatgroups').find('.active').attr('id').replace('chat-', '');
+  }
+
   this.chatsRef.once('value', snap => {
     $('#firebase-chatgroups').empty();
     //Needed for iteration and setting of the active class
@@ -250,18 +314,50 @@ ShaelynChat.prototype.init = function() {
           count++;
         }); 
       });
+
+      this.updateChatGroupOrder();
     //}  
   });
 };
+
+
+
+
+
+
+
+ShaelynChat.prototype.updateChatGroupOrder = function(){
+  const userId = firebase.auth().currentUser.uid;
+
+  // Reference to the /UserChat/ database path.
+  this.chatsRef = this.database.ref('UsersChat').child(userId);
+
+  var setOrder = function(data) {
+    var date = new Date(data.val().time);
+
+    $('#chat-'+data.key).attr('data-order', date.getTime()/1000|0);
+    document.getElementById('chat-'+data.key).style.order = -date.getTime()/1000|0;
+  }.bind(this);
+
+  //this.chatsRef.orderByChild('time').on('child_added', setMessage);
+  this.chatsRef.orderByChild('time').on('child_changed', setOrder);
+};
+
+
+
+
+
+
 
 ShaelynChat.prototype.seenCheck = function(active_groupId, messageId) {
   const userId = firebase.auth().currentUser.uid;
   const ref = firebase.database().ref();
   const chatAttendeesRef = ref.child('ChatAttendees').child(active_groupId);
 
-  // Check if the user is current active in a group if not put the message in the ChatNotSeenMessages
+  // Check if the user is current active in the group if not put the message in the ChatNotSeenMessages
   chatAttendeesRef.once('value', snap => {
     snap.forEach(function(childSnapshot) {
+      //Check if the user is not active in the group
       if(childSnapshot.val().time != 'active') {
         const ref = firebase.database().ref();
         const ChatNotSeenMessagesRef = ref.child('ChatNotSeenMessages').child(childSnapshot.key).child(active_groupId);
@@ -273,8 +369,7 @@ ShaelynChat.prototype.seenCheck = function(active_groupId, messageId) {
             ref.child('ChatAttendees').child(active_groupId).child(childSnapshot.key).update({ 
               notseen: usersnap.numChildren()
             })
-          });  
-
+          });
         }.bind(this)).catch(function(error) {
           console.error('Error writing new message to Firebase Database', error);
         });
@@ -283,6 +378,10 @@ ShaelynChat.prototype.seenCheck = function(active_groupId, messageId) {
   });
 };
 
+// What this does is REMOVING all the MESSAGE ID'S under the USERID in the ChatNotSeenMessage Table and updating the notseen
+// property in the CHATATTENDEES table to 0
+
+// This TRIGGERING CHILD_CHANGED for CHATATTENDEES loacated in LOADGROUPS function
 ShaelynChat.prototype.removeUnSeenMessages = function(active_groupId) {
   const userId = firebase.auth().currentUser.uid;
   const ref = firebase.database().ref();
@@ -290,13 +389,14 @@ ShaelynChat.prototype.removeUnSeenMessages = function(active_groupId) {
 
   const promise = chatNotSeenRef.child(userId).child(active_groupId).remove();
 
-
   promise.then(function() {
     //Reset counter in the group of ChatAttendees
     const postRef = firebase.database().ref().child('ChatAttendees').child(active_groupId).child(userId)
     postRef.update({ 
       notseen: 0
     })
+
+    $("#chat-"+active_groupId).find('.chat-number-indicator').removeClass('show');
   }.bind(this)).catch(function(error) {
     console.error('Error writing new message to Firebase Database', error);
   });
@@ -345,11 +445,6 @@ ShaelynChat.prototype.saveMessage = function(e) {
 
         //Update the UserChat Timestamp for sorting the ChatGroups
         this.updateUserChatTimestamp(active_groupId);
-
-        //Set
-        var highestNumber = $.fn.getHeighestAttrNum($('.js-switch-chat'))+1;
-        $('#chat-'+active_groupId).attr('data-order',highestNumber);
-        $('#chat-'+active_groupId).css('order',-highestNumber);
 
         // Clear message text field and SEND button state.
         ShaelynChat.resetMaterialTextfield(this.messageInput);

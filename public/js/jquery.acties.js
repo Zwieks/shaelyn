@@ -303,11 +303,15 @@ $(document).on("click",".js-switch-chat",function(){
 		ShaelynChat.getChatOptionsTitle(chat_title, image);		
 	}
 
-	// Update user last active group and remove the old one
-	ShaelynChat.seenMessages(old_reference, new_reference);
+	// Update user last active group and remove the old one,
+	// What this does is setting the timestamp or an active string
+	// When the user leaves a group it is setting a timestamp else the active string
+	//ShaelynChat.seenMessages(old_reference, new_reference);
 
-	// If the user got unseen messages but the group is now active.. remove them
+	// If the user got unseen messages but the group is now active.. remove the references and update the number of unseen messages for this group
 	ShaelynChat.removeUnSeenMessages(new_reference);
+
+	$(this).find('.chat-number-indicator').removeClass('show');
 
 	$('#firebase-chat-conversations').addClass('hide');
 	$(this).parent().find('.js-switch-chat').removeClass("active");
