@@ -121,9 +121,10 @@
 			listOwner = firebase.auth().currentUser.uid,
 			time = '',
 			tickedCount = 0,
-			userCount = 0;
+			userCount = 0,
+			chat = false;
 
-		var newPostKey = writeNewList(itemCount, name, listOwner, time, userCount, tickedCount);
+		var newPostKey = writeNewList(itemCount, name, listOwner, time, userCount, tickedCount, chat);
 			writeNewListItem(newPostKey, "", 0, false, "");
 	});
 
@@ -138,10 +139,11 @@
 			listOwner = firebase.auth().currentUser.uid,
 			time = '',
 			tickedCount = 0,
-			userCount = 0;
+			userCount = 0,
+			chat = false;
 
 		if(newPostKey == null) {
-			newPostKey = writeNewList(itemCount, name, listOwner, time, userCount, tickedCount);
+			newPostKey = writeNewList(itemCount, name, listOwner, time, userCount, tickedCount, chat);
 		}
 
 		$.each(items, function( index, value ) {
@@ -206,7 +208,7 @@
 		$('#focus').removeAttr('id');
 	});
 
-	function writeNewList(itemCount, name, listOwner, time, userCount, tickedCount) {
+	function writeNewList(itemCount, name, listOwner, time, userCount, tickedCount, chat) {
 		// A post entry.
 		var postData = {
 	    	itemCount: itemCount,
@@ -214,7 +216,8 @@
 	    	listOwner : listOwner,
 	    	time : time,
 	    	userCount : userCount,
-	    	tickedCount: tickedCount
+	    	tickedCount: tickedCount,
+	    	chat: chat
 		};
 
 	  	// Get a key for a new Post.

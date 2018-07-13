@@ -107,4 +107,27 @@
 #dialog-chat-wrapper {
 	width: calc(100%);
 	height: calc(100%);
+
+	img {
+		margin-bottom: @spacing;
+	}
+
+	.inner {
+		margin: @spacing 0;
+	}
+
+	.description {
+		display: block;
+		text-align: center;
+	}
+
+	.setting-item {
+		.justify-content(center);
+    	padding: 0;
+
+		img,
+		.slide-label {
+			display: none;
+		}
+	}
 }

@@ -15,5 +15,9 @@ return [
     'chat' => [
         'today' => 'Today',
         'yesterday' => 'Yesterday',
+
+        'dialog' => [
+            'notification' => 'If you don’t want a notification of this chat, just click on the button below',
+        ]
     ]
 ];

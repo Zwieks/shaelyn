@@ -70,8 +70,6 @@ ShaelynChat.prototype.initFirebase = function() {
 ShaelynChat.prototype.loadChatWindows = function(groupId, groupsnap, count, totalNum) {
   const chat_meta = document.getElementById('firebase-chat-meta');
   
-  this.messagesRef = this.database.ref('ChatMessages').child(groupsnap.key);
-  
   var meta = HTMLcreateChatMeta(groupsnap, count, totalNum);
   $.fn.updateOrPrependHTML("chat-meta-"+groupId, meta, chat_meta);
 
@@ -93,35 +91,43 @@ ShaelynChat.prototype.loadChatWindows = function(groupId, groupsnap, count, tota
         }
     }).mCustomScrollbar("scrollTo","bottom",{scrollInertia:0});
   }
-}; 
+};
 
 //Creates the chat overview with all the user groups or ividual chats
 ShaelynChat.prototype.loadGroups = function(groupId, groupsnap, count, totalNum, activeGroupId) {
   const userId = firebase.auth().currentUser.uid;
   const ref = firebase.database().ref();
-  const chatAttendeesRef = ref.child('ChatAttendees');
+  const chatAttendeesRef = ref.child('ChatAttendees').child(groupId);
+  //const chatAttendeeRef = chatAttendeesRef.child(userId);
+  var setChatGroup = function(data) {
+console.log(groupsnap.val());
+      console.log(data.key);
+      console.log(data.val());
+      console.log(groupId);
 
-  chatAttendeesRef.once('value', snap => {
-    const chatAttendeeRef = chatAttendeesRef.child(groupId).child(userId);
+    ref.child('Users').child(data.key).once('value', usersnap => {
+      var friend = HTMLcreateListFriend(groupId, usersnap);
 
-    chatAttendeeRef.on('value', snapchat => {
-      var highestNumber = 0;
-      if($('.js-switch-chat').length) {
-        highestNumber = $.fn.getHeighestAttrNum($('.js-switch-chat'))+1;
-      }
+      var friends_list = document.getElementById('chatfriends-'+groupId);
 
-      //Put the HTML in the container
-      var group = HTMLcreateGroup(groupId, groupsnap.key, groupsnap.val(), count, totalNum, activeGroupId, snapchat.val().notseen, highestNumber.toString());
-      $.fn.updateOrPrependHTML("chat-"+groupId, group, this.chat_list_wrapper);
+      $.fn.updateOrPrependHTML(groupId+"friend-"+usersnap.key, friend, friends_list);     
+    });            
 
-      var parent = document.getElementById(this.chat_list_wrapper.childNodes[0].id+'_container');
-          var loaded = document.getElementById("firebase-chat-conversations");
+    var highestNumber = 0;
+    if($('.js-switch-chat').length) {
+      highestNumber = $.fn.getHeighestAttrNum($('.js-switch-chat'))+1;
+    }
 
-      if (parent == null) {
-        parent = this.chat_list_wrapper;
-      }
-    });
-  });
+      chatAttendeesRef.once('value', snapchat => {
+
+        //Put the HTML in the container
+        var group = HTMLcreateGroup(groupId, groupsnap.key, groupsnap.val(), count, totalNum, activeGroupId, snapchat.val().notseen, parseInt(highestNumber));
+        $.fn.updateOrPrependHTML("chat-"+groupId, group, this.chat_list_wrapper);
+      });
+  }.bind(this);
+
+  chatAttendeesRef.on('child_added', setChatGroup);
+  chatAttendeesRef.on('child_changed', setChatGroup);
 };
 
 ShaelynChat.prototype.getChatOptionsTitle = function(chatTitle, image) {
@@ -155,33 +161,18 @@ ShaelynChat.prototype.seenMessages = function(oldGroupId, newGroupId) {
 };
 
 ShaelynChat.prototype.loadChatAttendees = function(groupId, count, totalNum) {
-  const ref = firebase.database().ref();
-  const chatAttendeesRef = ref.child('ChatAttendees').child(groupId);
-
   //Create HTML for the friends list
   var chatfriends_list_wrapper = HTMLcreateFriendsList('chat', groupId, count, totalNum);
 
   var parent = document.getElementById('firebase-chat-attendees');
   //Put the HTML in the container
   $.fn.updateOrPrependHTML("chatfriends-"+groupId, chatfriends_list_wrapper, parent);
-
-  chatAttendeesRef.on('value', snap => {
-    snap.forEach(function(childSnapshot) {
-      ref.child('Users').child(childSnapshot.key).once('value', usersnap => {
-
-        var friend = HTMLcreateListFriend(groupId, usersnap);
-
-        var friends_list = document.getElementById('chatfriends-'+groupId);
-
-          $.fn.updateOrPrependHTML(groupId+"friend-"+usersnap.key, friend, friends_list);
-      });
-    });
-  });
 };
 
 // Loads chat messages history and listens for upcoming ones.
 ShaelynChat.prototype.loadMessages = function(groupId, groupsnap) {
   // Loads the last 12 messages and listen for new ones.
+  this.messagesRef = this.database.ref('ChatMessages').child(groupId);
   var setMessage = function(data) {
     var val = data.val();
 
@@ -227,40 +218,39 @@ ShaelynChat.prototype.init = function() {
     if($('#firebase-chatgroups').find('.active').length != 0){
       activeGroupId = $('#firebase-chatgroups').find('.active').attr('id').replace('chat-', '');
     }
-  this.chatsRef.on('value', snap => {
+  this.chatsRef.once('value', snap => {
     $('#firebase-chatgroups').empty();
     //Needed for iteration and setting of the active class
     var count = 1;
-    snap.forEach(function(childSnapshot) {
-      //Get the user chatgroup
-      let chatGroupRef = chat.child(childSnapshot.key);
+    //if($('#firebase-chat-conversations').find('.chat-window.active').length == 0) {
+      snap.forEach(function(childSnapshot) {
+        //Get the user chatgroup
+        let chatGroupRef = chat.child(childSnapshot.key);
 
-      chatGroupRef.once('value', groupsnap => {
-        //Create the GROUPS
-        ShaelynChat.loadGroups(groupsnap.key, groupsnap, count, snap.numChildren(), activeGroupId);
+        chatGroupRef.once('value', groupsnap => {
+          //Create the Chat windows per Group for the messages
+          ShaelynChat.loadChatAttendees(groupsnap.key, count, snap.numChildren());
 
-        if($('#firebase-chat-conversations').find('.chat-window.active').length == 0) {
+          //Create the GROUPS
+          ShaelynChat.loadGroups(groupsnap.key, groupsnap, count, snap.numChildren(), activeGroupId);
 
           //Create the Chat windows per Group for the messages
           ShaelynChat.loadChatWindows(groupsnap.key, groupsnap, count, snap.numChildren());
 
           //Create the messages and put them in the corresponding group
           ShaelynChat.loadMessages(groupsnap.key, groupsnap);
+        }).then(snaper => {
+          //Add one to the counter after all other things are done
+          if (snap.numChildren() == count) {
+             setTimeout(function(){
+              $('#firebase-chat-conversations').addClass('loaded');
+            }, 500);
+          }
 
-          //Create the Chat windows per Group for the messages
-          ShaelynChat.loadChatAttendees(groupsnap.key, count, snap.numChildren());
-        }  
-      }).then(snaper => {
-        //Add one to the counter after all other things are done
-        if (snap.numChildren() == count) {
-           setTimeout(function(){
-            $('#firebase-chat-conversations').addClass('loaded');
-          }, 500);
-        }
-
-        count++;
-      }); 
-    });
+          count++;
+        }); 
+      });
+    //}  
   });
 };
 
@@ -284,6 +274,7 @@ ShaelynChat.prototype.seenCheck = function(active_groupId, messageId) {
               notseen: usersnap.numChildren()
             })
           });  
+
         }.bind(this)).catch(function(error) {
           console.error('Error writing new message to Firebase Database', error);
         });
@@ -354,6 +345,11 @@ ShaelynChat.prototype.saveMessage = function(e) {
 
         //Update the UserChat Timestamp for sorting the ChatGroups
         this.updateUserChatTimestamp(active_groupId);
+
+        //Set
+        var highestNumber = $.fn.getHeighestAttrNum($('.js-switch-chat'))+1;
+        $('#chat-'+active_groupId).attr('data-order',highestNumber);
+        $('#chat-'+active_groupId).css('order',-highestNumber);
 
         // Clear message text field and SEND button state.
         ShaelynChat.resetMaterialTextfield(this.messageInput);
@@ -642,6 +638,74 @@ ShaelynChat.prototype.LOADING_IMAGE_URL = 'https://www.google.com/images/spin-32
 //   this.messageList.scrollTop = this.messageList.scrollHeight;
 //   this.messageInput.focus();
 // };
+
+//Create a new chat based on a list or from scratch
+ShaelynChat.prototype.createNewChat = function(listId) {
+    const ref = firebase.database().ref();
+    const listChatsRef = ref.child('BetaChat');
+    const listAttendeesRef = ref.child('listAttendees').child(listId);
+    const usersChatRef = ref.child('UsersChat');
+    const chatAttendeesRef = ref.child('ChatAttendees');
+    const listsRef = ref.child('lists').child(listId);
+    let listData = '';
+
+  //Check the origion
+  if(listId != '') {
+    //Get the additional list info
+    listsRef.once('value', snap => {
+      if(snap.val().chat != true){
+        const postRef = listsRef;
+        postRef.update({ 
+          chat: true
+        })
+
+        let timestamp = firebase.database.ServerValue.TIMESTAMP;
+        const promiseChat = listChatsRef.push({
+          chatOwner: firebase.auth().currentUser.uid,
+          groupImage: "",
+          name: snap.val().name,
+          order: timestamp,
+          time: firebase.database.ServerValue.TIMESTAMP,
+          type: 'list',
+          userCount: snap.val().userCount
+        })
+        const key = promiseChat.key
+
+        promiseChat.then(function() {
+          const postRef = listChatsRef.child(key)
+          postRef.once('value').then(function(snapshot) {
+            timestamp = snapshot.val().order * -1
+            postRef.update({ 
+              order: timestamp
+            })
+          });
+        }).then(listDataSnap => {
+          //CREATE USER CHATS
+          listAttendeesRef.once('value', snap => {
+            snap.forEach(function(childSnapshot) {
+              const postChatAttendees = chatAttendeesRef.child(key).child(childSnapshot.key);
+              postChatAttendees.update({
+                notseen: 0,
+                time: firebase.database.ServerValue.TIMESTAMP
+              });
+
+              const postRef = usersChatRef.child(childSnapshot.key).child(key);
+              postRef.update({
+                seen: false,
+                time: firebase.database.ServerValue.TIMESTAMP
+              });
+              //Put the attendee in the CHATS Pivot table
+            });  
+          }).then(listDataSnap => {
+            ShaelynChat.init();
+          }); 
+        }); 
+      }else {
+        //Verwijzen naar CHAT
+      }
+    });
+  }  
+};
 
 // Enables or disables the submit button depending on the values of the input
 // fields.

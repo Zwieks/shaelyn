@@ -168,7 +168,84 @@ function HTMLcreateChatDialog(type) {
 	var HTML_chat_content_wrapper = document.createElement("div")
 		HTML_chat_content_wrapper.className = "content-wrapper";
 
+	var HTML_chat_content_wrapper_inner = document.createElement("div")
+		HTML_chat_content_wrapper_inner.className = "inner";
+
+	var HTML_chat_content_image_wrapper = document.createElement("figure")
+		HTML_chat_content_image_wrapper.className = "chat-option-image";	
+
+	var HTML_chat_content_image = document.createElement("img");
+		HTML_chat_content_image.setAttribute("title", "");
+		HTML_chat_content_image.setAttribute("alt", "");
+
+		if(type != 'chat-leave') {
+			HTML_chat_content_image.setAttribute("src", "/img/bot.svg");
+		}else{
+			HTML_chat_content_image.setAttribute("src", "/img/bot.svg");
+		}
+
+	HTML_chat_content_image_wrapper.appendChild(HTML_chat_content_image);
+
+	var HTML_chat_content_text = document.createElement("span")
+		HTML_chat_content_text.className = "description";
+
 	HTML_chat_dialog_wrapper.appendChild(HTML_chat_dialog_close);
+	HTML_chat_content_wrapper.appendChild(HTML_chat_content_wrapper_inner);
+
+	HTML_chat_content_wrapper_inner.appendChild(HTML_chat_content_image);
+	HTML_chat_content_wrapper_inner.appendChild(HTML_chat_content_text);
+
+	if(type != 'chat-leave') {
+		HTML_chat_content_text.appendChild(document.createTextNode(i18n.firebase.chat.dialog.notification));	
+
+		var HTML_chat_slide_control = document.createElement("div");
+			HTML_chat_slide_control.className = "settings-wrapper";
+
+		var HTML_chat_slide_control_wrapper = document.createElement("div");
+			HTML_chat_slide_control_wrapper.className = "setting-item";
+
+		var HTML_chat_slide_item = document.createElement("div");
+			HTML_chat_slide_item.className = "slide-label";
+			
+		var HTML_chat_slide_item_img = document.createElement("img");
+			HTML_chat_slide_item_img.className = "settings-icon";
+			HTML_chat_slide_item_img.setAttribute("src", "/img/ring.svg");
+			HTML_chat_slide_item_img.setAttribute("alt", "");
+
+		var HTML_chat_slide_wrapper = document.createElement("label");
+			HTML_chat_slide_wrapper.className = "slide-wrapper js-slide-control";
+			HTML_chat_slide_wrapper.setAttribute("for", "firebase-setting-notifications-chat");
+
+		var HTML_chat_slide_input = document.createElement("input");
+			HTML_chat_slide_input.type = "checkbox";
+			HTML_chat_slide_input.className = 'checkbox firebase-set-checkbox';
+			HTML_chat_slide_input.setAttribute("field", "UserSettings");
+			HTML_chat_slide_input.setAttribute("id", "firebase-setting-notifications-chat");
+
+		var HTML_chat_slide_element = document.createElement("div");
+			HTML_chat_slide_element.className = "slide";
+
+		var HTML_chat_slide_element_bg = document.createElement("div");
+			HTML_chat_slide_element_bg.className = "slide-bg";
+
+		var HTML_chat_slide_element_control = document.createElement("div");
+			HTML_chat_slide_element_control.className = "slide-control";
+
+
+		HTML_chat_slide_element.appendChild(HTML_chat_slide_element_bg);
+		HTML_chat_slide_element.appendChild(HTML_chat_slide_element_control);
+
+		HTML_chat_slide_wrapper.appendChild(HTML_chat_slide_input);				
+		HTML_chat_slide_wrapper.appendChild(HTML_chat_slide_element);
+
+		HTML_chat_slide_control_wrapper.appendChild(HTML_chat_slide_item);
+		HTML_chat_slide_control_wrapper.appendChild(HTML_chat_slide_wrapper);
+
+		HTML_chat_slide_control.appendChild(HTML_chat_slide_control_wrapper);
+
+		HTML_chat_content_wrapper_inner.appendChild(HTML_chat_slide_control);
+	}
+
 	HTML_chat_dialog_wrapper.appendChild(HTML_chat_content_wrapper);
 
 	return HTML_chat_dialog_wrapper;
@@ -189,10 +266,6 @@ function HTMLcreateGroup(groupId, key, snap, count, totalNum, activeGroupId, Not
 				HTML_chat_group_overview_wrapper.className = "card-wrapper chat js-switch-chat";
 			}	
 		}
-		
-		HTML_chat_group_overview_wrapper.setAttribute("id", "chat-"+key);
-		HTML_chat_group_overview_wrapper.setAttribute("data-order", highestNumber);
-		HTML_chat_group_overview_wrapper.style.order = highestNumber;
 
 	var HTML_chat_group_overview_inner  = document.createElement("div");
 		HTML_chat_group_overview_inner.className = "card";
@@ -241,12 +314,18 @@ function HTMLcreateGroup(groupId, key, snap, count, totalNum, activeGroupId, Not
 		HTML_chat_group_overview_indicator_image.setAttribute("title", "Chat options");
 		HTML_chat_group_overview_indicator_image.setAttribute("alt", "Chat options");
 
+		HTML_chat_group_overview_wrapper.setAttribute("id", "chat-"+key);
+
+		$('#chat-'+groupId).remove();
 		if(NotSeen > 0) {
-			$('#chat-'+groupId).removeAttr("style");
-			HTML_chat_group_overview_indicator.className = "card-indicator show";
+			HTML_chat_group_overview_indicator.className = "card-indicator chat-number-indicator show";
 			HTML_chat_group_overview_indicator_number.appendChild(document.createTextNode(NotSeen));
-			HTML_chat_group_overview_wrapper.style.order = -highestNumber;
-		}	
+		}else {
+
+		}
+
+			HTML_chat_group_overview_wrapper.setAttribute("data-order", parseInt(highestNumber));
+			HTML_chat_group_overview_wrapper.style.order = -parseInt(highestNumber);
 
 	HTML_chat_group_image_wrapper.appendChild(HTML_chat_group_image);
 
@@ -608,16 +687,28 @@ function HTMLcreateListItemControls() {
 		HTML_list_button_item_paste_item_image.setAttribute("src", "/img/clipboard.svg");
 		HTML_list_button_item_paste_item_image.setAttribute("alt", "Paste list");
 
+	var HTML_list_button_item_create_chat = document.createElement("li");
+		HTML_list_button_item_create_chat.className = "icon chat js-create-chat";
+
+	var HTML_list_button_item_create_chat_image = document.createElement("img");
+		HTML_list_button_item_create_chat_image.className = "js-";
+		HTML_list_button_item_create_chat_image.setAttribute("src", "/img/chat-small.svg");
+		HTML_list_button_item_create_chat_image.setAttribute("alt", "Create chat");
+
+
 	//Create buttons
 	HTML_list_button_item_delete_item.appendChild(HTML_list_button_item_delete_item_image);
 	HTML_list_button_item_add_user.appendChild(HTML_list_button_item_add_user_image);
 	HTML_list_button_item_add_item.appendChild(HTML_list_button_item_add_item_image);
 	HTML_list_button_item_paste_items.appendChild(HTML_list_button_item_paste_item_image);
+	HTML_list_button_item_create_chat.appendChild(HTML_list_button_item_create_chat_image);
+
 
 	HTML_list_button_wrapper.appendChild(HTML_list_button_item_delete_item);
 	HTML_list_button_wrapper.appendChild(HTML_list_button_item_add_item);
 	HTML_list_button_wrapper.appendChild(HTML_list_button_item_add_user);
 	HTML_list_button_wrapper.appendChild(HTML_list_button_item_paste_items);
+	HTML_list_button_wrapper.appendChild(HTML_list_button_item_create_chat);
 
 	return	HTML_list_button_wrapper;
 }

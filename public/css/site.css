@@ -6126,6 +6126,28 @@ form ol {
   width: calc(100%);
   height: calc(100%);
 }
+#dialog-chat-wrapper img {
+  margin-bottom: 2.4rem;
+}
+#dialog-chat-wrapper .inner {
+  margin: 2.4rem 0;
+}
+#dialog-chat-wrapper .description {
+  display: block;
+  text-align: center;
+}
+#dialog-chat-wrapper .setting-item {
+  -moz-justify-content: center;
+  -ms-justify-content: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  padding: 0;
+}
+#dialog-chat-wrapper .setting-item img,
+#dialog-chat-wrapper .setting-item .slide-label {
+  display: none;
+}
 .login-spinnerwrapper {
   border-radius: 50%;
   display: block;
@@ -8538,6 +8560,9 @@ form ol {
   top: -0.8rem;
   margin: 0;
 }
+.card .card-indicator.chat-number-indicator.show {
+  position: absolute;
+}
 .card .card-indicator.info {
   display: -webkit-box;
   display: -moz-flex;
@@ -9109,6 +9134,7 @@ form ol {
 .dashboard-wrapper .icon.remove,
 .dashboard-wrapper .icon.add,
 .dashboard-wrapper .icon.paste,
+.dashboard-wrapper .icon.chat,
 .dashboard-wrapper .icon.add-user {
   display: block;
   width: 2.9rem;
@@ -9118,6 +9144,7 @@ form ol {
 .dashboard-wrapper .icon.remove img,
 .dashboard-wrapper .icon.add img,
 .dashboard-wrapper .icon.paste img,
+.dashboard-wrapper .icon.chat img,
 .dashboard-wrapper .icon.add-user img {
   display: block;
   margin: auto;

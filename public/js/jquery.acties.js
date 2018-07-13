@@ -243,6 +243,7 @@ $(document).on('click', "#js-paste-list, #js-paste-list-items" ,function(e) {
 
 $(document).on('click', '.js-close-item-dialog',function(e) {
 	$(this).closest('.js-item-dialog').removeClass('active');
+	$("#firebase-chat-attendees").show();
 });
 
 $(document).on('input', '#firebase-message-input',function(e) {
@@ -255,6 +256,18 @@ $(document).on('input', '#firebase-message-input',function(e) {
 	}
 });
 
+// Create a new chat based on a list
+$(document).on("click",".js-create-chat", function() {
+	var listId;
+
+	if(typeof $(this).parent().parent().attr('ref') != 'undefined') {
+		listId = $(this).parent().parent().attr('ref');
+	}
+	//Add the content for the dialog
+	ShaelynChat.createNewChat(listId);
+});
+
+
 $(document).on("click",".js-chat-options-back", function(e) {
 	e.preventDefault();
 	$('#firebase-chat-options').removeClass('show');
@@ -264,15 +277,11 @@ $(document).on("click",".js-chat-options-back", function(e) {
 });
 
 // OPEN the OPTIONS CHAT dialog
-$(document).on("click",".js-item-chat-dialog", function(e) {
-	e.preventDefault();
+$(document).on("click",".js-item-chat-dialog", function() {
 	var type = $(this).attr('data-type');
 
-	if(type == 'chat-leave') {
-		ShaelynChat.openChatOptionsDialog(type);
-	}else if(type == 'chat-leave') {
-		ShaelynChat.openChatOptionsDialog(type);
-	}
+	//Add the content for the dialog
+	ShaelynChat.openChatOptionsDialog(type);
 
   	//Open dialog
   	$('#dialog-chat-wrapper').addClass('active');
@@ -284,12 +293,8 @@ $(document).on("click",".js-switch-chat",function(){
 	var chatGroupId = $(this).attr('id').replace('chat-', ''),
 		old_reference = $(this).parent().find('.active').attr('id').replace('chat-', ''),
 		new_reference = $(this).attr('id').replace('chat-', '');
-	
-console.log( "clicked: " + $(event.target).attr('class') );
 
 	if($(event.target).attr('class') == 'indicator-image') {
-		console.log('test');
-
 		$('#firebase-chat-options').addClass('show');
 
 		var chat_title = $(this).parent().find('.card-title').text(),
