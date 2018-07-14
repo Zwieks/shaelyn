@@ -251,7 +251,7 @@ function HTMLcreateChatDialog(type) {
 	return HTML_chat_dialog_wrapper;
 }
 
-function HTMLcreateGroup(groupId, key, snap, count, totalNum, activeGroupId, NotSeen, highestNumber) {
+function HTMLcreateGroup(key, snap, count, totalNum, activeGroupId, NotSeen, highestNumber) {
 	var HTML_chat_group_overview_wrapper = document.createElement("div");
 		if(activeGroupId == false) {
 			if(count != totalNum) {

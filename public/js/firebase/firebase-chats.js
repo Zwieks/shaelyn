@@ -110,15 +110,15 @@ ShaelynChat.prototype.loadGroups = function(groupId, groupsnap, count, totalNum,
 
     chatAttendeesRef.once('value', snapchat => {
       //Put the HTML in the container
-      var group = HTMLcreateGroup(groupId, groupsnap.key, groupsnap.val(), count, totalNum, activeGroupId, snapchat.val().notseen);
+      var group = HTMLcreateGroup(groupsnap.key, groupsnap.val(), count, totalNum, activeGroupId, snapchat.val().notseen);
       $.fn.updateOrPrependHTML("chat-"+groupId, group, this.chat_list_wrapper);
     }).then(userData => {
-
 
     });
   }.bind(this);
 
   var setChatGroupChanged = function(data) {
+    console.log('Update');
     var date = new Date($.now());
 
     document.getElementById('chat-'+groupId).removeAttribute("style");
@@ -742,6 +742,7 @@ ShaelynChat.prototype.createNewChat = function(listId) {
     const usersChatRef = ref.child('UsersChat');
     const chatAttendeesRef = ref.child('ChatAttendees');
     const listsRef = ref.child('lists').child(listId);
+    const userId = firebase.auth().currentUser.uid;
     let listData = '';
 
   //Check the origion
@@ -754,6 +755,7 @@ ShaelynChat.prototype.createNewChat = function(listId) {
           chat: true
         })
 
+        // Create the new chat
         let timestamp = firebase.database.ServerValue.TIMESTAMP;
         const promiseChat = listChatsRef.push({
           chatOwner: firebase.auth().currentUser.uid,
@@ -764,35 +766,75 @@ ShaelynChat.prototype.createNewChat = function(listId) {
           type: 'list',
           userCount: snap.val().userCount
         })
-        const key = promiseChat.key
+        const chatKey = promiseChat.key
 
         promiseChat.then(function() {
-          const postRef = listChatsRef.child(key)
+          const postRef = listChatsRef.child(chatKey)
           postRef.once('value').then(function(snapshot) {
             timestamp = snapshot.val().order * -1
             postRef.update({ 
               order: timestamp
             })
+
+            //REMOVE the active class on the child elements becouse we need the new item to be active  
+            $("#firebase-chatgroups").find('.active').removeClass('active');
+
+            usersChatRef.child(userId).once('value', usersChatSnapRef => {
+            }).then(UserChatRef => {
+
+              //SET THE HTML OF THE GROUP ITEM HERE
+              var group = HTMLcreateGroup(chatKey, snapshot.val(), snap.numChildren(), snap.numChildren()-1, chatKey, 0);
+              $.fn.updateOrPrependHTML("chat-"+chatKey, group, ShaelynChat.chat_list_wrapper);
+            });
           });
+
         }).then(listDataSnap => {
           //CREATE USER CHATS
           listAttendeesRef.once('value', snap => {
+            var count = $("#firebase-chatgroups .js-switch-chat").length;
+            //Create the GROUPS
+            // console.log(chatKey);
+            // console.log(snapshot.val());
+            // console.log(count+1);
+            // console.log(count+1);
+            // console.log(chatKey);
+            // ShaelynChat.loadGroups(chatKey, snapshot, count+1, count+1, chatKey);
+
+            //Loop through all the list attendees
             snap.forEach(function(childSnapshot) {
-              const postChatAttendees = chatAttendeesRef.child(key).child(childSnapshot.key);
-              postChatAttendees.update({
+
+              //Set the LIST ATTENDEE ID (userid) in the CHATATTENDEES table
+              chatAttendeesRef.child(chatKey).child(childSnapshot.key).set({
                 notseen: 0,
                 time: firebase.database.ServerValue.TIMESTAMP
               });
 
-              const postRef = usersChatRef.child(childSnapshot.key).child(key);
-              postRef.update({
+              //Put the LIST ATTENDEE data also in the USERSCHAT table
+              //THIS TRIGGERING A EVENT (updateChatGroupOrder)!
+              const postRef = usersChatRef.child(childSnapshot.key).child(chatKey);
+              postRef.set({
                 seen: false,
                 time: firebase.database.ServerValue.TIMESTAMP
               });
-              //Put the attendee in the CHATS Pivot table
             });  
           }).then(listDataSnap => {
-            ShaelynChat.init();
+            listChatsRef.once('value', snap => {
+
+            }).then(listDataSnap => {
+
+            });  
+
+            //Create the Chat windows per Group for the messages
+            //ShaelynChat.loadChatAttendees(groupsnap.key, count, snap.numChildren());
+
+            //Create the GROUPS
+            //ShaelynChat.loadGroups(chatKey, listDataSnap, count, listDataSnap.numChildren(), chatKey);
+
+            //Create the Chat windows per Group for the messages
+           // ShaelynChat.loadChatWindows(groupsnap.key, groupsnap, count, snap.numChildren());
+
+            //Create the messages and put them in the corresponding group
+            //ShaelynChat.loadMessages(groupsnap.key, groupsnap);
           }); 
         }); 
       }else {
