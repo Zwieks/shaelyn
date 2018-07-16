@@ -87,7 +87,12 @@ function HTMLcreateChatMessage(groupId, listId, userid, snap, userData) {
 	var HTML_chat_meta = document.createElement("span");
 		HTML_chat_meta.className = "message-time";
 		HTML_chat_meta.appendChild(document.createTextNode(hours+':'+minutes));
+
+	if(userData != "") {
 		HTML_chat_meta.style.color = userData.val().color;
+	}else {
+		HTML_chat_meta.style.color = i18n.firebase.chat.firstmessage.botcolor;
+	}
 
 	if(timeCheck == 1) {
 		HTML_chat_date.appendChild(document.createTextNode(i18n.firebase.chat.yesterday));
@@ -118,8 +123,14 @@ function HTMLcreateChatMessage(groupId, listId, userid, snap, userData) {
 
 	var HTML_chat_message_userinfo = document.createElement("span");
 		HTML_chat_message_userinfo.className = "chat-message-userinfo";
+
+	if(userData != "") {
 		HTML_chat_message_userinfo.style.color = userData.val().color;
 		HTML_chat_message_userinfo.appendChild(document.createTextNode(userData.val().name));
+	}else {
+		HTML_chat_message_userinfo.style.color = i18n.firebase.chat.firstmessage.botcolor;
+		HTML_chat_message_userinfo.appendChild(document.createTextNode("Shaelyn Bot"));
+	}
 
 	var HTML_chat_window = document.createElement("div");
 		HTML_chat_window.className = "message-wrapper";	

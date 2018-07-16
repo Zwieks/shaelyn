@@ -18,6 +18,11 @@ return [
 
         'dialog' => [
             'notification' => 'If you don’t want a notification of this chat, just click on the button below',
+        ],
+
+        'firstmessage' => [
+            'bottext' => 'Hello! Welcome to this awesome chat based on your list! Enjoy!',
+            'botcolor' => '#8240f7',
         ]
     ]
 ];
