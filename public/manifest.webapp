@@ -1,3 +1,18 @@
+POST /fcm/send HTTP/1.1
+Host: fcm.googleapis.com
+Content-Type: application/json
+Authorization: key=AAAAK9INryE:APA91bG0gnDfPlrPoOpcA0yWObVL8jbKNRofIxrf_FLwgyc0KeK8VkfzQasmB_hwlhcdARJGd_-Udclaz6MNCzU_490zWa6EAfcykWuSFCtP89nP6k6umHquAdMOHVZj6WOu7jvnpuHW
+
+{
+  "notification": {
+    "title": "New chat message!",
+    "body": "There is a new message in FriendlyChat",
+    "icon": "/images/profile_placeholder.png",
+    "click_action": "http://localhost:5000"
+  },
+  "to":"YOUR_DEVICE_TOKEN"
+}
+
 {
   "version": "1.0.0",
   "name": "Shaelyn Chat",

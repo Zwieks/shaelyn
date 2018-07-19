@@ -1,4 +1,7 @@
 <!-- {{$debugpath}} -->
+
+<script src="https://www.gstatic.com/firebasejs/4.12.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/4.12.1/firebase-messaging.js"></script>
 <script src="https://www.gstatic.com/firebasejs/4.12.1/firebase.js"></script>
 <script type="text/javascript" src="{{ URL::asset('js/jquery.browser.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/jquery.viewport.js') }}"></script>
@@ -27,8 +30,6 @@
 
 <!-- FIREBASE DOM FUNCTIONALITES -->
 <script src="/js/lang.js"></script>
-<script type="text/javascript" src="{{ URL::asset('js/firebase/firebase-lists.js') }}"></script>
-<script type="text/javascript" src="{{ URL::asset('js/firebase/firebase-chats.js') }}"></script>
 
 @hasSection('headeranimation')
 	@yield('headeranimation')

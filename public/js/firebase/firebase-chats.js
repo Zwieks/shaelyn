@@ -65,7 +65,12 @@ ShaelynChat.prototype.initFirebase = function() {
   	this.storage = firebase.storage();
 	// Initiates Firebase auth and listen to auth state changes.
 	this.auth.onAuthStateChanged(this.onAuthStateChanged.bind(this));
-};
+}; 
+
+ShaelynChat.prototype.playSound = function(){
+  var filename = '/sounds/notify'; 
+  document.getElementById("firebase-chat-sounds").innerHTML='<audio autoplay="autoplay"><source src="' + filename + '.mp3" type="audio/mpeg" /><source src="' + filename + '.ogg" type="audio/ogg" /><embed hidden="true" autostart="true" loop="false" src="' + filename +'.mp3" /></audio>';
+}
 
 //Create Chat Windows for the group or single chat
 ShaelynChat.prototype.loadChatWindows = function(groupId, groupsnap, count, totalNum) {
@@ -102,11 +107,11 @@ ShaelynChat.prototype.loadGroups = function(groupId, groupsnap, count, totalNum,
   //const chatAttendeeRef = chatAttendeesRef.child(userId);
   var setChatGroup = function(data) {
     ref.child('Users').child(data.key).once('value', usersnap => {
-      var friend = HTMLcreateListFriend(groupId, usersnap);
+      var friend = HTMLcreateListFriend("chat", groupId, usersnap);
 
       var friends_list = document.getElementById('chatfriends-'+groupId);
 
-      $.fn.updateOrPrependHTML(groupId+"friend-"+usersnap.key, friend, friends_list);     
+      $.fn.updateOrPrependHTML(groupId+"chatfriend-"+usersnap.key, friend, friends_list);     
     });            
 
     chatAttendeesRef.once('value', snapchat => {
@@ -118,6 +123,7 @@ ShaelynChat.prototype.loadGroups = function(groupId, groupsnap, count, totalNum,
     });
   }.bind(this);
 
+  //TRIGGERD WHEN CHATATTENDEES --> GROUPID IS TRIGGERED
   var setChatGroupChanged = function(data) {
     var date = new Date($.now());
 
@@ -126,69 +132,23 @@ ShaelynChat.prototype.loadGroups = function(groupId, groupsnap, count, totalNum,
     document.getElementById('chat-'+groupId).style.order = -date.getTime()/1000|0;
     document.getElementById('chat-'+groupId).setAttribute('data-order', date.getTime()/1000|0);
 
+    if (document.hidden) {
+        ShaelynChat.playSound();
+    }
+
     if(!$('#chat-'+groupId).hasClass('active')) {
-      console.log('aaa');
       $('#chat-'+groupId).find('.card-indicator-number').text(data.val().notseen);
       $('#chat-'+groupId).find('.chat-number-indicator').addClass('show');
+            console.log(groupId);
+            ShaelynChat.playSound();
     }else {
       ShaelynChat.removeUnSeenMessages(groupId);
     }
-
-  // Update user last active group and remove the old one,
-  // What this does is setting the timestamp or an active string
-  // When the user leaves a group it is setting a timestamp else the active string
-  //ShaelynChat.seenMessages(old_reference, new_reference);
-
-    // if(data.key != userId) {
-    //   console.log(data.val());
-    // }
-    //console.log('Active group: '+groupId);
-    //ShaelynChat.updateUserChatTimestamp(groupId);
-    //var group = HTMLcreateGroup(groupId, groupsnap.key, groupsnap.val(), count, totalNum, activeGroupId, snapchat.val().notseen, parseInt(highestNumber));
-    //$.fn.updateOrPrependHTML("chat-"+groupId, group, this.chat_list_wrapper);
-    //When an field under CHATATTENDEES is changed this will be triggered
-    //E.G. Resetting the unseen to 0 (removeUnSeenMessages function) AND Update the active table (seenMessages function)
-        //TODO SET THE ORDER IF THE GROUPS!!!
-
-    // if($('#firebase-chatgroups').find('.active').length != 0){
-    //   // Get the user active group
-    //   var activeGroupId = $('#firebase-chatgroups').find('.active').attr('id').replace('chat-', '');
-      
-    //   const userId = firebase.auth().currentUser.uid;
-
-    //   // Reference to the /UserChat/ database path.
-    //   const chatsRef = this.database.ref('UsersChat').child(userId).child(groupId);
-
-    //   const promise = chatsRef.update({
-    //     time: firebase.database.ServerValue.TIMESTAMP
-    //   })
-
-    //   promise.then(function() {
-    //         this.orderChatGroups();
-    //   }.bind(this)).catch(function(error) {
-    //     console.error('Error writing new message to Firebase Database', error);
-    //   });  
-    // }
   }.bind(this);
 
   chatAttendeesRef.on('child_added', setChatGroup);
   chatAttendeesRef.on('child_changed', setChatGroupChanged);
 };
-
-
-// Loads chat messages history and listens for upcoming ones.
-// ShaelynChat.prototype.orderChatGroups = function() {
-//   const userId = firebase.auth().currentUser.uid;
-
-//   // Reference to the /UserChat/ database path.
-//   const chatsRef = this.database.ref('UsersChat').child(userId);
-
-//   chatsRef.orderByChild('time').once('value', groupsnap => {
-//     console.log(groupsnap.val());
-//   });
-// };
-
-
 
 ShaelynChat.prototype.getChatOptionsTitle = function(chatTitle, image) {
   //$('#js-chat-title').text(chatTitle);
@@ -447,7 +407,6 @@ ShaelynChat.prototype.saveMessage = function(e) {
         message: message,
         name: name,
         order: timestamp,
-        text: message,
         time: firebase.database.ServerValue.TIMESTAMP,
         type: 'text'
       })
@@ -674,14 +633,24 @@ ShaelynChat.prototype.onAuthStateChanged = function(user) {
 //   return false;
 // };
 
+//TODO: Set device token in the ChatAttendees
+
 // Saves the messaging device token to the datastore.
 ShaelynChat.prototype.saveMessagingDeviceToken = function() {
   firebase.messaging().getToken().then(function(currentToken) {
     if (currentToken) {
-      console.log('Got FCM device token:', currentToken);
-      // Saving the Device Token to the datastore.
-      firebase.database().ref('/fcmTokens').child(currentToken)
-          .set(firebase.auth().currentUser.uid);
+      const userId = firebase.auth().currentUser.uid;
+      const ref = firebase.database().ref();
+      const chatAttendeesRef = ref.child('ChatAttendees');
+      const usersChatsRef = ref.child('UsersChat').child(userId);
+
+      usersChatsRef.once('value', userChats => {
+        userChats.forEach(function(chats) {
+          firebase.database().ref('ChatAttendees').child(chats.key).child(userId).update({
+            token: currentToken
+          });
+        });
+      });
     } else {
       // Need to request permissions to show notifications.
       this.requestNotificationsPermissions();
@@ -780,7 +749,7 @@ ShaelynChat.prototype.createNewChat = function(listId) {
 
         // Create the new chat
         let timestamp = firebase.database.ServerValue.TIMESTAMP;
-        const promiseChat = listChatsRef.push({
+        const promiseChat = listChatsRef.child(listId).update({
           chatOwner: firebase.auth().currentUser.uid,
           groupImage: "",
           name: snap.val().name,
@@ -789,7 +758,7 @@ ShaelynChat.prototype.createNewChat = function(listId) {
           type: 'list',
           userCount: snap.val().userCount
         })
-        const chatKey = promiseChat.key
+        const chatKey = listId
 
         promiseChat.then(function() {
           const postRef = listChatsRef.child(chatKey)
@@ -826,6 +795,8 @@ ShaelynChat.prototype.createNewChat = function(listId) {
 
                   //Set the LIST ATTENDEE ID (userid) in the CHATATTENDEES table
                   chatAttendeesRef.child(chatKey).child(childSnapshot.key).set({
+                    token: '',
+                    notification: true,
                     notseen: 0,
                     time: firebase.database.ServerValue.TIMESTAMP
                   });
@@ -839,21 +810,37 @@ ShaelynChat.prototype.createNewChat = function(listId) {
                   });
 
                   ref.child('Users').child(childSnapshot.key).once('value', usersnap => {
-                    var friend = HTMLcreateListFriend(chatKey, usersnap);
+                    var friend = HTMLcreateListFriend("chat", chatKey, usersnap);
                     var friends_list = document.getElementById('chatfriends-'+chatKey);
-                    $.fn.updateOrPrependHTML(chatKey+"friend-"+childSnapshot.key, friend, friends_list);   
+                    $.fn.updateOrPrependHTML(chatKey+"chatfriend-"+childSnapshot.key, friend, friends_list);   
                   });
                 });  
               }).then(firsChatSnap =>{
                 //Create the messages and put them in the corresponding group
                 ShaelynChat.loadMessages(chatKey, "");
-
+                //Save the message
                 ShaelynChat.saveMessage();
               });
             });
           }); 
         }); 
-      };
+      }else {
+        //REMOVE the active class on the child elements becouse we need the new item to be active  
+        $("#firebase-chatgroups").find('.active').removeClass('active');
+        $("#firebase-chat-meta").find('.active').removeClass('active');
+        $('#firebase-chat-conversations').find('.chat-window').removeClass("active");
+        $('#firebase-chat-attendees').find('.detail-members').removeClass("active");
+
+        $('#chat-'+listId).addClass('active');
+        $('#chat-meta-'+listId).addClass('active');
+        $('#chatfriends-'+listId).addClass('active');
+        $('#chat-window-'+listId).addClass('active');
+
+        setTimeout(function(){
+          $("#chat-window-"+listId).mCustomScrollbar("update");
+          $("#chat-window-"+listId).mCustomScrollbar("scrollTo", "bottom");
+        }, 500);
+      }
     });
   }; 
 }; 

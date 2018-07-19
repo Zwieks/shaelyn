@@ -598,10 +598,10 @@ function HTMLcreateFriendsList(type, listId, count, totalNum) {
 	return HTML_friendslist;
 }
 
-function HTMLcreateListFriend(listId, snap) {
+function HTMLcreateListFriend(type, listId, snap) {
 	var HTML_friend_wrapper = document.createElement("li");
 		HTML_friend_wrapper.className = "member";
-		HTML_friend_wrapper.setAttribute("id", listId+"friend-"+snap.key);
+		HTML_friend_wrapper.setAttribute("id", listId+type+"friend-"+snap.key);
 
 	if(snap.val().image != 'default') {
 		var HTML_friend_image = document.createElement("img");

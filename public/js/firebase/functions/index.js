@@ -141,49 +141,149 @@ exports.sendNotification = functions.database.ref('/notifications/{user_id}/{not
 });
 
 // Sends a notifications to all users when a new message is posted.
-exports.sendChatNotifications = functions.database.ref('/ChatMessages/{chatId}/{messageId}').onCreate(snapshot => {
+exports.sendNotifications = functions.database.ref('/ChatMessages/{groupId}/{messageId}').onCreate((snapshot, context) => {
+
+	const userId = snapshot.val().from;
+	const groupId = context.params.groupId;
+	const text = snapshot.val().message;
+	let tokens = []; // All Device tokens to send a notification to.
+	const payload = {
+		notification: {
+  			title: `${snapshot.val().name} posted ${text ? 'a message' : 'an image'}`,
+  			body: text ? (text.length <= 100 ? text : text.substring(0, 97) + '...') : '',
+  			click_action: `https://shaelyn.io`,
+		}
+	};
+
+	//Get the user info
+	return admin.database().ref('Users').child(userId).once('value').then((userInfo) => {
+		payload.notification.icon = userInfo.val().thumb_image || '/img/logo-3d.png'
+
+		return null;
+	}).then(() => {
+		//Get the chat attendees
+		return admin.database().ref(`/ChatAttendees/${groupId}`).once('value').then((chatAttendeesResult) => {
+			chatAttendeesResult.forEach((result, index) => {
+			   	const error = result.error;
+			   	if (error) {
+			     	console.error('Failure creating chat attendees and tokens match');
+			   	}else {
+			   		if(result.val().token !== "" && result.val().notification === true && userId !== result.key ) {
+			   			tokens.push(result.val().token);
+			   		}
+			   	}
+			});
+			// Send notifications to all tokens.
+			if (tokens.length) {
+	      		return admin.messaging().sendToDevice(tokens, payload);
+	      	}else {
+	      		return null;
+	      	}
+		}).then((response) => {
+			return cleanupTokens(response, groupId, tokens);
+		}).then(() => {
+			console.log('Notifications have been sent and tokens cleaned up.');
+			return null;
+		});
+	});	
+
+
   	// Notification details.
-  	const text = snapshot.val().text;
-  	const payload = {
-    	notification: {
-      		title: `${snapshot.val().name} posted ${text ? 'a message' : 'an image'}`,
-      		body: text ? (text.length <= 100 ? text : text.substring(0, 97) + '...') : '',
-      		icon: snapshot.val().photoUrl || '/images/profile_placeholder.png',
-      		click_action: `https://${process.env.GCLOUD_PROJECT}.firebaseapp.com`,
-    	}
-  	};
+  	// const text = snapshot.val().message;
+  	// const payload = {
+   //  	notification: {
+   //    		title: `${snapshot.val().name} posted ${text ? 'a message' : 'an image'}`,
+   //    		body: text ? (text.length <= 100 ? text : text.substring(0, 97) + '...') : '',
+	  // 		//icon: snapshot.val().photoUrl || '/images/profile_placeholder.png',
+   //    		icon: '/img/logo-3d.png',
+   //    		click_action: `https://shaelyn.io`,
+   //  	}
+  	// };
 
-  	let tokens = []; // All Device tokens to send a notification to.
-  	// Get the list of device tokens.
-  	return admin.database().ref('fcmTokens').once('value').then(allTokens => {
-    	if (allTokens.val()) {
-      		// Listing all tokens.
-      		tokens = Object.keys(allTokens.val());
+  	// let tokens = []; // All Device tokens to send a notification to.
+  	// // Get the list of device tokens.
+  	// return admin.database().ref('fcmTokens').once('value').then((allTokens) => {
+   //  	if (allTokens.val()) {
+   //    		// Listing all tokens.
+   //    		tokens = Object.keys(allTokens.val());
 
-      		// Send notifications to all tokens.
-      		return admin.messaging().sendToDevice(tokens, payload);
-    	}
-    	return {results: []};
-  	}).then(response => {
-    	// For each notification we check if there was an error.
-    	const tokensToRemove = {};
-    	response.results.forEach((result, index) => {
-      		const error = result.error;
-      		if (error) {
-        		console.error('Failure sending notification to', tokens[index], error);
-        		// Cleanup the tokens who are not registered anymore.
-        		if (error.code === 'messaging/invalid-registration-token' ||
-            		error.code === 'messaging/registration-token-not-registered') {
-          				tokensToRemove[`/fcmTokens/${tokens[index]}`] = null;
-        		}
-      		}
-    	});
-    	return admin.database().ref().update(tokensToRemove);
-  	}).then(() => {
-    	console.log('Notifications have been sent and tokens cleaned up.');
-    	return null;
-  	});
+   //    		// Send notifications to all tokens.
+   //    		return admin.messaging().sendToDevice(tokens, payload);
+   //  	}
+   //  	return {results: []};
+  	// }).then((response) => {
+   //  	return cleanupTokens(response, tokens);
+  	// }).then(() => {
+   //  	console.log('Notifications have been sent and tokens cleaned up.');
+   //  	return null;
+  	// });
 });
+
+// Cleans up the tokens that are no longer valid.
+function cleanupTokens(response, groupId, tokens) {
+	// For each notification we check if there was an error.
+	const tokensToRemove = {};
+	response.results.forEach((result, index) => {
+		const error = result.error;
+		if (error) {
+	 		console.error('Failure sending notification to', tokens[index], error);
+	 		//Cleanup the tokens who are not registered anymore.
+			if (error.code === 'messaging/invalid-registration-token' || error.code === 'messaging/registration-token-not-registered') {
+				//tokensToRemove[];
+				//tokensToRemove[`/ChatAttendees/${groupId}/${tokens[index]}`] = null;
+			}
+		}
+	});
+	return null;
+	//return admin.database().ref().update(tokensToRemove);
+}
+
+// Sends a notifications to all users when a new message is posted.
+// exports.sendNotifications = functions.database.ref('/ChatMessages/{chatId}/{messageId}').onCreate(snapshot => {
+//   	// Notification details.
+//   	const text = snapshot.val().message;
+//   	const payload = {
+//     	notification: {
+//       		title: `${snapshot.val().name} posted ${text ? 'a message' : 'an image'}`,
+//       		body: text ? (text.length <= 100 ? text : text.substring(0, 97) + '...') : '',
+//       		//icon: snapshot.val().photoUrl || '/images/profile_placeholder.png',
+//       		icon: '/img/logo-3d.png',
+//       		click_action: `https://${process.env.GCLOUD_PROJECT}.firebaseapp.com`,
+//     	}
+//   	};
+
+//   	let tokens = []; // All Device tokens to send a notification to.
+//   	// Get the list of device tokens.
+//   	return admin.database().ref('fcmTokens').once('value').then(allTokens => {
+//     	if (allTokens.val()) {
+//       		// Listing all tokens.
+//       		tokens = Object.keys(allTokens.val());
+
+//       		// Send notifications to all tokens.
+//       		return admin.messaging().sendToDevice(tokens, payload);
+//     	}
+//     	return {results: []};
+//   	}).then(response => {
+//     	// For each notification we check if there was an error.
+//     	const tokensToRemove = {};
+//     	response.results.forEach((result, index) => {
+//       		const error = result.error;
+//       		if (error) {
+//         		console.error('Failure sending notification to', tokens[index], error);
+//         		// Cleanup the tokens who are not registered anymore.
+//         		if (error.code === 'messaging/invalid-registration-token' ||
+//             		error.code === 'messaging/registration-token-not-registered') {
+//           				tokensToRemove[`/fcmTokens/${tokens[index]}`] = null;
+//         		}
+//       		}
+//     	});
+//     	return admin.database().ref().update(tokensToRemove);
+//   	}).then(() => {
+//     	console.log('Notifications have been sent and tokens cleaned up.');
+//     	return null;
+//   	});
+// });
+
 
 // Adds a message that welcomes new users into the chat.
 exports.addWelcomeMessages = functions.auth.user().onCreate(user => {
@@ -245,7 +345,6 @@ function blurImage(filePath, bucketName, metadata) {
   const groupId = filePath.split(path.sep)[1];
   const messageId = filePath.split(path.sep)[2];
   const bucket = gcs.bucket(bucketName);
-  console.log('Blurfunctie');
   // Download file from bucket.
   return bucket.file(filePath).download({destination: tempLocalFile}).then(() => {
     console.log('Image has been downloaded to', tempLocalFile);

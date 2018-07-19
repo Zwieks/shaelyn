@@ -68,4 +68,5 @@
 			</div>
 		</div>		
 	</div>
+	<div id="firebase-chat-sounds"></div>
 </div>

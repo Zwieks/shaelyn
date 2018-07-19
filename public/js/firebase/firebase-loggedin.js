@@ -10,6 +10,19 @@
   	};
 
   	firebase.initializeApp(config);
+  	const messaging = firebase.messaging();
+
+  	messaging.requestPermission()
+  	.then(function() {
+  		console.log('Have permission');
+  		return messaging.getToken();
+  	})
+  	.then(function(token) {
+  		console.log(token);
+  	})
+  	.catch(function(err) {
+  		console.log('Error Occured');
+  	});
 
   	//Set the base containers
   	const username = document.getElementById('firebase-username');
@@ -44,81 +57,6 @@
   	const userChatsRef = ref.child('UsersChat'); 	
   	const listItemsRef = ref.child('listItems');
   	const friendsRef = ref.child('Friends');
-
-  	function getChatMessages(listId, cb, chat_window) {
-  		var chat_window = document.getElementById(chat_window),
-  			parent = document.getElementById(chat_window.childNodes[0].id+'_container');
-
-		if (parent == null) {
-			parent = chat_window;
-		}
-
-  		chatMessagesRef.child(listId).orderByChild('order').limitToLast(50).on('child_added', snap => {
-  			let userRef = usersRef.child(snap.val().from);
-  			userRef.on('value', snapuser => {
-				if(snapuser.val() != null) {
-					var message = HTMLcreateChatMessage(listId, snapuser, snap);
-
-		  			//Put the HTML in the container
-					$.fn.updateOrPrependHTML("chat-message-"+snap.key, message, parent);					
-				}
-  			});
-  		});
-  	}
-
-  	function getChatAttendees(listId, cb) {
-  		chatAttendeesRef.child(listId).on('child_added', snap => {
-  			let userRef = usersRef.child(snap.key);
-
-  			userRef.on('value', snap => {
-  				if(snap.val() != null) {
-	  				//Renders the friends that are invited for the specific list
-	  				var friend = HTMLcreateListFriend(listId, snap);
-					//Put the HTML in the container
-					var friends_list = document.getElementById('friends-'+listId);
-					//console.log(snap.val());
-					//$.fn.updateOrPrependHTML(listId+"friend-"+snap.key, friend, friends_list);
-				}	
-  			});
-  		});
-
-  		listAttendeesRef.on('child_removed', snap => {
-  			var removed_list = snap.key;
-  			Object.keys(snap.val()).forEach(function(key, index) {
-  				if(listId == removed_list){
-	  				let userListRef = userListsRef.child(key+'/'+listId);
-	  				userListRef.remove();
-  				}
-  			});	
-  		});
-  	}
-
-  	function getChatOverviewItem(snap) {
-  		//Check if the chat is a single or a group
-  		if(snap.type != 'group') {
-  			let userRef = chatAttendeesRef.child(snap.key);
-
-  			userRef.on('value', snapuser => {
-	  			snapuser.forEach(function(childSnapshot) {
-	  				if(childSnapshot.key != firebase.auth().currentUser.uid) {
-	  					let userRef = usersRef.child(childSnapshot.key);
-
-			  			userRef.on('value', snap => {
-			  				//Renders the friends that are invited for the specific list
-			  				var friend = HTMLcreateFriend(snap, 'chat-');
-							//Put the HTML in the container
-							$.fn.updateOrPrependHTML("chat-userfriend-"+snap.key, friend, chat_list);
-			  			});	  					
-	  				}
-  				});
-  			});
-  		}else {
-			var group = HTMLcreateGroup(snap);
-			//Put the HTML in the container
-  		}	
-
-  		$.fn.updateOrPrependHTML("chat-"+snap.key, group, chat_list);
-  	}
 
   	function searchUsers(search) {
   		usersRef
@@ -313,11 +251,11 @@
   			userRef.on('value', snap => {
   				if(snap.val() != null) {
 	  				//Renders the friends that are invited for the specific list
-	  				var friend = HTMLcreateListFriend(listId, snap);
+	  				var friend = HTMLcreateListFriend("list", listId, snap);
 					//Put the HTML in the container
 					var friends_list = document.getElementById('friends-'+listId);
 
-					$.fn.updateOrPrependHTML(listId+"friend-"+snap.key, friend, friends_list);
+					$.fn.updateOrPrependHTML(listId+"listfriend-"+snap.key, friend, friends_list);
 				}	
   			});
   		});
@@ -502,8 +440,7 @@
 		if(document.getElementById(id) != null) {
 			var update_item_list = document.getElementById(id);
 				update_item_list.innerHTML = HTML_object.innerHTML;
-		}else if($('#firebase-chat-conversations').hasClass('loaded') &&
-				id.toLowerCase().indexOf("chat-message-") >= 0){
+		}else if($('#firebase-chat-conversations').hasClass('loaded') && id.toLowerCase().indexOf("chat-message-") >= 0){
 			parent.append(HTML_object);
 		}else {
 			parent.prepend(HTML_object);
