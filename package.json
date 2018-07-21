@@ -18,7 +18,8 @@
     "less": "^2.7.3",
     "less-loader": "^4.0.5",
     "lodash": "^4.17.4",
-    "vue": "^2.1.10"
+    "vue": "^2.1.10",
+    "vue-template-compiler": "^2.5.16"
   },
   "dependencies": {
     "@google-cloud/storage": "^1.5.1",

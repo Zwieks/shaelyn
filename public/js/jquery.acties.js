@@ -279,15 +279,29 @@ $(document).on("click",".js-chat-options-back", function(e) {
 // OPEN the OPTIONS CHAT dialog
 $(document).on("click",".js-item-chat-dialog", function() {
 	var type = $(this).attr('data-type');
+	var active_groupId = $('#firebase-chat-conversations .active').attr('id').replace('chat-window-', '');
 
 	//Add the content for the dialog
-	ShaelynChat.openChatOptionsDialog(type);
+	ShaelynChat.openChatOptionsDialog(type, active_groupId);
 
   	//Open dialog
   	$('#dialog-chat-wrapper').addClass('active');
 
   	$("#firebase-chat-attendees").hide();
 });
+
+$(document).on("change",".js-chat-setting",function(){
+	var value = false;
+
+	if ($(this).is(":checked"))
+	{
+	  value = true;
+	}
+
+	if(typeof(value) === "boolean"){
+		ShaelynChat.updateChatSetting('notification', value);
+	}
+});	
 
 $(document).on("click",".js-switch-chat",function(){
 	var chatGroupId = $(this).attr('id').replace('chat-', ''),

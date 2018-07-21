@@ -6059,6 +6059,10 @@ form ol {
   transition-delay: 0.5s;
   top: 0;
 }
+#paste-wrapper .dialog-settings,
+#dialog-chat-wrapper .dialog-settings {
+  height: 100%;
+}
 #paste-wrapper .close-paste,
 #dialog-chat-wrapper .close-paste,
 #paste-wrapper .close-dialog,

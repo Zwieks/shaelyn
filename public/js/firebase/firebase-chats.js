@@ -67,9 +67,16 @@ ShaelynChat.prototype.initFirebase = function() {
 	this.auth.onAuthStateChanged(this.onAuthStateChanged.bind(this));
 }; 
 
-ShaelynChat.prototype.playSound = function(){
-  var filename = '/sounds/notify'; 
-  document.getElementById("firebase-chat-sounds").innerHTML='<audio autoplay="autoplay"><source src="' + filename + '.mp3" type="audio/mpeg" /><source src="' + filename + '.ogg" type="audio/ogg" /><embed hidden="true" autostart="true" loop="false" src="' + filename +'.mp3" /></audio>';
+ShaelynChat.prototype.playSound = function(groupId){
+  const userId = firebase.auth().currentUser.uid;
+  const ref = firebase.database().ref();
+  const chatAttendeesRef = ref.child('ChatAttendees').child(groupId).child(userId);
+  chatAttendeesRef.once('value', snap => {
+    if(snap.val().notification == true) {
+      var filename = '/sounds/notify'; 
+      document.getElementById("firebase-chat-sounds").innerHTML='<audio autoplay="autoplay"><source src="' + filename + '.mp3" type="audio/mpeg" /><source src="' + filename + '.ogg" type="audio/ogg" /><embed hidden="true" autostart="true" loop="false" src="' + filename +'.mp3" /></audio>';
+    }
+  });  
 }
 
 //Create Chat Windows for the group or single chat
@@ -133,14 +140,15 @@ ShaelynChat.prototype.loadGroups = function(groupId, groupsnap, count, totalNum,
     document.getElementById('chat-'+groupId).setAttribute('data-order', date.getTime()/1000|0);
 
     if (document.hidden) {
-        ShaelynChat.playSound();
+        ShaelynChat.playSound(groupId);
     }
 
     if(!$('#chat-'+groupId).hasClass('active')) {
       $('#chat-'+groupId).find('.card-indicator-number').text(data.val().notseen);
       $('#chat-'+groupId).find('.chat-number-indicator').addClass('show');
-            console.log(groupId);
-            ShaelynChat.playSound();
+
+      //Hear the chat sound
+      ShaelynChat.playSound(groupId);
     }else {
       ShaelynChat.removeUnSeenMessages(groupId);
     }
@@ -864,16 +872,39 @@ ShaelynChat.prototype.checkSetup = function() {
   }
 };
 
-ShaelynChat.prototype.openChatOptionsDialog = function(type) {
+ShaelynChat.prototype.openChatOptionsDialog = function(type, groupId) {
   const userId = firebase.auth().currentUser.uid;
+  const ref = firebase.database().ref();
+  const chatAttendeesRef = ref.child('ChatAttendees').child(groupId);
+  const dialog_wrapper = document.getElementById('dialog-chat-wrapper');
 
-  //Create the CHAT WINDOWS per GROUP
-  var chat_dialog_content = HTMLcreateChatDialog(type);
+  chatAttendeesRef.child(userId).once('value', snap => {
+    var chat_dialog_content = HTMLcreateChatDialog(type, snap);
+    $.fn.updateOrPrependHTML("chat-settings-"+snap.key, chat_dialog_content, dialog_wrapper);
+  });
 
-  //Put the HTML in the container
-  $.fn.updateOrPrependHTML("dialog-chat-wrapper", chat_dialog_content, "dialog-chat-wrapper");
+  chatAttendeesRef.child(userId).on('value', snap => {
+    if(document.getElementById('firebase-setting-notifications-chat')) {
+      document.getElementById('firebase-setting-notifications-chat').checked = snap.val().notification;
+    }
+  });
 };
 
+ShaelynChat.prototype.updateChatSetting = function(type, value) {
+  var groupId = $('#firebase-chatgroups').find('.active').attr('id').replace('chat-', '');
+  
+  const userId = firebase.auth().currentUser.uid;
+  const ref = firebase.database().ref();
+  const chatAttendeesRef = ref.child('ChatAttendees').child(groupId).child(userId);
+  
+  chatAttendeesRef.once('value').then(function(snapshot) {
+    if(type = 'notification') {
+      chatAttendeesRef.update({ 
+        notification: value
+      });
+    }
+  });
+};
 
 window.addEventListener('load' , function() {
   window.ShaelynChat = new ShaelynChat();

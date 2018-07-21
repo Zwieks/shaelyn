@@ -170,8 +170,10 @@ function HTMLcreateChatMessage(groupId, listId, userid, snap, userData) {
 	return HTML_chat_message_wrapper;
 }
 
-function HTMLcreateChatDialog(type) {
+function HTMLcreateChatDialog(type, snap) {
 	var HTML_chat_dialog_wrapper = document.createElement("div");
+		HTML_chat_dialog_wrapper.setAttribute("id", "chat-settings-"+snap.key);
+		HTML_chat_dialog_wrapper.className = "dialog-settings";
 
 	var HTML_chat_dialog_close = document.createElement("div");
 		HTML_chat_dialog_close.className = "close-dialog js-close-item-dialog";
@@ -229,9 +231,11 @@ function HTMLcreateChatDialog(type) {
 
 		var HTML_chat_slide_input = document.createElement("input");
 			HTML_chat_slide_input.type = "checkbox";
-			HTML_chat_slide_input.className = 'checkbox firebase-set-checkbox';
+			HTML_chat_slide_input.className = 'checkbox firebase-set-checkbox js-chat-setting';
 			HTML_chat_slide_input.setAttribute("field", "UserSettings");
 			HTML_chat_slide_input.setAttribute("id", "firebase-setting-notifications-chat");
+			HTML_chat_slide_input.checked = snap.val().notification;
+			HTML_chat_slide_input.setAttribute('checked', snap.val().notification);
 
 		var HTML_chat_slide_element = document.createElement("div");
 			HTML_chat_slide_element.className = "slide";
