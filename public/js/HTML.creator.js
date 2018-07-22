@@ -110,6 +110,10 @@ function HTMLcreateChatMessage(groupId, listId, userid, snap, userData) {
 	if(userid != firebase.auth().currentUser.uid) {
 		HTML_chat_message_wrapper.className = "chat-message "+dataAnnotation;
 
+		if(snap.val().from == "shaelyn") {
+			HTML_chat_message_wrapper.className = "chat-message "+dataAnnotation+" bot-welcome-message";
+		}
+
 		if(snap.val().type == 'image') {
 			HTML_chat_message_wrapper.className = "chat-message image "+dataAnnotation;
 		}
@@ -146,6 +150,8 @@ function HTMLcreateChatMessage(groupId, listId, userid, snap, userData) {
 	}else {
 		var HTML_chat_image_wrapper = document.createElement("figure");
 			HTML_chat_image_wrapper.className = "message-image";
+			HTML_chat_image_wrapper.setAttribute("data-toggle", "modal");
+			HTML_chat_image_wrapper.setAttribute("data-target", "#modal-chat-image");
 
 	    var HTML_chat_image = document.createElement('img');
 		    HTML_chat_image.addEventListener('load', function() {
@@ -259,6 +265,24 @@ function HTMLcreateChatDialog(type, snap) {
 		HTML_chat_slide_control.appendChild(HTML_chat_slide_control_wrapper);
 
 		HTML_chat_content_wrapper_inner.appendChild(HTML_chat_slide_control);
+	}else {
+		HTML_chat_content_text.appendChild(document.createTextNode(i18n.firebase.chat.dialog.leavechat));
+
+		var HTML_chat_button_wrapper = document.createElement("div");
+			HTML_chat_button_wrapper.className = "button-wrapper modal-footer";
+
+		var HTML_chat_button_cancel = document.createElement("button");
+			HTML_chat_button_cancel.className = "btn btn-default js-close-item-dialog";
+			HTML_chat_button_cancel.appendChild(document.createTextNode(i18n.firebase.chat.buttons.cancel));
+
+		var HTML_chat_button_leave = document.createElement("button");
+			HTML_chat_button_leave.className = "btn btn-default js-leave-chat";
+			HTML_chat_button_leave.appendChild(document.createTextNode(i18n.firebase.chat.buttons.leavechat));
+
+			HTML_chat_button_wrapper.appendChild(HTML_chat_button_cancel);
+			HTML_chat_button_wrapper.appendChild(HTML_chat_button_leave);
+
+			HTML_chat_content_wrapper_inner.appendChild(HTML_chat_button_wrapper);
 	}
 
 	HTML_chat_dialog_wrapper.appendChild(HTML_chat_content_wrapper);

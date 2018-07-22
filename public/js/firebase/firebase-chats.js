@@ -378,6 +378,27 @@ ShaelynChat.prototype.removeUnSeenMessages = function(active_groupId) {
   });
 };
 
+//Remove the user from the current chat
+ShaelynChat.prototype.removeChat = function(groupId) {
+  const userId = firebase.auth().currentUser.uid;
+  
+  const ref = firebase.database().ref();
+  const chatAttendeesRef = ref.child('ChatAttendees').child(groupId).child(userId);
+  const chatNotSeenRef = ref.child('ChatNotSeenMessages').child(userId).child(groupId);
+  const usersChatRef = ref.child('UsersChat').child(userId).child(groupId);
+  const listsRef = ref.child('lists').child(groupId);
+
+  listsRef.once('value').then(function(snapshot) {
+    listsRef.update({ 
+      chat: true
+    })
+  }).then(snap => {
+    chatAttendeesRef.remove();
+    chatNotSeenRef.remove();
+    usersChatRef.remove();
+  });
+};
+
 //Saves a new message on the Firebase DB.
 ShaelynChat.prototype.saveMessage = function(e) {
   if(typeof e != "undefined") {
@@ -545,7 +566,7 @@ ShaelynChat.prototype.saveImageMessage = function(event) {
     }.bind(this)).then(function(snap) {
         //Update the UserChat Timestamp for sorting the ChatGroups
         ShaelynChat.updateUserChatTimestamp(active_groupId);
-
+         ShaelynChat.playSound(groupId);
         setTimeout(function(){
           $("#chat-window-"+active_groupId).mCustomScrollbar("update");
           $("#chat-window-"+active_groupId).mCustomScrollbar("scrollTo", "bottom");
@@ -744,111 +765,118 @@ ShaelynChat.prototype.createNewChat = function(listId) {
     const listsRef = ref.child('lists').child(listId);
     const userId = firebase.auth().currentUser.uid;
     let listData = '';
+    let inList = false;
 
   //Check the origion
   if(listId != '') {
-    //Get the additional list info
-    listsRef.once('value', snap => {
-      if(snap.val().chat != true){
-        const postRef = listsRef;
-        postRef.update({ 
-          chat: true
-        })
-
-        // Create the new chat
-        let timestamp = firebase.database.ServerValue.TIMESTAMP;
-        const promiseChat = listChatsRef.child(listId).update({
-          chatOwner: firebase.auth().currentUser.uid,
-          groupImage: "",
-          name: snap.val().name,
-          order: timestamp,
-          time: firebase.database.ServerValue.TIMESTAMP,
-          type: 'list',
-          userCount: snap.val().userCount
-        })
-        const chatKey = listId
-
-        promiseChat.then(function() {
-          const postRef = listChatsRef.child(chatKey)
-          postRef.once('value').then(function(snapshot) {
-            timestamp = snapshot.val().order * -1
-            postRef.update({ 
-              order: timestamp
-            })
-
-            //REMOVE the active class on the child elements becouse we need the new item to be active  
-            $("#firebase-chatgroups").find('.active').removeClass('active');
-            $("#firebase-chat-meta").find('.active').removeClass('active');
-            $('#firebase-chat-conversations').find('.chat-window').removeClass("active");
-            $('#firebase-chat-attendees').find('.detail-members').removeClass("active");
-
-            usersChatRef.child(userId).once('value', usersChatSnapRef => {
-            }).then(UserChatRef => {
-              //Create the Chat windows per Group for the messages
-              ShaelynChat.loadChatAttendees(chatKey, snap.numChildren(), snap.numChildren());
-
-              //SET THE HTML OF THE GROUP ITEM HERE
-              var group = HTMLcreateGroup(chatKey, snapshot.val(), snap.numChildren(), snap.numChildren()-1, chatKey, 0);
-              $.fn.updateOrPrependHTML("chat-"+chatKey, group, ShaelynChat.chat_list_wrapper);
-
-              //CREATE THE CHAT TITLE AND WINDOW
-              ShaelynChat.loadChatWindows(chatKey, snapshot,  snap.numChildren(), snap.numChildren());
-            }).then(listDataSnap => {
-              //CREATE USER CHATS
-              listAttendeesRef.once('value', snap => {
-                // ShaelynChat.loadGroups(chatKey, snapshot, count+1, count+1, chatKey);
-
-                //Loop through all the list attendees
-                snap.forEach(function(childSnapshot) {
-
-                  //Set the LIST ATTENDEE ID (userid) in the CHATATTENDEES table
-                  chatAttendeesRef.child(chatKey).child(childSnapshot.key).set({
-                    token: '',
-                    notification: true,
-                    notseen: 0,
-                    time: firebase.database.ServerValue.TIMESTAMP
-                  });
-
-                  //Put the LIST ATTENDEE data also in the USERSCHAT table
-                  //THIS TRIGGERING A EVENT (updateChatGroupOrder)!
-                  const postRef = usersChatRef.child(childSnapshot.key).child(chatKey);
-                  postRef.set({
-                    seen: false,
-                    time: firebase.database.ServerValue.TIMESTAMP
-                  });
-
-                  ref.child('Users').child(childSnapshot.key).once('value', usersnap => {
-                    var friend = HTMLcreateListFriend("chat", chatKey, usersnap);
-                    var friends_list = document.getElementById('chatfriends-'+chatKey);
-                    $.fn.updateOrPrependHTML(chatKey+"chatfriend-"+childSnapshot.key, friend, friends_list);   
-                  });
-                });  
-              }).then(firsChatSnap =>{
-                //Create the messages and put them in the corresponding group
-                ShaelynChat.loadMessages(chatKey, "");
-                //Save the message
-                ShaelynChat.saveMessage();
-              });
-            });
-          }); 
-        }); 
-      }else {
-        //REMOVE the active class on the child elements becouse we need the new item to be active  
-        $("#firebase-chatgroups").find('.active').removeClass('active');
-        $("#firebase-chat-meta").find('.active').removeClass('active');
-        $('#firebase-chat-conversations').find('.chat-window').removeClass("active");
-        $('#firebase-chat-attendees').find('.detail-members').removeClass("active");
-
-        $('#chat-'+listId).addClass('active');
-        $('#chat-meta-'+listId).addClass('active');
-        $('#chatfriends-'+listId).addClass('active');
-        $('#chat-window-'+listId).addClass('active');
-
-        setTimeout(function(){
-          $("#chat-window-"+listId).mCustomScrollbar("update");
-          $("#chat-window-"+listId).mCustomScrollbar("scrollTo", "bottom");
-        }, 500);
+    chatAttendeesRef.child(listId).child(userId).once('value', function(snapshot) {
+      if (snapshot.exists()) {
+        inList = true;
       }
+    }).then( checkList => {
+      //Get the additional list info
+      listsRef.once('value', snap => {
+        if(inList != true){
+          const postRef = listsRef;
+          postRef.update({ 
+            chat: true
+          })
+
+          // Create the new chat
+          let timestamp = firebase.database.ServerValue.TIMESTAMP;
+          const promiseChat = listChatsRef.child(listId).update({
+            chatOwner: firebase.auth().currentUser.uid,
+            groupImage: "",
+            name: snap.val().name,
+            order: timestamp,
+            time: firebase.database.ServerValue.TIMESTAMP,
+            type: 'list',
+            userCount: snap.val().userCount
+          })
+          const chatKey = listId
+
+          promiseChat.then(function() {
+            const postRef = listChatsRef.child(chatKey)
+            postRef.once('value').then(function(snapshot) {
+              timestamp = snapshot.val().order * -1
+              postRef.update({ 
+                order: timestamp
+              })
+
+              //REMOVE the active class on the child elements becouse we need the new item to be active  
+              $("#firebase-chatgroups").find('.active').removeClass('active');
+              $("#firebase-chat-meta").find('.active').removeClass('active');
+              $('#firebase-chat-conversations').find('.chat-window').removeClass("active");
+              $('#firebase-chat-attendees').find('.detail-members').removeClass("active");
+
+              usersChatRef.child(userId).once('value', usersChatSnapRef => {
+              }).then(UserChatRef => {
+                //Create the Chat windows per Group for the messages
+                ShaelynChat.loadChatAttendees(chatKey, snap.numChildren(), snap.numChildren());
+
+                //SET THE HTML OF THE GROUP ITEM HERE
+                var group = HTMLcreateGroup(chatKey, snapshot.val(), snap.numChildren(), snap.numChildren()-1, chatKey, 0);
+                $.fn.updateOrPrependHTML("chat-"+chatKey, group, ShaelynChat.chat_list_wrapper);
+
+                //CREATE THE CHAT TITLE AND WINDOW
+                ShaelynChat.loadChatWindows(chatKey, snapshot,  snap.numChildren(), snap.numChildren());
+              }).then(listDataSnap => {
+                //CREATE USER CHATS
+                listAttendeesRef.once('value', snap => {
+                  // ShaelynChat.loadGroups(chatKey, snapshot, count+1, count+1, chatKey);
+
+                  //Loop through all the list attendees
+                  snap.forEach(function(childSnapshot) {
+
+                    //Set the LIST ATTENDEE ID (userid) in the CHATATTENDEES table
+                    chatAttendeesRef.child(chatKey).child(childSnapshot.key).set({
+                      token: '',
+                      notification: true,
+                      notseen: 0,
+                      time: firebase.database.ServerValue.TIMESTAMP
+                    });
+
+                    //Put the LIST ATTENDEE data also in the USERSCHAT table
+                    //THIS TRIGGERING A EVENT (updateChatGroupOrder)!
+                    const postRef = usersChatRef.child(childSnapshot.key).child(chatKey);
+                    postRef.set({
+                      seen: false,
+                      time: firebase.database.ServerValue.TIMESTAMP
+                    });
+
+                    ref.child('Users').child(childSnapshot.key).once('value', usersnap => {
+                      var friend = HTMLcreateListFriend("chat", chatKey, usersnap);
+                      var friends_list = document.getElementById('chatfriends-'+chatKey);
+                      $.fn.updateOrPrependHTML(chatKey+"chatfriend-"+childSnapshot.key, friend, friends_list);   
+                    });
+                  });  
+                }).then(firsChatSnap =>{
+                  //Create the messages and put them in the corresponding group
+                  ShaelynChat.loadMessages(chatKey, "");
+                  //Save the message
+                  ShaelynChat.saveMessage();
+                });
+              });
+            }); 
+          }); 
+        }else {
+          //REMOVE the active class on the child elements becouse we need the new item to be active  
+          $("#firebase-chatgroups").find('.active').removeClass('active');
+          $("#firebase-chat-meta").find('.active').removeClass('active');
+          $('#firebase-chat-conversations').find('.chat-window').removeClass("active");
+          $('#firebase-chat-attendees').find('.detail-members').removeClass("active");
+
+          $('#chat-'+listId).addClass('active');
+          $('#chat-meta-'+listId).addClass('active');
+          $('#chatfriends-'+listId).addClass('active');
+          $('#chat-window-'+listId).addClass('active');
+
+          setTimeout(function(){
+            $("#chat-window-"+listId).mCustomScrollbar("update");
+            $("#chat-window-"+listId).mCustomScrollbar("scrollTo", "bottom");
+          }, 500);
+        }
+      });
     });
   }; 
 }; 

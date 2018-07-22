@@ -22,12 +22,14 @@
 	@include('scripts.textarea.textarea-init')
     @include('scripts.modal.modal-show-search-users-init', ['modalid' => 'modal-search-friends'])
     @include('scripts.modal.modal-show-search-friends-init', ['modalid' => 'modal-search-users'])
+     @include('scripts.modal.modal-show-chat-image-init', ['modalid' => 'modal-chat-image'])
 @stop
 
 {{-- Include Modal --}}
 @section('modal')
 	@include('modals.layout', ['content' => "modals.search.friends", 'modalsize' => 'large', 'modaltype' => 'transparent', 'modalid' => 'modal-search-friends'])
 	@include('modals.layout', ['content' => "modals.search.users", 'modalsize' => 'large', 'modaltype' => 'transparent', 'modalid' => 'modal-search-users'])
+	@include('modals.layout', ['content' => "modals.chat.image", 'modalsize' => 'large', 'modaltype' => 'transparent', 'modalid' => 'modal-chat-image'])
 @stop
 
 {{-- Include Scripts --}}

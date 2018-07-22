@@ -192,7 +192,7 @@ function getMostUsedWord(array)
 //IMPORT LIST FUNCTIONALITY
 function ImportCreatList(text, type) {
 	var max_items = 100,
-		list_items_array = text.split('\n').slice(0, max_items),
+		list_items_array = text.split('\n').slice(0, max_items).reverse(),
 		most_used_word = getMostUsedWord(text.split(' ').slice(0, max_items)),
 		listId = null;
 
@@ -239,6 +239,28 @@ $(document).on('click', "#js-paste-list, #js-paste-list-items" ,function(e) {
 	$("#paste-wrapper").attr('data-type', $(this).attr('id'));
 	$("#paste-wrapper").addClass('active');
 	$('.list-paste').focus();
+});
+
+$(document).on('click', '.js-leave-chat',function(e) {
+	var active_groupId = $('#firebase-chat-conversations .active').attr('id').replace('chat-window-', '');
+	
+	ShaelynChat.removeChat(active_groupId);
+	$("#chat-"+active_groupId).remove();
+	$('#firebase-chat-options').removeClass('show');
+	$('#chat-meta-'+active_groupId).remove();
+	$('#chat-window-'+active_groupId).remove();
+	$('#chatfriends-'+active_groupId).remove();
+	$("#dialog-chat-wrapper").removeClass('active');
+	$("#firebase-chat-attendees").show();
+
+	var first_child_id = $('#firebase-chatgroups').find(">:first-child").attr('id').replace('chat-', '');
+	$('#chat-'+first_child_id).addClass("active");
+	$('#chat-meta-'+first_child_id).addClass('active');
+	$('#chatfriends-'+first_child_id).addClass('active');
+	$('#chat-window-'+first_child_id).addClass('active');
+
+	//Scroll the chat window to the bottom
+	$("#chat-window-"+first_child_id).mCustomScrollbar("scrollTo", "bottom", {scrollInertia:0});
 });
 
 $(document).on('click', '.js-close-item-dialog',function(e) {

@@ -891,11 +891,12 @@
 
 	.message-image {
 		.border-radius(0.7rem);
-		width: 100%;
     	overflow: hidden;
     	padding: 0;
     	position: relative;
     	margin: 0.5rem;
+    	max-height: 18rem;
+    	cursor: pointer;
 
     	&:after {
     		.border-radius(0 0 0.7rem 0.7rem);
@@ -1056,6 +1057,16 @@
 		}
 		~ .today {
 			.chat-message-date-wrapper {
+				display: none;
+			}
+		}
+	}
+
+	&.bot-welcome-message {
+		~ .bot-welcome-message {
+			display: none;
+
+			.message-wrapper {
 				display: none;
 			}
 		}

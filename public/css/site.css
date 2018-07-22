@@ -6086,6 +6086,14 @@ form ol {
   right: 2.4rem;
   width: auto;
 }
+#paste-wrapper .button-wrapper,
+#dialog-chat-wrapper .button-wrapper {
+  -moz-justify-content: center;
+  -ms-justify-content: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
 #paste-wrapper .content-wrapper,
 #dialog-chat-wrapper .content-wrapper {
   display: -webkit-box;
@@ -9882,11 +9890,12 @@ form ol {
 }
 .chat-message .message-image {
   border-radius: 0.7rem;
-  width: 100%;
   overflow: hidden;
   padding: 0;
   position: relative;
   margin: 0.5rem;
+  max-height: 18rem;
+  cursor: pointer;
 }
 .chat-message .message-image:after {
   border-radius: 0 0 0.7rem 0.7rem;
@@ -10047,6 +10056,12 @@ form ol {
   display: flex;
 }
 .chat-message.today ~ .today .chat-message-date-wrapper {
+  display: none;
+}
+.chat-message.bot-welcome-message ~ .bot-welcome-message {
+  display: none;
+}
+.chat-message.bot-welcome-message ~ .bot-welcome-message .message-wrapper {
   display: none;
 }
 .list-checked .list-wrapper {
@@ -11953,6 +11968,18 @@ form ol {
 }
 .modal-notification .image-wrapper {
   height: 23rem;
+}
+#modal-chat-image figure {
+  padding-top: calc(100vh - 24rem);
+}
+#modal-chat-image img {
+  width: auto;
+  height: auto;
+  max-height: calc(100vh - 19.2rem);
+  max-width: calc(100vh - 9.6rem);
+}
+#modal-chat-image .image-wrapper {
+  margin: 0;
 }
 @media (min-width: 900px) {
   .modal-dialog {

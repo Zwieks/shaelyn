@@ -146,14 +146,20 @@ exports.sendNotifications = functions.database.ref('/ChatMessages/{groupId}/{mes
 	const userId = snapshot.val().from;
 	const groupId = context.params.groupId;
 	const text = snapshot.val().message;
+	const image = snapshot.val().imageUrl;
 	let tokens = []; // All Device tokens to send a notification to.
 	const payload = {
 		notification: {
-  			title: `${snapshot.val().name} posted ${text ? 'a message' : 'an image'}`,
+			title: snapshot.val().name+" says:",
   			body: text ? (text.length <= 100 ? text : text.substring(0, 97) + '...') : '',
   			click_action: `https://shaelyn.io`,
 		}
 	};
+
+	if(image) {
+		payload.notification.body = "Check out this image!"
+		payload.notification.image = snapshot.val().imageUrl
+	}
 
 	//Get the user info
 	return admin.database().ref('Users').child(userId).once('value').then((userInfo) => {
@@ -175,6 +181,7 @@ exports.sendNotifications = functions.database.ref('/ChatMessages/{groupId}/{mes
 			});
 			// Send notifications to all tokens.
 			if (tokens.length) {
+						console.log(payload);
 	      		return admin.messaging().sendToDevice(tokens, payload);
 	      	}else {
 	      		return null;
