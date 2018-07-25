@@ -58,7 +58,7 @@
   	const listItemsRef = ref.child('listItems');
   	const friendsRef = ref.child('Friends');
 
-  	function searchUsers(search) {
+  	function searchUsers(search, type) {
   		usersRef
   			.orderByChild("nameToLower")
   			.limitToFirst(9)
@@ -67,6 +67,7 @@
   			.on("value", function(snapshot) {
   				if(snapshot.val() != null && snapshot.key != firebase.auth().currentUser.uid) {	
   					var search_users_results = document.getElementById('firebase-search-users-results');
+
   					search_users_results.innerHTML = '';
 	  				snapshot.forEach(function(childSnapshot) {
 	  					if(childSnapshot.key != firebase.auth().currentUser.uid) {
@@ -78,6 +79,33 @@
 		  						};
 		  					});
 		  				}	
+	  				});
+  				}
+			});
+  	}
+
+  	function searchChatFriends(search) {
+  		usersRef
+  			.orderByChild("nameToLower")
+  			.limitToFirst(9)
+  			.startAt(search.toLowerCase())
+  			.endAt(search.toLowerCase() + "\uf8ff")
+  			.on("value", function(snapshot) {
+  				if(snapshot.val() != null) {
+  					var search_users_results = document.getElementById('firebase-search-chatfriends-results');
+  					//var selected_users = document.getElementById('firebase-selected-friends');
+
+  					search_users_results.innerHTML = '';
+	  				snapshot.forEach(function(childSnapshot) {
+					  	friendsRef.child(firebase.auth().currentUser.uid+'/'+childSnapshot.key).once('value', function(snapshot) {
+					  		if (snapshot.exists()) {
+								var searchItem = HTMLcreateFriend(childSnapshot);
+					
+								search_users_results.appendChild(searchItem);
+								//selected_users.appendChild(searchItem);
+					  		}
+						});
+
 	  				});
   				}
 			});
@@ -436,6 +464,18 @@
 		return highest;
 	};
 
+	$.fn.ValidURL = function(str) {
+  		regexp =  /^(?:(?:https?|ftp):\/\/)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/\S*)?$/;
+        if (regexp.test(str))
+        {
+          return true;
+        }
+        else
+        {
+          return false;
+        }
+	}
+
 	$.fn.updateOrPrependHTML = function(id, HTML_object, parent) {
 		if(document.getElementById(id) != null) {
 			var update_item_list = document.getElementById(id);
@@ -510,6 +550,7 @@
 
 	  		$(document).on("input",".firebase-search-friends",function(e) {
 				var dInput = this.value,
+					type = $(this).attr('data-type');
 					listId = $('#js-invite-friends').attr('data-list');
 
 				if(typeof dInput == 'undefined') {
@@ -520,8 +561,10 @@
 					listId = $(this).text();
 				}
 
-				if(dInput.trim() != '' && typeof listId != 'undefined') {
+				if(dInput.trim() != '' && typeof listId != 'undefined' && listId != '') {
 					searchFriends(dInput, listId);
+				}else if(dInput.trim() != '') {
+					searchChatFriends(dInput);
 				}
 	  		});
 
@@ -532,7 +575,7 @@
 					dInput = $(this).text();
 				}
 
-				if(dInput.trim() != '') {
+				if(dInput.trim() != '' && type == 'chatfriends') {
 					searchUsers(dInput);
 				}
 	  		});

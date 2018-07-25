@@ -140,9 +140,26 @@ function HTMLcreateChatMessage(groupId, listId, userid, snap, userData) {
 		HTML_chat_window.className = "message-wrapper";	
 
 	if(snap.val().type != 'image') {
-		var HTML_chat_text = document.createElement("p");
-			HTML_chat_text.className = "message-text";
-			HTML_chat_text.appendChild(document.createTextNode(snap.val().message));
+		var isLink = $.fn.ValidURL(snap.val().message); //Funny because like Zelda
+
+		if(isLink) {
+			var prefix = 'https://';
+			var  chatMessage = snap.val().message;
+			if (snap.val().message.substr(0, prefix.length) !== prefix)
+			{
+			    chatMessage = prefix + chatMessage;
+			}
+
+			var HTML_chat_text = document.createElement("a");
+				HTML_chat_text.setAttribute("target", "_blank");
+				HTML_chat_text.setAttribute("href", chatMessage);
+				HTML_chat_text.className = "message-text";
+				HTML_chat_text.appendChild(document.createTextNode(snap.val().message));
+		}else {
+			var HTML_chat_text = document.createElement("p");
+				HTML_chat_text.className = "message-text";
+				HTML_chat_text.appendChild(document.createTextNode(snap.val().message));
+		}
 
 		HTML_chat_window.appendChild(HTML_chat_message_userinfo);
 		HTML_chat_window.appendChild(HTML_chat_text);
@@ -651,6 +668,18 @@ function HTMLcreateListFriend(type, listId, snap) {
 			HTML_friend_image.setAttribute("init", getInitials(snap.val().name));
 			HTML_friend_image.style.background = snap.val().color;
 			HTML_friend_image.style.color = invertColor(snap.val().color);
+	}
+
+	if(type == 'selectedchat') {
+		var HTML_friend_remove = document.createElement("div");
+			HTML_friend_remove.className ="remove-icon-wrapper js-remove-selected-user";
+
+		var HTML_friend_remove_image = document.createElement("img");
+			HTML_friend_remove_image.setAttribute("src", "/img/x-button.svg");
+			HTML_friend_remove_image.setAttribute("alt", "Delete selected user");
+		
+		HTML_friend_remove.appendChild(HTML_friend_remove_image);
+		HTML_friend_wrapper.appendChild(HTML_friend_remove);
 	}
 
 	HTML_friend_wrapper.appendChild(HTML_friend_image);

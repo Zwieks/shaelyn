@@ -177,6 +177,31 @@
     padding:@spacing;
   }
 
+  .remove-icon-wrapper {
+    .transition;
+    position: absolute;
+    top: -0.5rem;
+    right: -0.5rem;
+    width: @spacing;
+    height: @spacing;
+    cursor: pointer;
+    z-index: 1;
+    display: none;
+  }
+
+  .member {
+    &:hover,
+    &:focus {
+      .transition;
+      .scale(0.8s);
+
+      .remove-icon-wrapper {
+        .scale(1.1);
+        display: block;
+      }
+    }
+  }
+
   .transparent & {
     .box-shadow(none);
     background: transparent;
@@ -454,20 +479,47 @@
   }
 }
 
+.modal-intro {
+    font-size: @mediumSmallHeadingSize;
+    margin: @spacing 0;
+    font-weight: bold;
+}
+
 #modal-chat-image {
   figure {
     padding-top: calc(100vh ~'-' @spacing*10);
   }
 
   img {
+    .centerX;
+    top: 0;
     width: auto;
     height: auto;
-    max-height: calc(100vh ~'-' @spacing*8);
     max-width: calc(100vh ~'-' @spacing*4);
   }
 
   .image-wrapper {
     margin: 0;
+  }
+}
+
+#modal-chat-new {
+  .detail-members {
+    position: absolute;
+    right: -@spacing/2;
+    top: 0;
+    width: @spacing*3;
+  }
+
+  .member {
+    .transition;
+    .animation(scale 0.2s linear);
+    .transition-delay(1s);
+    margin-bottom: @spacing/2;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
   }
 }
 
@@ -502,4 +554,13 @@
 
 @media (min-width: @screen-md-min) {
     .modal-lg { width: @modal-lg; }
+}
+
+@keyframes scale {
+  0% { 
+    .scale(0);
+  }
+  100% { 
+    .scale(1);
+  }
 }

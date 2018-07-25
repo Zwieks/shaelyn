@@ -375,7 +375,41 @@ $(document).on("click",".js-switch-chat",function(){
 	}, 100);
 });
 
+//INVITE CHATFRIENDS
+$(document).on("click","#modal-chat-new .card",function(){
+	var id = $(this).parent().attr('id').replace('userfriend-', '')
 
+	if($(this).parent().hasClass('invite')) {
+		$(this).parent().removeClass('invite');
+		$('#selectedchatfriend-'+id).remove();
+	}else {
+		
+		$(this).parent().addClass('invite');
+		//Added the selected friend to the liste
+		ShaelynChat.addSelectedFriend(id);
+	}
+});
+
+$(document).on("click","#js-invite-chatfriends", function(){
+	if ($(".invite").length) {
+		$(".invite").each(function() {
+	    	var id = $(this).attr('id').replace('userfriend-', '');
+
+	    	//$.fn.firebase_invite_friends(id, listId);
+		});
+
+		$('#js-invite-chatfriend-search').hide();
+		$('#js-creat-chat-confirmation').show();
+		$('#js-invite-chatfriends').hide();
+		$('.js-modal-cancel').hide();
+
+		setTimeout(function(){
+			$('#modal-chat-new').modal('hide');
+		}, 1500);
+	};		
+});
+
+//INVITE FRIENDS
 $(document).on("click","#modal-search-friends .card",function(){
 	$(this).parent().toggleClass("invite");
 });
@@ -400,6 +434,7 @@ $(document).on("click","#js-invite-friends", function(){
 	};		
 });
 
+//INVITE USERS
 $(document).on("click","#modal-search-users .card",function(){
 	$(this).parent().toggleClass("invite");
 });

@@ -200,6 +200,20 @@ ShaelynChat.prototype.loadChatAttendees = function(groupId, count, totalNum) {
   $.fn.updateOrPrependHTML("chatfriends-"+groupId, chatfriends_list_wrapper, parent);
 };
 
+//Add chat user to temporary selected friendslist
+ShaelynChat.prototype.addSelectedFriend = function(friendId) {
+  const ref = firebase.database().ref();
+
+  ref.child('Users').child(friendId).once('value', usersnap => {
+    var friend = HTMLcreateListFriend("selectedchat", "", usersnap);
+    var parent = document.getElementById('firebase-selected-friends');
+    console.log(parent);
+    console.log(friend);
+    console.log("selectedchatfriend-"+usersnap.key);
+    $.fn.updateOrPrependHTML("selectedchatfriend-"+usersnap.key, friend, parent);   
+  });
+};
+
 // Loads chat messages history and listens for upcoming ones.
 ShaelynChat.prototype.loadMessages = function(groupId, groupsnap) {
   // Loads the last 12 messages and listen for new ones.

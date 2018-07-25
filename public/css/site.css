@@ -5203,6 +5203,11 @@ form ol {
   height: auto;
   resize: none;
 }
+.ghost-input-small {
+  background: transparent;
+  text-align: center;
+  color: #fff;
+}
 .editable-firebase-wrapper {
   position: relative;
 }
@@ -8834,33 +8839,40 @@ form ol {
   }
 }
 #modal-search-friends .modal-header,
-#modal-search-users .modal-header {
+#modal-search-users .modal-header,
+#modal-chat-new .modal-header {
   margin-bottom: 1.2rem;
 }
 #modal-search-friends .velden > li,
-#modal-search-users .velden > li {
+#modal-search-users .velden > li,
+#modal-chat-new .velden > li {
   width: 74.4rem;
 }
 @media screen and (max-width: 1023px) {
   #modal-search-friends .velden > li,
-  #modal-search-users .velden > li {
+  #modal-search-users .velden > li,
+  #modal-chat-new .velden > li {
     width: 100%;
   }
 }
 #modal-search-friends .image-wrapper,
-#modal-search-users .image-wrapper {
+#modal-search-users .image-wrapper,
+#modal-chat-new .image-wrapper {
   margin-bottom: 2.4rem;
 }
 #modal-search-friends .image-wrapper figure,
-#modal-search-users .image-wrapper figure {
+#modal-search-users .image-wrapper figure,
+#modal-chat-new .image-wrapper figure {
   padding-top: 9.6rem;
 }
 #modal-search-friends form,
-#modal-search-users form {
+#modal-search-users form,
+#modal-chat-new form {
   margin-bottom: 1.2rem;
 }
 #modal-search-friends .component-search,
-#modal-search-users .component-search {
+#modal-search-users .component-search,
+#modal-chat-new .component-search {
   display: -webkit-box;
   display: -moz-flex;
   display: -ms-flexbox;
@@ -8876,7 +8888,8 @@ form ol {
   margin: 0 -1.2rem;
 }
 #modal-search-friends .component-search .card-wrapper,
-#modal-search-users .component-search .card-wrapper {
+#modal-search-users .component-search .card-wrapper,
+#modal-chat-new .component-search .card-wrapper {
   width: calc(33.33333333%);
   max-width: 38.4rem;
   padding: 1.2rem;
@@ -8884,18 +8897,21 @@ form ol {
 }
 @media screen and (max-width: 1023px) {
   #modal-search-friends .component-search .card-wrapper,
-  #modal-search-users .component-search .card-wrapper {
+  #modal-search-users .component-search .card-wrapper,
+  #modal-chat-new .component-search .card-wrapper {
     width: 50%;
   }
 }
 @media screen and (max-width: 480px) {
   #modal-search-friends .component-search .card-wrapper,
-  #modal-search-users .component-search .card-wrapper {
+  #modal-search-users .component-search .card-wrapper,
+  #modal-chat-new .component-search .card-wrapper {
     width: 100%;
   }
 }
 #modal-search-friends .component-search .card,
-#modal-search-users .component-search .card {
+#modal-search-users .component-search .card,
+#modal-chat-new .component-search .card {
   -webkit-transition: 0.15s ease-out;
   transition: 0.15s ease-out;
   background: rgba(255, 255, 255, 0.2);
@@ -8904,7 +8920,8 @@ form ol {
 }
 @media screen and (max-width: 1023px) {
   #modal-search-friends .component-search .card,
-  #modal-search-users .component-search .card {
+  #modal-search-users .component-search .card,
+  #modal-chat-new .component-search .card {
     background: #464447;
   }
 }
@@ -9441,9 +9458,19 @@ form ol {
   width: 3rem;
   display: inline-block;
   margin-right: 0.6rem;
+  position: relative;
 }
 .dashboard-wrapper .detail-members .member:last-child {
   margin-right: 0;
+}
+.dashboard-wrapper .detail-members .remove-icon-wrapper {
+  position: absolute;
+  top: -0.5rem;
+  right: -0.5rem;
+  width: 2.4rem;
+  height: 2.4rem;
+  cursor: pointer;
+  z-index: 1;
 }
 .dashboard-wrapper .detail-members .add-member {
   margin-bottom: 1.2rem;
@@ -9834,6 +9861,9 @@ form ol {
           justify-content: flex-start;
   margin-bottom: 1.2rem;
   margin-left: 1.2rem;
+}
+.chat-message a {
+  text-decoration: underline;
 }
 .chat-message .chat-message-date-wrapper {
   -moz-justify-content: center;
@@ -11691,6 +11721,31 @@ form ol {
     padding: 2.4rem;
   }
 }
+.modal-content .remove-icon-wrapper {
+  -webkit-transition: 0.15s ease-out;
+  transition: 0.15s ease-out;
+  position: absolute;
+  top: -0.5rem;
+  right: -0.5rem;
+  width: 2.4rem;
+  height: 2.4rem;
+  cursor: pointer;
+  z-index: 1;
+  display: none;
+}
+.modal-content .member:hover,
+.modal-content .member:focus {
+  -webkit-transition: 0.15s ease-out;
+  transition: 0.15s ease-out;
+  -webkit-transform: scale(0.8s);
+  transform: scale(0.8s);
+}
+.modal-content .member:hover .remove-icon-wrapper,
+.modal-content .member:focus .remove-icon-wrapper {
+  -webkit-transform: scale(1.1);
+  transform: scale(1.1);
+  display: block;
+}
 .transparent .modal-content {
   -webkit-box-shadow: none;
   box-shadow: none;
@@ -11969,17 +12024,44 @@ form ol {
 .modal-notification .image-wrapper {
   height: 23rem;
 }
+.modal-intro {
+  font-size: 2.1rem;
+  margin: 2.4rem 0;
+  font-weight: bold;
+}
 #modal-chat-image figure {
   padding-top: calc(100vh - 24rem);
 }
 #modal-chat-image img {
+  -webkit-transform: translateX(-50%);
+  transform: translateX(-50%);
+  position: absolute;
+  left: 50%;
+  top: 0;
   width: auto;
   height: auto;
-  max-height: calc(100vh - 19.2rem);
   max-width: calc(100vh - 9.6rem);
 }
 #modal-chat-image .image-wrapper {
   margin: 0;
+}
+#modal-chat-new .detail-members {
+  position: absolute;
+  right: -1.2rem;
+  top: 0;
+  width: 7.2rem;
+}
+#modal-chat-new .member {
+  -webkit-transition: 0.15s ease-out;
+  transition: 0.15s ease-out;
+  -webkit-animation: scale 0.2s linear;
+  animation: scale 0.2s linear;
+  -webkit-transition-delay: 1s;
+  transition-delay: 1s;
+  margin-bottom: 1.2rem;
+}
+#modal-chat-new .member:last-child {
+  margin-bottom: 0;
 }
 @media (min-width: 900px) {
   .modal-dialog {
@@ -12004,6 +12086,16 @@ form ol {
 @media (min-width: 992px) {
   .modal-lg {
     width: 900px;
+  }
+}
+@keyframes scale {
+  0% {
+    -webkit-transform: scale(0);
+    transform: scale(0);
+  }
+  100% {
+    -webkit-transform: scale(1);
+    transform: scale(1);
   }
 }
 .editable-wrapper,

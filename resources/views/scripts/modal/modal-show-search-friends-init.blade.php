@@ -21,6 +21,7 @@
             $('#js-friend-invite-confirmation').hide();
             $('#js-invite-friends').show();
             $('.js-modal-cancel').show();
+            $('#modal-search-friends').find('.firebase-search-friends').attr('data-type', 'friends');
         });
     });
 </script>

@@ -499,10 +499,21 @@
 			width: 3rem;
 			display: inline-block;
 			margin-right: @spacing/4;
+			position: relative;
 
 			&:last-child {
 				margin-right: 0;
 			}
+		}
+
+		.remove-icon-wrapper {
+			position: absolute;
+			top: -0.5rem;
+			right: -0.5rem;
+			width: @spacing;
+			height: @spacing;
+			cursor: pointer;
+			z-index: 1;
 		}
 
 		.add-member {
@@ -846,6 +857,10 @@
 
 	margin-bottom: @spacing/2;
 	margin-left: @spacing/2;
+
+	a {
+		text-decoration: underline;
+	}
 
 	.chat-message-date-wrapper {
 		.justify-content(center);
