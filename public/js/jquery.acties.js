@@ -268,10 +268,10 @@ $(document).on('click', '.js-close-item-dialog',function(e) {
 	$("#firebase-chat-attendees").show();
 });
 
-$(document).on('input', '#firebase-message-input',function(e) {
+$(document).on('input', '#firebase-message-input, #firebase-message-input-emoticons',function(e) {
 	$('.chat-fieldset').removeClass('hide');
-	
-	if($(this).val() != '') {
+
+	if($(this).val() != '' || $(this).text() != "") {
 		$('#js-chat-image-input').addClass('hide');
 	}else {
 		$('#js-chat-text-input').addClass('hide');
@@ -286,7 +286,7 @@ $(document).on("click",".js-create-chat", function() {
 		listId = $(this).parent().parent().attr('ref');
 	}
 	//Add the content for the dialog
-	ShaelynChat.createNewChat(listId);
+	ShaelynChat.createNewChat(listId, "", null);
 });
 
 
@@ -342,7 +342,7 @@ $(document).on("click",".js-switch-chat",function(){
 	// Update user last active group and remove the old one,
 	// What this does is setting the timestamp or an active string
 	// When the user leaves a group it is setting a timestamp else the active string
-	//ShaelynChat.seenMessages(old_reference, new_reference);
+	ShaelynChat.chatActive(old_reference, new_reference);
 
 	// If the user got unseen messages but the group is now active.. remove the references and update the number of unseen messages for this group
 	ShaelynChat.removeUnSeenMessages(new_reference);
@@ -390,6 +390,17 @@ $(document).on("click","#modal-chat-new .card",function(){
 	}
 });
 
+//REMOVE SELECTED CHAT USER
+$(document).on("click", ".js-remove-selected-user", function(){
+	var id = $(this).parent().attr('id').replace('selectedchatfriend-', '');
+
+	//De-select the user in the list
+	$("#firebase-search-chatfriends-results").find("#userfriend-"+id).removeClass("invite");	
+
+	//Remove the HTML of the user from the list
+	$("#selectedchatfriend-"+id).remove();
+});
+
 $(document).on("click","#js-invite-chatfriends", function(){
 	if ($(".invite").length) {
 		$(".invite").each(function() {
@@ -410,7 +421,7 @@ $(document).on("click","#js-invite-chatfriends", function(){
 });
 
 //INVITE FRIENDS
-$(document).on("click","#modal-search-friends .card",function(){
+$(document).on("click","#modal-search-friends .card",function() {
 	$(this).parent().toggleClass("invite");
 });
 
@@ -432,6 +443,48 @@ $(document).on("click","#js-invite-friends", function(){
 			$('#modal-search-friends').modal('hide');
 		}, 1500);
 	};		
+});
+
+//INVITE SLECTED FRIENDS FOR CHAT
+$(document).on("click","#js-invite-chatfriends", function() {
+	var parent = $("#firebase-selected-friends"),
+		name = $("#new_chatname").val(),
+		users = [];
+
+	if(parent.children().length > 0) {
+		parent.children('li').each(function() {
+			var id = $(this).attr('id').replace('selectedchatfriend-', '');
+			users.push(id);
+		});
+
+		ShaelynChat.createNewChat("", users, name);
+
+		$('#js-invite-chatfriends-search').hide();
+		$('#js-creat-chat-confirmation').show();
+		$('#js-invite-chatfriends').hide();
+		$('.js-modal-cancel').hide();
+
+		setTimeout(function(){
+			$('#modal-chat-new').modal('hide');
+		}, 1500);
+	}
+	// if ($(".invite").length) {
+	// 	$(".invite").each(function() {
+	//     	var id = $(this).attr('id').replace('userfriend-', ''),
+	//     		listId = $('#js-invite-friends').attr('data-list');
+
+	//     	$.fn.firebase_invite_friends(id, listId);
+	// 	});
+
+	// 	$('#js-invite-friend-search').hide();
+	// 	$('#js-friend-invite-confirmation').show();
+	// 	$('#js-invite-friends').hide();
+	// 	$('.js-modal-cancel').hide();
+
+	// 	setTimeout(function(){
+	// 		$('#modal-search-friends').modal('hide');
+	// 	}, 1500);
+	// };		
 });
 
 //INVITE USERS
@@ -460,7 +513,8 @@ $(document).on("click","#js-invite-users", function(){
 $(document).on("keypress","[contenteditable]", function(evt){
   var keycode = evt.charCode || evt.keyCode;
   if (keycode  == 13) { //Enter key's keycode
-  	$(this).blur();
+  	
+  	ShaelynChat.saveMessage();
     return false;
   }
 });

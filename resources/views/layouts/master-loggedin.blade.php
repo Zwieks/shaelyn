@@ -58,6 +58,11 @@
             @yield('page-scripts')
         @endif
 
+
+        @hasSection('emojipicker')
+            @yield('emojipicker')
+        @endif
+
         @hasSection('firebase')
             @yield('firebase')
         @endif

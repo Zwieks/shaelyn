@@ -9463,15 +9463,6 @@ form ol {
 .dashboard-wrapper .detail-members .member:last-child {
   margin-right: 0;
 }
-.dashboard-wrapper .detail-members .remove-icon-wrapper {
-  position: absolute;
-  top: -0.5rem;
-  right: -0.5rem;
-  width: 2.4rem;
-  height: 2.4rem;
-  cursor: pointer;
-  z-index: 1;
-}
 .dashboard-wrapper .detail-members .add-member {
   margin-bottom: 1.2rem;
   cursor: pointer;
@@ -9945,6 +9936,8 @@ form ol {
 .chat-message .chat-image {
   border-radius: 1rem;
   position: relative;
+  min-height: 6rem;
+  min-width: 8rem;
 }
 .chat-message:last-child {
   margin-bottom: 0;
@@ -10041,6 +10034,14 @@ form ol {
   margin: 0;
   width: 100%;
   font-size: 1.3rem;
+  word-break: break-word;
+}
+.chat-message.image {
+  -webkit-animation: fade-in 0.5s ease 0.4s;
+  animation: fade-in 0.5s ease 0.4s;
+  -webkit-animation-fill-mode: forwards;
+          animation-fill-mode: forwards;
+  opacity: 0;
 }
 .chat-message.image .chat-message-userinfo {
   padding-bottom: 0.4rem;
@@ -11733,6 +11734,9 @@ form ol {
   z-index: 1;
   display: none;
 }
+.modal-content .member {
+  position: relative;
+}
 .modal-content .member:hover,
 .modal-content .member:focus {
   -webkit-transition: 0.15s ease-out;
@@ -12539,4 +12543,59 @@ form ol {
 .mce-object-iframe iframe {
   height: 100%;
   width: 100%;
+}
+.emoji-menu {
+  width: 100%!important;
+  top: -21.7rem !important;
+}
+.emoji-menu .emoji-items-wrap {
+  overflow: auto!important;
+  padding: 0 1.2rem !important;
+}
+img.emojione {
+  margin: 0px !important;
+  display: inline !important;
+  height: auto;
+  width: 50px;
+}
+.emoji {
+  text-indent: inherit!important;
+  font-size: 2rem!important;
+  margin-right: 0.8rem!important;
+}
+.emoji-picker-container {
+  -moz-flex-grow: 1;
+  -ms-flex-grow: 1;
+  -webkit-box-flex: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
+  max-width: calc(100% - 7.2rem);
+  margin-right: 0;
+}
+.emoji-wysiwyg-editor {
+  border-radius: 0!important;
+  padding-top: 1.4rem!important;
+  background: #ebebeb;
+  border: none!important;
+  white-space: pre-wrap;
+}
+.emoji-wysiwyg-editor:focus {
+  outline: none;
+}
+.emoji-wysiwyg-editor img {
+  margin: 0.4rem 0 0 0;
+}
+.emoji-picker-icon {
+  -webkit-transform: translateY(-50%);
+  transform: translateY(-50%);
+  position: absolute;
+  top: 50%;
+  top: 50%!important;
+}
+.emoji-items-wrap1 {
+  padding: 0!important;
+}
+.emoji-items-wrap1 .emoji-menu-tabs {
+  background: #fbfbfb;
+  margin-top: 0!important;
 }

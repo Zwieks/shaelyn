@@ -17,6 +17,7 @@
 
 {{-- Include Scripts --}}
 @section('page-scripts')
+	@include('scripts.emoticons.emoticons-init')
 	@include('scripts.owlslider.owlslider-init')
 	@include('scripts.customscrollbar.customscrollbar-init')
 	@include('scripts.textarea.textarea-init')
@@ -39,6 +40,17 @@
 	<script type="text/javascript" src="{{ URL::asset('js/network-animation.js') }}"></script>
 	<script type="text/javascript" src="{{ URL::asset('js/network-animation-init.js') }}"></script>
 @stop
+
+@section('emojipicker')
+	<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet">
+	<link href="{{ URL::asset('css/emoticons/emoji.css') }}" rel="stylesheet">
+
+	<script src="{{ URL::asset('js/emoticons/config.js') }}"></script>
+  	<script src="{{ URL::asset('js/emoticons/util.js') }}"></script>
+  	<script src="{{ URL::asset('js/emoticons/jquery.emojiarea.js') }}"></script>
+  	<script src="{{ URL::asset('js/emoticons/emoji-picker.js') }}"></script>
+@stop
+
 @section('firebase')
 	<script type="text/javascript" src="{{ URL::asset('js/firebase/firebase-lists.js') }}"></script>
 	<script type="text/javascript" src="{{ URL::asset('js/firebase/firebase-chats.js') }}"></script>

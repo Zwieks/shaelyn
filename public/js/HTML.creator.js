@@ -30,14 +30,22 @@ function HTMLcreateUserProfile(snap) {
 	return HTML_user_image_wrapper;
 }
 
-function HTMLcreateChatMeta(snap, count, totalNum) {
+function HTMLcreateChatMeta(key, snap, count, totalNum, activeGroupId) {
 	var HTML_chat_title_wrapper = document.createElement("div");
 		HTML_chat_title_wrapper.setAttribute("id", "chat-meta-"+snap.key);
-		
-		if(count != totalNum) {
-			HTML_chat_title_wrapper.className = "title-wrapper";
+	
+		if(activeGroupId == false) {
+			if(count != totalNum) {
+				HTML_chat_title_wrapper.className = "title-wrapper";
+			}else {
+				HTML_chat_title_wrapper.className = "title-wrapper active";
+			}
 		}else {
-			HTML_chat_title_wrapper.className = "title-wrapper active";
+			if(activeGroupId == key) {
+				HTML_chat_title_wrapper.className = "title-wrapper active";
+			}else {
+				HTML_chat_title_wrapper.className = "title-wrapper";
+			}	
 		}
 
 	var HTML_chat_title = document.createElement("h3");
@@ -49,13 +57,22 @@ function HTMLcreateChatMeta(snap, count, totalNum) {
 		return HTML_chat_title_wrapper;
 }
 
-function HTMLcreateChatWindow(snap, count, totalNum) {
+function HTMLcreateChatWindow(key, snap, count, totalNum, activeGroupId) {
 	var HTML_chat_window = document.createElement("div");
 		HTML_chat_window.setAttribute("id", "chat-window-"+snap.key);
-		if(count != totalNum) {
-			HTML_chat_window.className = "chat-window";
+
+		if(activeGroupId == false) {
+			if(count != totalNum) {
+				HTML_chat_window.className = "chat-window";
+			}else {
+				HTML_chat_window.className = "chat-window active";
+			}
 		}else {
-			HTML_chat_window.className = "chat-window active";
+			if(activeGroupId == key) {
+				HTML_chat_window.className = "chat-window active";
+			}else {
+				HTML_chat_window.className = "chat-window";
+			}	
 		}
 
 	return HTML_chat_window;
@@ -142,6 +159,17 @@ function HTMLcreateChatMessage(groupId, listId, userid, snap, userData) {
 	if(snap.val().type != 'image') {
 		var isLink = $.fn.ValidURL(snap.val().message); //Funny because like Zelda
 
+		var ranges = [
+		  '\ud83c[\udf00-\udfff]', // U+1F300 to U+1F3FF
+		  '\ud83d[\udc00-\ude4f]', // U+1F400 to U+1F64F
+		  '\ud83d[\ude80-\udeff]'  // U+1F680 to U+1F6FF
+		];
+		var text = snap.val().message.replace(
+		  new RegExp(ranges.join('|'), 'g'),
+		  '<span class="emoji" data-emoji="$&">$&</span>');
+		var htmlObject = document.createElement('div');
+		htmlObject.innerHTML = text;
+
 		if(isLink) {
 			var prefix = 'https://';
 			var  chatMessage = snap.val().message;
@@ -154,12 +182,12 @@ function HTMLcreateChatMessage(groupId, listId, userid, snap, userData) {
 				HTML_chat_text.setAttribute("target", "_blank");
 				HTML_chat_text.setAttribute("href", chatMessage);
 				HTML_chat_text.className = "message-text";
-				HTML_chat_text.appendChild(document.createTextNode(snap.val().message));
 		}else {
 			var HTML_chat_text = document.createElement("p");
 				HTML_chat_text.className = "message-text";
-				HTML_chat_text.appendChild(document.createTextNode(snap.val().message));
 		}
+
+		HTML_chat_text.appendChild(htmlObject);
 
 		HTML_chat_window.appendChild(HTML_chat_message_userinfo);
 		HTML_chat_window.appendChild(HTML_chat_text);
@@ -171,13 +199,14 @@ function HTMLcreateChatMessage(groupId, listId, userid, snap, userData) {
 			HTML_chat_image_wrapper.setAttribute("data-target", "#modal-chat-image");
 
 	    var HTML_chat_image = document.createElement('img');
-		    HTML_chat_image.addEventListener('load', function() {
-			    $("#chat-window-"+groupId).mCustomScrollbar("update");
-			    $("#chat-window-"+groupId).mCustomScrollbar("scrollTo", "bottom");
-		    }.bind(this));
 			HTML_chat_image.className = "chat-image";
 			HTML_chat_image.setAttribute("title", "");
 			HTML_chat_image.setAttribute("alt", "");
+			HTML_chat_image.setAttribute("src", "/img/loading.gif");
+		    HTML_chat_image.addEventListener('load', function() {
+		    	$("#chat-window-"+groupId).mCustomScrollbar("update");
+			    $("#chat-window-"+groupId).mCustomScrollbar("scrollTo", "bottom",{scrollInertia:0});
+		    }.bind(this));
 
 	    ShaelynChat.setImageUrl(snap, snap.val().imageLocation, HTML_chat_image);
 		HTML_chat_image_wrapper.appendChild(HTML_chat_image);
@@ -307,16 +336,16 @@ function HTMLcreateChatDialog(type, snap) {
 	return HTML_chat_dialog_wrapper;
 }
 
-function HTMLcreateGroup(key, snap, count, totalNum, activeGroupId, NotSeen, highestNumber) {
+function HTMLcreateGroup(key, snap, count, totalNum, activeGroupId, NotSeen, groupId) {
 	var HTML_chat_group_overview_wrapper = document.createElement("div");
 		if(activeGroupId == false) {
 			if(count != totalNum) {
 				HTML_chat_group_overview_wrapper.className = "card-wrapper chat js-switch-chat";
 			}else {
-				HTML_chat_group_overview_wrapper.className = "card-wrapper chat js-switch-chat active";
+				HTML_chat_group_overview_wrapper.className = "card-wrapper chat js-switch-chat";
 			}
 		}else {
-			if(activeGroupId == key) {
+			if(groupId === activeGroupId) {
 				HTML_chat_group_overview_wrapper.className = "card-wrapper chat js-switch-chat active";
 			}else {
 				HTML_chat_group_overview_wrapper.className = "card-wrapper chat js-switch-chat";
@@ -376,11 +405,11 @@ function HTMLcreateGroup(key, snap, count, totalNum, activeGroupId, NotSeen, hig
 			HTML_chat_group_overview_indicator.className = "card-indicator chat-number-indicator show";
 			HTML_chat_group_overview_indicator_number.appendChild(document.createTextNode(NotSeen));
 		}else {
-
+			HTML_chat_group_overview_indicator.className = "card-indicator chat-number-indicator";
+			HTML_chat_group_overview_indicator_number.appendChild(document.createTextNode(NotSeen));
 		}
 
-			HTML_chat_group_overview_wrapper.setAttribute("data-order", highestNumber);
-			HTML_chat_group_overview_wrapper.style.order = -highestNumber;
+
 
 	HTML_chat_group_image_wrapper.appendChild(HTML_chat_group_image);
 
@@ -626,17 +655,27 @@ function HTMLcreateListMainTitle(snap, focus, show) {
 		return HTML_main_title_list_wrapper;
 }
 
-function HTMLcreateFriendsList(type, listId, count, totalNum) {
+function HTMLcreateFriendsList(type, key, count, totalNum, activeGroupId) {
 	var HTML_friendslist = document.createElement("ul");
 		HTML_friendslist.className = 'detail-members';
 
 		if(type == 'list') {
-			HTML_friendslist.setAttribute("id", 'friends-'+listId);
+			HTML_friendslist.setAttribute("id", 'friends-'+key);
 		}else if(type == 'chat') {
-			HTML_friendslist.setAttribute("id", 'chatfriends-'+listId);
+			HTML_friendslist.setAttribute("id", 'chatfriends-'+key);
 
-			if(count == totalNum) {
-				HTML_friendslist.className = "detail-members active";
+			if(activeGroupId == false) {
+				if(count != totalNum) {
+					HTML_friendslist.className = "detail-members";
+				}else {
+					HTML_friendslist.className = "detail-members active";
+				}
+			}else {
+				if(activeGroupId == key) {
+					HTML_friendslist.className = "detail-members active";
+				}else {
+					HTML_friendslist.className = "detail-members";
+				}	
 			}
 		}
 		

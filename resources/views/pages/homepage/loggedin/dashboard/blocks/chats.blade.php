@@ -49,8 +49,10 @@
 				<div id="firebase-chat-conversations"></div>	
 				<div class="chat-message-wrapper">
 					<form id="chat-form" action="#">
-						<input type="text" id="firebase-message-input" class="chat-message-input" autocomplete="off"/>
-
+						<div class="lead emoji-picker-container">
+							<input type="text" id="firebase-message-input" class="chat-message-input" autocomplete="off" data-emojiable="true"/>
+						</div>
+						
 						<fieldset class="chat-fieldset hide" id="js-chat-text-input">
 							<button class="chat-input-btn chat-send-btn" id="firebase-send-chat-message">
 								<img src="/img/send-button.svg" alt="Send text">

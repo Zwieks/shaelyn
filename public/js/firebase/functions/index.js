@@ -141,6 +141,53 @@ exports.sendNotification = functions.database.ref('/notifications/{user_id}/{not
 });
 
 // Sends a notifications to all users when a new message is posted.
+exports.sendNotificationNewChat = functions.database.ref('/BetaChat/{groupId}').onCreate((snapshot, context) => {
+	const userId = snapshot.val().chatOwner;
+	const groupId = context.params.groupId;
+	const text = "I created a chat named "+snapshot.val().name;
+	let tokens = []; // All Device tokens to send a notification to.
+	const payload = {
+		notification: {
+			body: text ? (text.length <= 100 ? text : text.substring(0, 97) + '...') : '',
+			click_action: `https://shaelyn.io`,
+		}
+	};
+
+	//Get the user info
+	return admin.database().ref('Users').child(userId).once('value').then((userInfo) => {
+		payload.notification.icon = userInfo.val().thumb_image || '/img/logo-3d.png'
+		payload.notification.title = userInfo.val().name+" says:"
+
+		return null;
+	}).then(() => {
+		return admin.database().ref(`/ChatAttendees/${groupId}`).once('value').then((chatAttendeesResult) => {
+			chatAttendeesResult.forEach((result, index) => {
+			   	const error = result.error;
+			   	if (error) {
+			     	console.error('Failure creating chat attendees and tokens match');
+			   	}else {
+			   		if(result.val().token !== "" && result.val().notification === true && userId !== result.key ) {
+			   			tokens.push(result.val().token);
+			   		}
+			   	}
+			});
+
+			// Send notifications to all tokens.
+			if (tokens.length) {
+	      		return admin.messaging().sendToDevice(tokens, payload);
+	      	}else {
+	      		return null;
+	      	}		
+		}).then((response) => {
+			return cleanupTokens(response, groupId, tokens);
+		}).then(() => {
+			console.log('Notifications have been sent and tokens cleaned up.');
+			return null;
+		});
+	});		
+});
+
+// Sends a notifications to all users when a new message is posted.
 exports.sendNotifications = functions.database.ref('/ChatMessages/{groupId}/{messageId}').onCreate((snapshot, context) => {
 
 	const userId = snapshot.val().from;
@@ -181,7 +228,6 @@ exports.sendNotifications = functions.database.ref('/ChatMessages/{groupId}/{mes
 			});
 			// Send notifications to all tokens.
 			if (tokens.length) {
-						console.log(payload);
 	      		return admin.messaging().sendToDevice(tokens, payload);
 	      	}else {
 	      		return null;

@@ -506,16 +506,6 @@
 			}
 		}
 
-		.remove-icon-wrapper {
-			position: absolute;
-			top: -0.5rem;
-			right: -0.5rem;
-			width: @spacing;
-			height: @spacing;
-			cursor: pointer;
-			z-index: 1;
-		}
-
 		.add-member {
 			margin-bottom: @spacing/2;
 			cursor: pointer;
@@ -931,6 +921,8 @@
 	.chat-image {
 		.border-radius(1rem);
     	position: relative;
+    	min-height: 6rem;
+    	min-width: 8rem;
 	}
 
 	&:last-child {
@@ -1025,9 +1017,15 @@
 		margin: 0;
 		width: 100%;
 		font-size: @smallBaseFontSize;
+		word-break: break-word;
 	}
 
 	&.image {
+		.animation(fade-in 0.5s ease 0.4s);
+
+		animation-fill-mode: forwards;
+		opacity: 0;
+
 		.chat-message-userinfo {
 			padding-bottom: @spacing/6;
 		}

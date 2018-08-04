@@ -350,7 +350,7 @@
 					}
 
 	  				var parent = document.getElementById(items_wrapper.childNodes[0].id+'_container');
-
+	  				
 	  				if ($(window).width()<768 && parent == null) {
 	  					parent = lists;
 	  				}else {

@@ -1,0 +1,61 @@
+.emoji-menu {
+    width: 100%!important;
+    top: -21.7rem!important;
+
+    .emoji-items-wrap {
+    	overflow: auto!important;
+    	padding: 0 @spacing/2!important;
+    }
+}
+
+img.emojione {
+  // Override any img styles to ensure Emojis are displayed inline
+  margin: 0px !important;
+  display: inline !important;
+
+  height: auto;
+  width: 50px;
+}
+
+.emoji {
+	text-indent: inherit!important;
+	font-size: 2rem!important;
+	margin-right: 0.8rem!important;
+}
+
+.emoji-picker-container {
+	.flex-grow(1);
+	max-width: calc(100% ~'-' 7.2rem);
+	margin-right: 0;
+
+}
+
+.emoji-wysiwyg-editor {
+	border-radius: 0!important;
+	padding-top: 1.4rem!important;
+	background: @ligtestGrey;
+	border: none!important;
+	white-space: pre-wrap;
+
+	&:focus {
+		outline: none;
+	}
+
+	img {
+		margin: 0.4rem 0 0 0;
+	}
+}
+
+.emoji-picker-icon {
+	.centerY;
+	    top: 50%!important;
+}
+
+.emoji-items-wrap1 {
+	padding: 0!important;
+
+	.emoji-menu-tabs {
+		background: #fbfbfb;
+		margin-top: 0!important;
+	}
+}
