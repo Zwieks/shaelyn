@@ -803,6 +803,26 @@
 		display: block;
 	}
 
+	&.no-chat {
+		.displayflex;
+		.flex-direction(column);
+		.justify-content(center);
+		.align-items(center);
+		text-align: center;
+
+		.card-image-wrapper {
+			.transition;
+			cursor: pointer;
+			max-width: @spacing*3;
+
+			&:hover,
+			&:focus {
+				.transition;
+				.scale(1.08);
+			}
+		}
+	}
+
 	@media @bp-MobileL {
 		.flex-direction(column);
 		.justify-content(flex-end);

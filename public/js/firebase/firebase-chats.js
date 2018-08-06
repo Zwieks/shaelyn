@@ -101,15 +101,19 @@ ShaelynChat.prototype.loadGroups = function(groupId, groupsnap, count, totalNum,
   const userChatActive = ref.child('ChatActive').child(groupId);
   const ChatNotSeenMessages =  ref.child('ChatNotSeenMessages').child(userId).child(groupId);
 
+  //If the Group is the only one there is, remove the ChatNotSeen and this group always active
+  if(totalNum == 1) {
+    ShaelynChat.chatActive(groupId, groupId);
+    ChatNotSeenMessages.remove();
+  }
+
+  if(count === totalNum && $("#firebase-chatgroups").find(".active").length <= 0) {
+    ShaelynChat.chatActive(groupId, groupId);
+    ChatNotSeenMessages.remove();
+  }
+
   //const chatAttendeeRef = chatAttendeesRef.child(userId);
   var setChatGroup = function(data) {
-    ref.child('Users').child(data.key).on('value', usersnap => {
-      var friend = HTMLcreateListFriend("chat", groupId, usersnap);
-
-      var friends_list = document.getElementById('chatfriends-'+groupId);
-      $.fn.updateOrPrependHTML(groupId+"chatfriend-"+usersnap.key, friend, friends_list);     
-    });            
-
     userChatActive.child(userId).once('value', userActiveSnap => {
     }).then(snaper => {
       chatAttendeesRef.child(data.key).once('value', snapchat => {
@@ -130,24 +134,25 @@ ShaelynChat.prototype.loadGroups = function(groupId, groupsnap, count, totalNum,
         });
 
       });
-    });  
+    });
   }.bind(this);
 
   //TRIGGERD WHEN CHATATTENDEES --> GROUPID IS TRIGGERED
   var setChatGroupChanged = function(data) {
     var date = new Date($.now());
+    if($('#chat-'+groupId).length) {
+      document.getElementById('chat-'+groupId).removeAttribute("style");
 
-    document.getElementById('chat-'+groupId).removeAttribute("style");
+      document.getElementById('chat-'+groupId).style.order = -date.getTime()/1000|0;
+      document.getElementById('chat-'+groupId).setAttribute('data-order', date.getTime()/1000|0);
 
-    document.getElementById('chat-'+groupId).style.order = -date.getTime()/1000|0;
-    document.getElementById('chat-'+groupId).setAttribute('data-order', date.getTime()/1000|0);
-
-    if (!$('#chat-'+groupId).hasClass('active') || document.hidden) {
-        ShaelynChat.playSound(groupId);
-    }
-    if(!$('#chat-'+groupId).hasClass('active')) {
-      $('#chat-'+groupId).find('.card-indicator-number').text(data.val().notseen);
-      $('#chat-'+groupId).find('.chat-number-indicator').addClass('show');
+      if (!$('#chat-'+groupId).hasClass('active') || document.hidden) {
+          ShaelynChat.playSound(groupId);
+      }
+      if(!$('#chat-'+groupId).hasClass('active')) {
+        $('#chat-'+groupId).find('.card-indicator-number').text(data.val().notseen);
+        $('#chat-'+groupId).find('.chat-number-indicator').addClass('show');
+      }
     }
   }.bind(this);
 
@@ -189,12 +194,23 @@ ShaelynChat.prototype.seenMessages = function(oldGroupId, newGroupId) {
 };
 
 ShaelynChat.prototype.loadChatAttendees = function(groupId, count, totalNum, activeGroupId) {
-  //Create HTML for the friends list
-  var chatfriends_list_wrapper = HTMLcreateFriendsList('chat', groupId, count, totalNum, activeGroupId);
+  const ref = firebase.database().ref();
+  const chatAttendeesRef = ref.child('ChatAttendees').child(groupId);
 
+  var chatfriends_list_wrapper = HTMLcreateFriendsList('chat', groupId, count, totalNum, activeGroupId);
   var parent = document.getElementById('firebase-chat-attendees');
   //Put the HTML in the container
   $.fn.updateOrPrependHTML("chatfriends-"+groupId, chatfriends_list_wrapper, parent);
+  
+  chatAttendeesRef.once('value', snap => {
+    snap.forEach(function(chatattendee) {
+      ref.child('Users').child(chatattendee.key).on('value', usersnap => {
+        var friend = HTMLcreateListFriend("chat", groupId, usersnap);
+        var friends_list = document.getElementById('chatfriends-'+groupId);
+        $.fn.updateOrPrependHTML(groupId+"chatfriend-"+usersnap.key, friend, friends_list);
+      });
+    });
+  });
 };
 
 //Add chat user to temporary selected friendslist
@@ -255,6 +271,27 @@ ShaelynChat.prototype.loadMessages = function(groupId, groupsnap) {
   this.messagesRef.orderByChild('order').limitToFirst(12).on('child_changed', setMessage);
 };
 
+ShaelynChat.prototype.NoChatHandler = function() {
+    const chat_meta = document.getElementById('firebase-chat-meta');
+    const chat_text = document.getElementById("firebase-chat-conversations");
+    
+    ShaelynChat.chatKey = "";
+    
+    $("#firebase-chat-meta .title-wrapper").remove();
+    $("#firebase-chat-conversations .chat-window").remove();
+    $("#firebase-chat-attendees .detail-members").remove();
+    $("#firebase-chatgroups .chat").remove();
+
+    var noChat = HTMLcreateNoChat();
+    $.fn.updateOrPrependHTML("chat-nochat", noChat, chat_text);
+    
+    var meta = HTMLcreateChatMetaEmpty();
+    $.fn.updateOrPrependHTML("chat-meta-empty", meta, chat_meta);
+
+    $(".chat-message-wrapper").hide();
+    $(".chat-controls").hide();
+};
+
 ShaelynChat.prototype.init = function() {
   //Get the current user ID
   const userId = firebase.auth().currentUser.uid;
@@ -277,19 +314,42 @@ ShaelynChat.prototype.init = function() {
 
   //GET ALL THE USERCHATS (UsersChat)
   this.chatsRef.on('value', snap => {
-    //Needed for iteration and setting of the active class
-    var count = 1;
+    if (!snap.exists()) {
+      ShaelynChat.NoChatHandler();
+    }else {
+      if($("#chat-nochat").length) {
+        $("#chat-nochat").remove();
+        $("#chat-meta-empty").remove();
+        $(".chat-message-wrapper").show();
+        $(".chat-controls").show();
+      }
+
+      //Needed for iteration and setting of the active class
+      var count = 1;
       //LOOP THROUGH ALL THE CHATS OF THE USER
       snap.forEach(function(childSnapshot) {
+
         //Get the user chatgroup (BETACHAT)
         let chatGroupRef = chat.child(childSnapshot.key);
 
         userChatActive.child(childSnapshot.key).child(userId).once('value', userActiveSnap => {
-          if(userActiveSnap.val() != null) {
-            activeGroupId = childSnapshot.key;
-          }
+            if(userActiveSnap && userActiveSnap.val() != null) {
+              activeGroupId = childSnapshot.key;
+            }
+
         }).then( snapPromise => {
           chatGroupRef.once('value', groupsnap => {
+            const ChatNotSeenMessages =  ref.child('ChatNotSeenMessages').child(userId).child(groupsnap.key);
+
+            if(count === snap.numChildren() && $("#firebase-chatgroups").find(".active").length <= 0) {
+              activeGroupId = groupsnap.key;
+            }
+
+            if(activeGroupId && activeGroupId != "") {
+              ShaelynChat.chatActive(activeGroupId, activeGroupId);
+              ref.child('ChatNotSeenMessages').child(userId).child(activeGroupId).remove();
+            }
+
             //Create the GROUPS
             ShaelynChat.loadGroups(groupsnap.key, groupsnap, count, snap.numChildren(), activeGroupId);
            
@@ -313,6 +373,7 @@ ShaelynChat.prototype.init = function() {
         })
       });
       this.updateChatGroupOrder(); 
+    }
   });
 };
 
@@ -364,64 +425,6 @@ ShaelynChat.prototype.seenCheck = function(active_groupId, messageId) {
       });
     });
   });
-
-  userChatRef.once('value', userChatSnap => {
-    userChatSnap.forEach(function(userChatChildSnap) {
-      if(active_groupId === userChatChildSnap.key) {
-        //Remove the unseen message when the current group is active
-        //ref.child('ChatNotSeenMessages').child(userId).child(active_groupId).remove();
-      }
-    });
-  }).then(snapPromise => {
-    // Check if the user is current active in the group if not put the message in the ChatNotSeenMessages
-    chatAttendeesRef.once('value', snap => {
-      // snap.forEach(function(userInGroupSnap) {
-      //   const ref = firebase.database().ref();
-      //   const ChatNotSeenMessagesRef = ref.child('ChatNotSeenMessages').child(userInGroupSnap.key).child(active_groupId);
-        //const promise = ChatNotSeenMessagesRef.child(messageId).set(true);
-
-        //SOMEWHERE CODE
-
-        // ChatNotSeenMessagesRef.once('value', notSeenSnap => {
-        //   var NumberNotSeenMessages = notSeenSnap.numChildren();
-        //   console.log(NumberNotSeenMessages);
-
-        //   if(NumberNotSeenMessages > 0) {
-        //     ref.child('ChatNotSeenMessages').child(userInGroupSnap.key).child(active_groupId).child(messageId).set(true);
-        //   }
-        // });
-
-        //Check if the user is not active in the group
-        // if(childSnapshot.key != active_groupId) {
-        //   console.log(childSnapshot.key+' NOT ACTIVE');
-        //   //Add the not viewed item with one for the user in childSnapshot.key
-        //   promise.then(function(ChatNotSeenMessagesRef, postRef) {
-        //     ref.child('ChatNotSeenMessages').child(childSnapshot.key).child(active_groupId).once('value', usersnap => {
-        //       ref.child('ChatAttendees').child(active_groupId).child(childSnapshot.key).update({ 
-        //         notseen: usersnap.numChildren(),
-        //         time: firebase.database.ServerValue.TIMESTAMP
-        //       })
-        //     });
-        //   }.bind(this)).catch(function(error) {
-        //     console.error('Error writing new message to Firebase Database', error);
-        //   });
-        // }else {
-        //   console.log(childSnapshot.key+' ACTIVE');
-        //   //Add the not viewed item with one for the user in childSnapshot.key
-        //   promise.then(function(ChatNotSeenMessagesRef, postRef) {
-        //     ref.child('ChatNotSeenMessages').child(childSnapshot.key).child(active_groupId).once('value', usersnap => {
-        //       ref.child('ChatAttendees').child(active_groupId).child(childSnapshot.key).update({ 
-        //         notseen: 0,
-        //         time: "active"
-        //       })
-        //     });
-        //   }.bind(this)).catch(function(error) {
-        //     console.error('Error writing new message to Firebase Database', error);
-        //   });
-        // }
-      //});
-    });
-  });
 };
 
 ShaelynChat.prototype.chatActive = function(oldGroup, newGroup) {
@@ -430,8 +433,10 @@ ShaelynChat.prototype.chatActive = function(oldGroup, newGroup) {
   const userChatActiveOld = ref.child('ChatActive').child(oldGroup);
   const userChatActiveNew = ref.child('ChatActive').child(newGroup);
 
-  userChatActiveOld.child(userId).remove();
-  userChatActiveNew.child(userId).set(true);
+  if(oldGroup != newGroup) {
+    userChatActiveOld.child(userId).remove();
+    userChatActiveNew.child(userId).set(true);
+  }
 };
 
 // What this does is REMOVING all the MESSAGE ID'S under the USERID in the ChatNotSeenMessage Table and updating the notseen
@@ -771,51 +776,42 @@ ShaelynChat.prototype.createNewChat = function(listId, users, name) {
                 order: timestamp
               })
 
-              //REMOVE the active class on the child elements becouse we need the new item to be active  
+              //REMOVE the active class on the child elements becouse we need the new item to be active
+              listAttendeesRef.once('value', snap => {
+                //Loop through all the list attendees
+                snap.forEach(function(user) {
 
-              usersChatRef.child(userId).once('value', usersChatSnapRef => {
-              }).then(UserChatRef => {
-                //SET THE HTML OF THE GROUP ITEM HERE
-                var group = HTMLcreateGroup(chatKey, snapshot.val(), snap.numChildren(), snap.numChildren()-1, chatKey, 0);
-                $.fn.updateOrPrependHTML("chat-"+chatKey, group, ShaelynChat.chat_list_wrapper);
+                  //Set the LIST ATTENDEE ID (userid) in the CHATATTENDEES table
+                  chatAttendeesRef.child(chatKey).child(user.key).update({
+                    token: '',
+                    notification: true,
+                    notseen: 0,
+                    time: firebase.database.ServerValue.TIMESTAMP
+                  });
 
-                //CREATE THE CHAT TITLE AND WINDOW
-              }).then(listDataSnap => {
-                //CREATE USER CHATS
-                listAttendeesRef.once('value', snap => {
-                  //Loop through all the list attendees
-                  snap.forEach(function(childSnapshot) {
-
-                    //Set the LIST ATTENDEE ID (userid) in the CHATATTENDEES table
-                    chatAttendeesRef.child(chatKey).child(childSnapshot.key).set({
-                      token: '',
-                      notification: true,
-                      notseen: 0,
-                      time: firebase.database.ServerValue.TIMESTAMP
+                  usersRef.child(user.key).once('value', userRef => {
+                    chatAttendeesRef.child(chatKey).child(user.key).update({
+                      token: userRef.val().device_token
                     });
-
-                    //Put the LIST ATTENDEE data also in the USERSCHAT table
-                    //THIS TRIGGERING A EVENT (updateChatGroupOrder)!
-                    const postRef = usersChatRef.child(childSnapshot.key).child(chatKey);
-                    postRef.set({
+                  }).then(listDataSnap => {
+                    usersChatRef.child(user.key).child(chatKey).update({
                       seen: false,
                       time: firebase.database.ServerValue.TIMESTAMP
                     });
+                  });
+                }); 
 
-                    ref.child('Users').child(childSnapshot.key).once('value', usersnap => {
-                      var friend = HTMLcreateListFriend("chat", chatKey, usersnap);
-                      var friends_list = document.getElementById('chatfriends-'+chatKey);
-                      $.fn.updateOrPrependHTML(chatKey+"chatfriend-"+childSnapshot.key, friend, friends_list);   
-                    });
-                  });  
-                }).then(firsChatSnap =>{
-                  //Create the messages and put them in the corresponding group
-                  ShaelynChat.loadMessages(chatKey, "");
-                });
+                //Save the message
+                ShaelynChat.firstmessage = true;
+                ShaelynChat.chatKey = chatKey;
+                ShaelynChat.saveMessage();
               });
             }); 
           }); 
         }else {
+          //TRIGGER a click on the list
+          $("#chat-"+listId+".js-switch-chat").trigger( "click" );
+
           setTimeout(function(){
             $("#chat-window-"+listId).mCustomScrollbar("scrollTo", "bottom",{scrollInertia:0});
           }, 0);

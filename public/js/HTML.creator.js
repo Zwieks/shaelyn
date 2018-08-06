@@ -30,10 +30,24 @@ function HTMLcreateUserProfile(snap) {
 	return HTML_user_image_wrapper;
 }
 
+function HTMLcreateChatMetaEmpty() {
+	var HTML_chat_title_wrapper = document.createElement("div");
+		HTML_chat_title_wrapper.setAttribute("id", "chat-meta-empty");
+		HTML_chat_title_wrapper.className = "title-wrapper active";
+
+	var HTML_chat_title = document.createElement("h3");
+		HTML_chat_title.className = "item-title";
+		HTML_chat_title.appendChild(document.createTextNode(i18n.firebase.chat.nochatmaintitle));
+
+	HTML_chat_title_wrapper.appendChild(HTML_chat_title);
+
+	return HTML_chat_title_wrapper;
+}
+
 function HTMLcreateChatMeta(key, snap, count, totalNum, activeGroupId) {
 	var HTML_chat_title_wrapper = document.createElement("div");
 		HTML_chat_title_wrapper.setAttribute("id", "chat-meta-"+snap.key);
-	
+
 		if(activeGroupId == false) {
 			if(count != totalNum) {
 				HTML_chat_title_wrapper.className = "title-wrapper";
@@ -83,7 +97,6 @@ function HTMLcreateChatMessage(groupId, listId, userid, snap, userData) {
 		HTML_chat_message_wrapper.setAttribute("id", "chat-message-"+snap.key);
 		HTML_chat_message_wrapper.setAttribute("data-group", listId);
 		HTML_chat_message_wrapper.setAttribute("data-time", snap.val().time);
-
 	var dataAnnotation = '';	
 	var date = new Date(snap.val().time);
   	var hours = (date.getHours() < 10 ? '0' : '') + date.getHours();
@@ -164,11 +177,29 @@ function HTMLcreateChatMessage(groupId, listId, userid, snap, userData) {
 		  '\ud83d[\udc00-\ude4f]', // U+1F400 to U+1F64F
 		  '\ud83d[\ude80-\udeff]'  // U+1F680 to U+1F6FF
 		];
-		var text = snap.val().message.replace(
+		var smileyConverter = snap.val().message.replace(':)', '😊');
+			smileyConverter = smileyConverter.replace(':-)', '😊');
+			smileyConverter = smileyConverter.replace(';)', '😉');
+			smileyConverter = smileyConverter.replace(';-)', '😉');
+			smileyConverter = smileyConverter.replace(':p', '😋');
+			smileyConverter = smileyConverter.replace(':-p', '😋');
+			smileyConverter = smileyConverter.replace(';p', '😜');
+			smileyConverter = smileyConverter.replace(';-p', '😜');
+			smileyConverter = smileyConverter.replace(':|', '😐');
+			smileyConverter = smileyConverter.replace(':-|', '😐');
+			smileyConverter = smileyConverter.replace(':(', '😔');
+			smileyConverter = smileyConverter.replace(':-(', '😔');
+			smileyConverter = smileyConverter.replace('x-d', '😆');
+			smileyConverter = smileyConverter.replace('X-D', '😆');
+			smileyConverter = smileyConverter.replace('(k)', '💋');
+			smileyConverter = smileyConverter.replace('(l)', '❤️');
+
+		var text = smileyConverter.replace(
 		  new RegExp(ranges.join('|'), 'g'),
-		  '<span class="emoji" data-emoji="$&">$&</span>');
-		var htmlObject = document.createElement('div');
-		htmlObject.innerHTML = text;
+		  '<span data-emoji="$&">$&</span>');
+		// var htmlObject = document.createElement('div');
+		// 	htmlObject.className = "emoji";
+		// 	htmlObject.innerHTML = text;
 
 		if(isLink) {
 			var prefix = 'https://';
@@ -184,10 +215,11 @@ function HTMLcreateChatMessage(groupId, listId, userid, snap, userData) {
 				HTML_chat_text.className = "message-text";
 		}else {
 			var HTML_chat_text = document.createElement("p");
-				HTML_chat_text.className = "message-text";
+				HTML_chat_text.className = "message-text emoji";
+				HTML_chat_text.innerHTML = text;
+				//HTML_chat_text.appendChild(htmlObject);
 		}
 
-		HTML_chat_text.appendChild(htmlObject);
 
 		HTML_chat_window.appendChild(HTML_chat_message_userinfo);
 		HTML_chat_window.appendChild(HTML_chat_text);
@@ -336,14 +368,49 @@ function HTMLcreateChatDialog(type, snap) {
 	return HTML_chat_dialog_wrapper;
 }
 
+function HTMLcreateNoChat() {
+	var HTML_no_chat_wrapper = document.createElement("section");
+		HTML_no_chat_wrapper.setAttribute("id", "chat-nochat");
+		HTML_no_chat_wrapper.className = "chat-window no-chat active";
+
+	var HTML_no_chat_text_title = document.createElement("h2");
+		HTML_no_chat_text_title.appendChild(document.createTextNode(i18n.firebase.chat.nochattitle));
+
+	var HTML_no_chat_text = document.createElement("p");
+		HTML_no_chat_text.appendChild(document.createTextNode(i18n.firebase.chat.nochattext));
+
+	var HTML_no_chat_image_wrapper = document.createElement("figure");
+		HTML_no_chat_image_wrapper.className = "card-image-wrapper";
+		HTML_no_chat_image_wrapper.setAttribute("id","js-add-chat-first");
+		HTML_no_chat_image_wrapper.setAttribute("data-toggle", "modal");
+		HTML_no_chat_image_wrapper.setAttribute("data-target","#modal-chat-new");
+
+	var HTML_no_chat_image = document.createElement("img");
+		HTML_no_chat_image.className = "js-";
+		HTML_no_chat_image.setAttribute("src", "/img/plus.svg");
+		HTML_no_chat_image.setAttribute("title", i18n.firebase.chat.nochatalt);
+		HTML_no_chat_image.setAttribute("alt", i18n.firebase.chat.nochatalt);
+
+
+	HTML_no_chat_image_wrapper.appendChild(HTML_no_chat_image);
+
+	HTML_no_chat_wrapper.appendChild(HTML_no_chat_text_title);
+	HTML_no_chat_wrapper.appendChild(HTML_no_chat_text);
+	HTML_no_chat_wrapper.appendChild(HTML_no_chat_image_wrapper);
+
+	return HTML_no_chat_wrapper;
+}
+
 function HTMLcreateGroup(key, snap, count, totalNum, activeGroupId, NotSeen, groupId) {
 	var HTML_chat_group_overview_wrapper = document.createElement("div");
-		if(activeGroupId == false) {
+		if(activeGroupId == false && totalNum > 1) {
 			if(count != totalNum) {
 				HTML_chat_group_overview_wrapper.className = "card-wrapper chat js-switch-chat";
 			}else {
 				HTML_chat_group_overview_wrapper.className = "card-wrapper chat js-switch-chat";
 			}
+		}else if (activeGroupId == "" && count === 1 && totalNum === 1) {
+			HTML_chat_group_overview_wrapper.className = "card-wrapper chat js-switch-chat active";
 		}else {
 			if(groupId === activeGroupId) {
 				HTML_chat_group_overview_wrapper.className = "card-wrapper chat js-switch-chat active";
@@ -401,7 +468,7 @@ function HTMLcreateGroup(key, snap, count, totalNum, activeGroupId, NotSeen, gro
 
 		HTML_chat_group_overview_wrapper.setAttribute("id", "chat-"+key);
 
-		if(NotSeen > 0) {
+		if(NotSeen > 0 && NotSeen != "" && NotSeen != "0" && totalNum > 1) {
 			HTML_chat_group_overview_indicator.className = "card-indicator chat-number-indicator show";
 			HTML_chat_group_overview_indicator_number.appendChild(document.createTextNode(NotSeen));
 		}else {

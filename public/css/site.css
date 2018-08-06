@@ -9766,6 +9766,42 @@ form ol {
 .chat-window.active {
   display: block;
 }
+.chat-window.no-chat {
+  display: -webkit-box;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: -ms-flex;
+  display: flex;
+  -moz-flex-direction: column;
+  -ms-flex-direction: column;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+          flex-direction: column;
+  -moz-justify-content: center;
+  -ms-justify-content: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -moz-align-items: center;
+  -ms-align-items: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  text-align: center;
+}
+.chat-window.no-chat .card-image-wrapper {
+  -webkit-transition: 0.15s ease-out;
+  transition: 0.15s ease-out;
+  cursor: pointer;
+  max-width: 7.2rem;
+}
+.chat-window.no-chat .card-image-wrapper:hover,
+.chat-window.no-chat .card-image-wrapper:focus {
+  -webkit-transition: 0.15s ease-out;
+  transition: 0.15s ease-out;
+  -webkit-transform: scale(1.08);
+  transform: scale(1.08);
+}
 @media screen and (max-width: 640px) {
   .chat-window {
     -moz-flex-direction: column;
@@ -12560,8 +12596,9 @@ img.emojione {
 }
 .emoji {
   text-indent: inherit!important;
-  font-size: 2rem!important;
-  margin-right: 0.8rem!important;
+}
+.emoji span {
+  font-size: 2.5rem!important;
 }
 .emoji-picker-container {
   -moz-flex-grow: 1;

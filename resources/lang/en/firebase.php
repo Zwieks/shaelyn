@@ -16,6 +16,11 @@ return [
         'today' => 'Today',
         'yesterday' => 'Yesterday',
 
+        'nochatmaintitle' => 'There are no chats created',
+        'nochattitle' => 'Such an empty space..',
+        'nochattext' => 'Start a chat now!',
+        'nochatalt' => "Let's go!",
+
         'dialog' => [
             'notification' => 'If you don’t want a notification of this chat, just click on the button below',
             'leavechat' => 'Are you sure you want to leave this chat?',

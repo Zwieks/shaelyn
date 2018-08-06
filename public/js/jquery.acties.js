@@ -253,14 +253,16 @@ $(document).on('click', '.js-leave-chat',function(e) {
 	$("#dialog-chat-wrapper").removeClass('active');
 	$("#firebase-chat-attendees").show();
 
-	var first_child_id = $('#firebase-chatgroups').find(">:first-child").attr('id').replace('chat-', '');
-	$('#chat-'+first_child_id).addClass("active");
-	$('#chat-meta-'+first_child_id).addClass('active');
-	$('#chatfriends-'+first_child_id).addClass('active');
-	$('#chat-window-'+first_child_id).addClass('active');
+	if(typeof $('#firebase-chatgroups').find(">:first-child").attr('id') != "undefined") {
+		var first_child_id = $('#firebase-chatgroups').find(">:first-child").attr('id').replace('chat-', '');
+		$('#chat-'+first_child_id).addClass("active");
+		$('#chat-meta-'+first_child_id).addClass('active');
+		$('#chatfriends-'+first_child_id).addClass('active');
+		$('#chat-window-'+first_child_id).addClass('active');
 
-	//Scroll the chat window to the bottom
-	$("#chat-window-"+first_child_id).mCustomScrollbar("scrollTo", "bottom", {scrollInertia:0});
+		//Scroll the chat window to the bottom
+		$("#chat-window-"+first_child_id).mCustomScrollbar("scrollTo", "bottom", {scrollInertia:0});		
+	}
 });
 
 $(document).on('click', '.js-close-item-dialog',function(e) {
@@ -401,25 +403,6 @@ $(document).on("click", ".js-remove-selected-user", function(){
 	$("#selectedchatfriend-"+id).remove();
 });
 
-$(document).on("click","#js-invite-chatfriends", function(){
-	if ($(".invite").length) {
-		$(".invite").each(function() {
-	    	var id = $(this).attr('id').replace('userfriend-', '');
-
-	    	//$.fn.firebase_invite_friends(id, listId);
-		});
-
-		$('#js-invite-chatfriend-search').hide();
-		$('#js-creat-chat-confirmation').show();
-		$('#js-invite-chatfriends').hide();
-		$('.js-modal-cancel').hide();
-
-		setTimeout(function(){
-			$('#modal-chat-new').modal('hide');
-		}, 1500);
-	};		
-});
-
 //INVITE FRIENDS
 $(document).on("click","#modal-search-friends .card",function() {
 	$(this).parent().toggleClass("invite");
@@ -467,24 +450,7 @@ $(document).on("click","#js-invite-chatfriends", function() {
 		setTimeout(function(){
 			$('#modal-chat-new').modal('hide');
 		}, 1500);
-	}
-	// if ($(".invite").length) {
-	// 	$(".invite").each(function() {
-	//     	var id = $(this).attr('id').replace('userfriend-', ''),
-	//     		listId = $('#js-invite-friends').attr('data-list');
-
-	//     	$.fn.firebase_invite_friends(id, listId);
-	// 	});
-
-	// 	$('#js-invite-friend-search').hide();
-	// 	$('#js-friend-invite-confirmation').show();
-	// 	$('#js-invite-friends').hide();
-	// 	$('.js-modal-cancel').hide();
-
-	// 	setTimeout(function(){
-	// 		$('#modal-search-friends').modal('hide');
-	// 	}, 1500);
-	// };		
+	};	
 });
 
 //INVITE USERS
