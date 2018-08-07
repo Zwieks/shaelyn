@@ -61,6 +61,6 @@
 
         @hasSection('modal')
             @yield('modal')
-        @endif  
+        @endif
     </body>
 </html>

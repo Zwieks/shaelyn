@@ -21,7 +21,7 @@
 
         <title>@yield('title')</title>
     </head>
-    <body @if (Request::path() === '/') itemscope itemtype="http://schema.org/WebSite"@endif class="component-@yield('type')@hasSection('heroimage') has-bgimage @endif preload" id="js-loggedin">
+    <body @if (Request::path() === '/') itemscope itemtype="http://schema.org/WebSite"@endif class="component-@yield('type')@hasSection('heroimage') has-bgimage @endif preload modal-open" id="js-loggedin">
        <!--  heading for document outline  -->
         <h2 class="hide-from-layout">@yield('title')</h2>
 
@@ -69,6 +69,10 @@
 
         @hasSection('modal')
             @yield('modal')
+        @endif  
+
+        @hasSection('pageloader')
+            @yield('pageloader')
         @endif  
     </body>
 </html>

@@ -54,6 +54,37 @@
 //** Deprecated `@screen-desktop` as of v3.0.1
 @screen-desktop:             @screen-md-min;
 
+#js-loggedin {
+  &.preload {
+    opacity: 0;
+    background: #fff;
+  }
+}
+
+//Page loader
+.main-page-loader {
+  .transition;
+  position: fixed;
+  background: #fff;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1050;
+  opacity: 1;
+
+  &.hide {
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  .image-wrapper {
+    .center;
+    width: 50rem;
+  }
+}
+
+
 // Kill the scroll on the body
 .modal-open {
   padding-right: 0!important;

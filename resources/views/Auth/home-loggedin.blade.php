@@ -35,6 +35,10 @@
 	@include('modals.layout', ['content' => "modals.chat.new", 'modalsize' => 'large', 'modaltype' => 'transparent', 'modalid' => 'modal-chat-new'])
 @stop
 
+@section('pageloader')
+	@include('modals.loaders.page')
+@stop
+
 {{-- Include Scripts --}}
 @section('headeranimation')
 	<script type="text/javascript" src="{{ URL::asset('js/network-animation.js') }}"></script>

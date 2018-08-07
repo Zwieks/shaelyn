@@ -11658,6 +11658,36 @@ form ol {
 .bootstrap-datetimepicker-widget .picker-switch {
   display: none!important;
 }
+#js-loggedin.preload {
+  opacity: 0;
+  background: #fff;
+}
+.main-page-loader {
+  -webkit-transition: 0.15s ease-out;
+  transition: 0.15s ease-out;
+  position: fixed;
+  background: #fff;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1050;
+  opacity: 1;
+}
+.main-page-loader.hide {
+  opacity: 0;
+  visibility: hidden;
+}
+.main-page-loader .image-wrapper {
+  display: block;
+  margin: auto;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 50rem;
+}
 .modal-open {
   padding-right: 0!important;
   overflow: hidden;

@@ -17,6 +17,16 @@ jQuery(window).on('load resize scroll', function(){
 
 // When all resources are loaded...
 jQuery(window).on('load', function(){
+	//Check if the user is loggedin
+	if($('body').is('#js-loggedin')) {
+		$('#js-page-loader').show();
+
+		setTimeout(function(){
+			$('body').removeClass('modal-open');
+			$('#js-page-loader').addClass('hide');
+		}, 1500);
+	}
+
 
 	// Remove class when Javascript is loaded
 	jQuery('body').removeClass('preload');
@@ -245,6 +255,7 @@ $(document).on('click', '.js-leave-chat',function(e) {
 	var active_groupId = $('#firebase-chat-conversations .active').attr('id').replace('chat-window-', '');
 	
 	ShaelynChat.removeChat(active_groupId);
+
 	$("#chat-"+active_groupId).remove();
 	$('#firebase-chat-options').removeClass('show');
 	$('#chat-meta-'+active_groupId).remove();
@@ -261,7 +272,7 @@ $(document).on('click', '.js-leave-chat',function(e) {
 		$('#chat-window-'+first_child_id).addClass('active');
 
 		//Scroll the chat window to the bottom
-		$("#chat-window-"+first_child_id).mCustomScrollbar("scrollTo", "bottom", {scrollInertia:0});		
+		$("#chat-window-"+first_child_id).mCustomScrollbar("scrollTo", "bottom", {scrollInertia:0});
 	}
 });
 

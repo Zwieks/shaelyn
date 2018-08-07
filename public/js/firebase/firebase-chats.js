@@ -397,6 +397,20 @@ ShaelynChat.prototype.updateUsersChatTime = function(groupId) {
     postRef.update({ 
       time: firebase.database.ServerValue.TIMESTAMP
     })
+};
+
+ShaelynChat.prototype.updateAllUsersChatTime = function(groupId) {
+  const ref = firebase.database().ref();
+  const userschatRef = ref.child('UsersChat');
+  const chatAttendeesRef = ref.child('ChatAttendees').child(groupId);
+
+  chatAttendeesRef.once('value', snap => {
+    snap.forEach(function(userInGroupSnap) {
+      userschatRef.child(userInGroupSnap.key).child(groupId).update({
+        time: firebase.database.ServerValue.TIMESTAMP
+      });
+    });
+  });
 };  
 
 ShaelynChat.prototype.seenCheck = function(active_groupId, messageId) {
@@ -476,6 +490,8 @@ ShaelynChat.prototype.removeChat = function(groupId) {
     chatAttendeesRef.remove();
     chatNotSeenRef.remove();
     usersChatRef.remove();
+  }).then(snapLast => {
+      ShaelynChat.updateAllUsersChatTime(groupId);
   });
 };
 
