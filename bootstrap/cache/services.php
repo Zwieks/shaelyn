@@ -29,6 +29,7 @@
     25 => 'Shaelyn\\Providers\\EventServiceProvider',
     26 => 'Shaelyn\\Providers\\RouteServiceProvider',
     27 => 'Collective\\Html\\HtmlServiceProvider',
+    28 => 'Jenssegers\\Agent\\AgentServiceProvider',
   ),
   'eager' => 
   array (
@@ -46,6 +47,7 @@
     11 => 'Shaelyn\\Providers\\AuthServiceProvider',
     12 => 'Shaelyn\\Providers\\EventServiceProvider',
     13 => 'Shaelyn\\Providers\\RouteServiceProvider',
+    14 => 'Jenssegers\\Agent\\AgentServiceProvider',
   ),
   'deferred' => 
   array (

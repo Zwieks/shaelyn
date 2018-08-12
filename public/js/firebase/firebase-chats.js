@@ -101,17 +101,6 @@ ShaelynChat.prototype.loadGroups = function(groupId, groupsnap, count, totalNum,
   const userChatActive = ref.child('ChatActive').child(groupId);
   const ChatNotSeenMessages =  ref.child('ChatNotSeenMessages').child(userId).child(groupId);
 
-  //If the Group is the only one there is, remove the ChatNotSeen and this group always active
-  if(totalNum == 1) {
-    ShaelynChat.chatActive(groupId, groupId);
-    ChatNotSeenMessages.remove();
-  }
-
-  if(count === totalNum && $("#firebase-chatgroups").find(".active").length <= 0) {
-    ShaelynChat.chatActive(groupId, groupId);
-    ChatNotSeenMessages.remove();
-  }
-
   //const chatAttendeeRef = chatAttendeesRef.child(userId);
   var setChatGroup = function(data) {
     userChatActive.child(userId).once('value', userActiveSnap => {
@@ -214,14 +203,13 @@ ShaelynChat.prototype.loadChatAttendees = function(groupId, count, totalNum, act
 };
 
 //Add chat user to temporary selected friendslist
-ShaelynChat.prototype.addSelectedFriend = function(friendId) {
+ShaelynChat.prototype.addSelectedFriend = function(friendId, modal) {
   const ref = firebase.database().ref();
-
   ref.child('Users').child(friendId).once('value', usersnap => {
-    var friend = HTMLcreateListFriend("selectedchat", "", usersnap);
-    var parent = document.getElementById('firebase-selected-friends');
+    var friend = HTMLcreateListFriend("selectedchat", modal, usersnap);
+    var parent = $("#"+modal).find(".detail-members");
 
-    $.fn.updateOrPrependHTML("selectedchatfriend-"+usersnap.key, friend, parent);   
+    $.fn.updateOrPrependHTML(modal+"selectedchatfriend-"+usersnap.key, friend, parent);   
   });
 };
 
@@ -341,13 +329,12 @@ ShaelynChat.prototype.init = function() {
           chatGroupRef.once('value', groupsnap => {
             const ChatNotSeenMessages =  ref.child('ChatNotSeenMessages').child(userId).child(groupsnap.key);
 
-            if(count === snap.numChildren() && $("#firebase-chatgroups").find(".active").length <= 0) {
-              activeGroupId = groupsnap.key;
-            }
-
             if(activeGroupId && activeGroupId != "") {
               ShaelynChat.chatActive(activeGroupId, activeGroupId);
-              ref.child('ChatNotSeenMessages').child(userId).child(activeGroupId).remove();
+
+              if(snap.numChildren() <= 1) {
+                ref.child('ChatNotSeenMessages').child(userId).child(activeGroupId).remove();
+              }
             }
 
             //Create the GROUPS
@@ -373,6 +360,17 @@ ShaelynChat.prototype.init = function() {
         })
       });
       this.updateChatGroupOrder(); 
+
+      //Check the window width
+      if ($(window).width() <= 768) {
+        setTimeout(function(){
+          $("#firebase-chat-conversations").find('.active').scrollTop(10000000);
+            if(count === snap.numChildren() && $("#firebase-chatgroups").find(".active").length <= 0) {
+              activeGroupId = groupsnap.key;
+            }
+
+        }, 5000);
+      };
     }
   });
 };
@@ -425,7 +423,7 @@ ShaelynChat.prototype.seenCheck = function(active_groupId, messageId) {
     snap.forEach(function(userInGroupSnap) {
       userChatActive.child(userInGroupSnap.key).once('value', userActiveSnap => {
         if(userActiveSnap.val() != null) {
-          ref.child('ChatNotSeenMessages').child(userInGroupSnap.key).child(active_groupId).remove();
+          ref.child('C').child(userInGroupSnap.key).child(active_groupId).remove();
         }else {
           ref.child('ChatNotSeenMessages').child(userInGroupSnap.key).child(active_groupId).child(messageId).set(true);
         }
@@ -568,6 +566,14 @@ ShaelynChat.prototype.saveMessage = function(e) {
         this.toggleButton();
         ShaelynChat.chatKey = "";
         ShaelynChat.firstmessage = false;
+
+        //Check the window width
+        if ($(window).width() <= 768) {
+          setTimeout(function(){
+            $("#firebase-chat-conversations").find('.active').scrollTop(10000000);
+          }, 500);
+        };
+
       }.bind(this)).catch(function(error) {
         console.error('Error writing new message to Firebase Database', error);
       });

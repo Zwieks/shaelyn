@@ -30,10 +30,6 @@ jQuery(window).on('load', function(){
 
 	// Remove class when Javascript is loaded
 	jQuery('body').removeClass('preload');
-
-	// Init Kirra and Google Analytics tracker
-	jQuery(window).analyticsTracker();
-
 });
 
 function getRandomColor() {
@@ -388,30 +384,60 @@ $(document).on("click",".js-switch-chat",function(){
 	}, 100);
 });
 
-//INVITE CHATFRIENDS
-$(document).on("click","#modal-chat-new .card",function(){
-	var id = $(this).parent().attr('id').replace('userfriend-', '')
+
+
+
+
+
+//INVITE ADD CHAT ADD FRIENDS
+$(document).on("click","#modal-chat-add-users .card",function(){
+	var id = $(this).parent().attr('id').replace('userfriend-', ''),
+		modal = $(this).closest(".modal").attr("id");
 
 	if($(this).parent().hasClass('invite')) {
 		$(this).parent().removeClass('invite');
-		$('#selectedchatfriend-'+id).remove();
+		$('#'+modal+'selectedchatfriend-'+id).remove();
 	}else {
 		
 		$(this).parent().addClass('invite');
 		//Added the selected friend to the liste
-		ShaelynChat.addSelectedFriend(id);
+		ShaelynChat.addSelectedFriend(id, modal);
 	}
 });
 
+//INVITE CHATFRIENDS
+$(document).on("click","#modal-chat-new .card",function(){
+	var id = $(this).parent().attr('id').replace('userfriend-', ''),
+		modal = $(this).closest(".modal").attr("id");
+
+	if($(this).parent().hasClass('invite')) {
+		$(this).parent().removeClass('invite');
+		$('#'+modal+'selectedchatfriend-'+id).remove();
+	}else {
+		
+		$(this).parent().addClass('invite');
+		//Added the selected friend to the liste
+		ShaelynChat.addSelectedFriend(id, modal);
+	}
+});
+
+
+
+
+
+
+
+
 //REMOVE SELECTED CHAT USER
 $(document).on("click", ".js-remove-selected-user", function(){
-	var id = $(this).parent().attr('id').replace('selectedchatfriend-', '');
+	var modal = $(this).closest(".modal").attr("id"),
+		id = $(this).parent().attr('id').replace(modal+'selectedchatfriend-', '');
 
 	//De-select the user in the list
-	$("#firebase-search-chatfriends-results").find("#userfriend-"+id).removeClass("invite");	
+	$(this).closest(".modal").find("#userfriend-"+id).removeClass("invite");	
 
 	//Remove the HTML of the user from the list
-	$("#selectedchatfriend-"+id).remove();
+	$("#"+modal+"selectedchatfriend-"+id).remove();
 });
 
 //INVITE FRIENDS
@@ -440,9 +466,11 @@ $(document).on("click","#js-invite-friends", function(){
 });
 
 //INVITE SLECTED FRIENDS FOR CHAT
-$(document).on("click","#js-invite-chatfriends", function() {
-	var parent = $("#firebase-selected-friends"),
+$(document).on("click",".js-invite-chatfriends", function() {
+	var parent = $(this).closest(".modal").find(".detail-members"),
+		id = $(this).attr("id").replace('js-invite-', ''),
 		name = $("#new_chatname").val(),
+		success = false,
 		users = [];
 
 	if(parent.children().length > 0) {
@@ -451,16 +479,31 @@ $(document).on("click","#js-invite-chatfriends", function() {
 			users.push(id);
 		});
 
-		ShaelynChat.createNewChat("", users, name);
+		if(typeof name != "undefined" && name != "" && id == "chatfriends") {
+			ShaelynChat.createNewChat("", users, name);
+			success = true;
+		}else if(id == "addfriends") {
 
-		$('#js-invite-chatfriends-search').hide();
-		$('#js-creat-chat-confirmation').show();
-		$('#js-invite-chatfriends').hide();
-		$('.js-modal-cancel').hide();
 
-		setTimeout(function(){
-			$('#modal-chat-new').modal('hide');
-		}, 1500);
+			//ADD USER TO CHAT HERE!!!!!
+
+			
+			success = true;
+		}
+
+		if(success == true) {
+			$('.js-invite-wrapper').hide();
+			$('.js-confirmation-wrapper').show();
+			$('.js-invite-chatfriends').hide();
+			$('.js-modal-cancel').hide();
+
+			setTimeout(function(){
+				var id = $(".js-confirmation-wrapper").closest(".modal").attr("id");
+				$('#'+id).modal('hide');
+			}, 1500);
+		}else {
+			console.log("Nope");
+		}
 	};	
 });
 

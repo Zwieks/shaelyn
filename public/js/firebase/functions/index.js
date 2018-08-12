@@ -82,64 +82,6 @@ exports.decreaseListItemsCount = functions.database.ref('/listItems/{list_id}/{l
 	});	
 });
 
-exports.sendNotification = functions.database.ref('/notifications/{user_id}/{notification_id}').onWrite(event => {
-   
-    const user_id = event.params.user_id;
-    const notification_id = event.params.notification_id;
-   
-    console.log('We have a notification : ', user_id);
-   
-    if (!event.data.val()){
-        return console.log('A notification has been deleted from the database', notification_id);
-    }
-   
-    const fromUser = admin.database().ref(`/notifications/${user_id}/${notification_id}`).once('value');
-    return fromUser.then(fromUserResult => {
-       
-        const from_user_id = fromUserResult.val().from;
-           
-        console.log('You have a new notification from: ', from_user_id);
-       
-        const userQuery = admin.database().ref(`/Users/${from_user_id}/name`).once('value');
-        return userQuery.then(userResult => {
-           
-            const userName = userResult.val();
-           
-            console.log('senders name is: ', userName);
- 
-           
-            const deviceToken = admin.database().ref(`/Users/${user_id}/device_token`).once('value');
-           
-            return deviceToken.then(result => {
-               
-                const token_id = result.val();
-               
-                const payload = {
-                    notification: {
-                        title: `${userName} wants to be your friend!`,
-                        body: "What do you say?",
-                        icon: "default",
-                        click_action: "com.stella.dennis.shaelyn_TARGET_NOTIFICATION"
-                    },
-                    data: {
-                        from_user_id: from_user_id
-                    }
-                };
-           
-                return admin.messaging().sendToDevice(token_id, payload).then(response => {
-                    console.log('This was the notification feature');
-
-                    return {results: []};
-                });
-               
-            });
-           
-        });
-           
-    });
-   
-});
-
 // Sends a notifications to all users when a new message is posted.
 exports.sendNotificationNewChat = functions.database.ref('/BetaChat/{groupId}').onCreate((snapshot, context) => {
 	const userId = snapshot.val().chatOwner;

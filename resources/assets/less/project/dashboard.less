@@ -3,6 +3,10 @@
 
 	.page-content {
 			background: #e8e8e8;
+
+		@media @bp-MobileL {
+			background: @white;
+		}
 	}
 }
 
@@ -733,6 +737,10 @@
 	width: 50%;
 	background: #e5e5e530;
 	position: relative;
+
+	@media @bp-MobileL {
+		display: none;
+	}
 }
 
 .user-chats-wrapper {
@@ -831,7 +839,8 @@
 		overflow-y: auto;
 
 		&.active {
-			.displayflex;
+		    display: block;
+		    overflow-x: hidden;
 		}
 	}
 

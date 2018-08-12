@@ -178,6 +178,7 @@ return [
         Shaelyn\Providers\RouteServiceProvider::class,
 
         Collective\Html\HtmlServiceProvider::class,
+        Jenssegers\Agent\AgentServiceProvider::class,
 
     ],
 
@@ -229,6 +230,7 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'Form' => Collective\Html\FormFacade::class,
         'Html' => Collective\Html\HtmlFacade::class,
+        'Agent' => Jenssegers\Agent\Facades\Agent::class,
 
     ],
 

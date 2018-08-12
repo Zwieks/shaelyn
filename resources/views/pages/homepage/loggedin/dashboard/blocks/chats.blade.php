@@ -14,6 +14,10 @@
 					<li class="icon add" id="js-add-chat" data-toggle="modal" data-target="#modal-chat-new">
 						<img class="js-" src="/img/plus.svg" alt="Add chat">
 					</li>
+
+					<li class="icon add" id="js-add-users-chat" data-toggle="modal" data-target="#modal-chat-add-users">
+						<img class="js-" src="/img/add-user.svg" alt="Add chat users">
+					</li>
 				</ul>
 
 				<div id="firebase-chat-options" class="chat-options-wrapper">

@@ -84,7 +84,9 @@
 			});
   	}
 
-  	function searchChatFriends(search) {
+  	function searchChatFriends(search, modalId) {
+  		var search_users_results = "";
+
   		usersRef
   			.orderByChild("nameToLower")
   			.limitToFirst(9)
@@ -92,7 +94,7 @@
   			.endAt(search.toLowerCase() + "\uf8ff")
   			.on("value", function(snapshot) {
   				if(snapshot.val() != null) {
-  					var search_users_results = document.getElementById('firebase-search-chatfriends-results');
+  					search_users_results = document.getElementById(modalId);
   					//var selected_users = document.getElementById('firebase-selected-friends');
 
   					search_users_results.innerHTML = '';
@@ -111,7 +113,7 @@
 			});
   	}
 
-  	function searchFriends(search, listId) {
+  	function searchFriends(search, modalId, listId) {
   		usersRef
   			.orderByChild("nameToLower")
   			.limitToFirst(9)
@@ -550,7 +552,8 @@
 
 	  		$(document).on("input",".firebase-search-friends",function(e) {
 				var dInput = this.value,
-					type = $(this).attr('data-type');
+					modalId = $(this).closest(".modal").find(".firebase-search-chatfriends-results").attr("id");
+					type = $(this).attr('data-type'),
 					listId = $('#js-invite-friends').attr('data-list');
 
 				if(typeof dInput == 'undefined') {
@@ -562,20 +565,21 @@
 				}
 
 				if(dInput.trim() != '' && typeof listId != 'undefined' && listId != '') {
-					searchFriends(dInput, listId);
+					searchFriends(dInput, modalId, listId);
 				}else if(dInput.trim() != '') {
-					searchChatFriends(dInput);
+					searchChatFriends(dInput, modalId);
 				}
 	  		});
 
 	  		$(document).on("input",".firebase-search-users",function(e) {
-				var dInput = this.value;
+				var dInput = this.value,
+					type = $(this).attr('data-type');
 
 				if(typeof dInput == 'undefined') {
 					dInput = $(this).text();
 				}
 
-				if(dInput.trim() != '' && type == 'chatfriends') {
+				if(dInput.trim() != '' && type == 'allusers') {
 					searchUsers(dInput);
 				}
 	  		});

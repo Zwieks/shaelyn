@@ -8,6 +8,7 @@
             $('#js-invite-friend-search').show();
             $('#js-friend-invite-confirmation').hide();
             $('#firebase-search-friends-results').empty();
+            $('#js-invite-friends').attr('data-list', "");
         });
 
         //Click on the agenda item

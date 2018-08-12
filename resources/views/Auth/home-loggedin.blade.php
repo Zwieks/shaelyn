@@ -17,7 +17,9 @@
 
 {{-- Include Scripts --}}
 @section('page-scripts')
-	@include('scripts.emoticons.emoticons-init')
+	@if (!Agent::isMobile() )
+		@include('scripts.emoticons.emoticons-init')
+	@endif	
 	@include('scripts.owlslider.owlslider-init')
 	@include('scripts.customscrollbar.customscrollbar-init')
 	@include('scripts.textarea.textarea-init')
@@ -25,6 +27,7 @@
     @include('scripts.modal.modal-show-search-friends-init', ['modalid' => 'modal-search-users'])
     @include('scripts.modal.modal-show-chat-image-init', ['modalid' => 'modal-chat-image'])
     @include('scripts.modal.modal-show-chat-new-init', ['modalid' => 'modal-chat-new'])
+    @include('scripts.modal.modal-show-chat-addusers-init', ['modalid' => 'modal-chat-add-users'])
 @stop
 
 {{-- Include Modal --}}
@@ -32,6 +35,7 @@
 	@include('modals.layout', ['content' => "modals.search.friends", 'modalsize' => 'large', 'modaltype' => 'transparent', 'modalid' => 'modal-search-friends'])
 	@include('modals.layout', ['content' => "modals.search.users", 'modalsize' => 'large', 'modaltype' => 'transparent', 'modalid' => 'modal-search-users'])
 	@include('modals.layout', ['content' => "modals.chat.image", 'modalsize' => 'large', 'modaltype' => 'transparent', 'modalid' => 'modal-chat-image'])
+	@include('modals.layout', ['content' => "modals.chat.addusers", 'modalsize' => 'large', 'modaltype' => 'transparent', 'modalid' => 'modal-chat-add-users'])
 	@include('modals.layout', ['content' => "modals.chat.new", 'modalsize' => 'large', 'modaltype' => 'transparent', 'modalid' => 'modal-chat-new'])
 @stop
 
@@ -45,15 +49,18 @@
 	<script type="text/javascript" src="{{ URL::asset('js/network-animation-init.js') }}"></script>
 @stop
 
-@section('emojipicker')
-	<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet">
-	<link href="{{ URL::asset('css/emoticons/emoji.css') }}" rel="stylesheet">
+@if (!Agent::isMobile() )
+	@section('emojipicker')
+		<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet">
+		<link href="{{ URL::asset('css/emoticons/emoji.css') }}" rel="stylesheet">
 
-	<script src="{{ URL::asset('js/emoticons/config.js') }}"></script>
-  	<script src="{{ URL::asset('js/emoticons/util.js') }}"></script>
-  	<script src="{{ URL::asset('js/emoticons/jquery.emojiarea.js') }}"></script>
-  	<script src="{{ URL::asset('js/emoticons/emoji-picker.js') }}"></script>
-@stop
+		<script src="{{ URL::asset('js/emoticons/config.js') }}"></script>
+	  	<script src="{{ URL::asset('js/emoticons/util.js') }}"></script>
+	  	<script src="{{ URL::asset('js/emoticons/jquery.emojiarea.js') }}"></script>
+	  	<script src="{{ URL::asset('js/emoticons/emoji-picker.js') }}"></script>
+	@stop
+@endif
+
 
 @section('firebase')
 	<script type="text/javascript" src="{{ URL::asset('js/firebase/firebase-lists.js') }}"></script>

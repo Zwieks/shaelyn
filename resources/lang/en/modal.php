@@ -20,6 +20,9 @@ return [
             'title' => 'Start a new chat',
             'addfriends' => 'Add your friends',
         ],
+        'add' => [
+            'friends' => 'Add friends to this chat'
+        ]
     ],
 
     'confirmation' => [
