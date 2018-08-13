@@ -467,7 +467,8 @@ $(document).on("click","#js-invite-friends", function(){
 
 //INVITE SLECTED FRIENDS FOR CHAT
 $(document).on("click",".js-invite-chatfriends", function() {
-	var parent = $(this).closest(".modal").find(".detail-members"),
+	var modal =  $(this).closest(".modal"),
+		parent = modal.find(".detail-members"),
 		id = $(this).attr("id").replace('js-invite-', ''),
 		name = $("#new_chatname").val(),
 		success = false,
@@ -475,7 +476,17 @@ $(document).on("click",".js-invite-chatfriends", function() {
 
 	if(parent.children().length > 0) {
 		parent.children('li').each(function() {
-			var id = $(this).attr('id').replace('selectedchatfriend-', '');
+			var stringId = $(this).attr('id');
+			var id = "";
+
+			if(stringId.includes("modal-chat-add-users")) {
+				id = stringId.replace('modal-chat-add-usersselectedchatfriend-', '');
+			}else if(stringId.includes("modal-chat-new")) {
+				id = stringId.replace('modal-chat-newselectedchatfriend-', '');
+			}else if(stringId.includes("selectedchatfriend-")) {
+				id = stringId.replace('selectedchatfriend-', '');
+			}
+
 			users.push(id);
 		});
 
@@ -483,11 +494,10 @@ $(document).on("click",".js-invite-chatfriends", function() {
 			ShaelynChat.createNewChat("", users, name);
 			success = true;
 		}else if(id == "addfriends") {
-
-
 			//ADD USER TO CHAT HERE!!!!!
+			var chatid = modal.find(".firebase-search-friends").attr("data-chatid");
 
-			
+			ShaelynChat.addChatUsers(users, chatid);
 			success = true;
 		}
 
@@ -501,8 +511,6 @@ $(document).on("click",".js-invite-chatfriends", function() {
 				var id = $(".js-confirmation-wrapper").closest(".modal").attr("id");
 				$('#'+id).modal('hide');
 			}, 1500);
-		}else {
-			console.log("Nope");
 		}
 	};	
 });

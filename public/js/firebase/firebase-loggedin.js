@@ -84,7 +84,7 @@
 			});
   	}
 
-  	function searchChatFriends(search, modalId) {
+  	function searchChatFriends(search, modalId, chatId) {
   		var search_users_results = "";
 
   		usersRef
@@ -99,15 +99,22 @@
 
   					search_users_results.innerHTML = '';
 	  				snapshot.forEach(function(childSnapshot) {
-					  	friendsRef.child(firebase.auth().currentUser.uid+'/'+childSnapshot.key).once('value', function(snapshot) {
-					  		if (snapshot.exists()) {
-								var searchItem = HTMLcreateFriend(childSnapshot);
-					
-								search_users_results.appendChild(searchItem);
-								//selected_users.appendChild(searchItem);
-					  		}
+					  	friendsRef.child(firebase.auth().currentUser.uid+'/'+childSnapshot.key).once('value', function(friendSnap) {
+						}).then(snap => {
+							if (snap.exists()) {
+								if(typeof chatId != "undefined") {
+									chatAttendeesRef.child(chatId).child(childSnapshot.key).once('value', function(chatAttendeeSnap) {
+								  		if (!chatAttendeeSnap.exists()) {
+											var searchItem = HTMLcreateFriend(childSnapshot);
+											search_users_results.appendChild(searchItem);
+								  		}
+									});
+								}else {
+									var searchItem = HTMLcreateFriend(childSnapshot);
+									search_users_results.appendChild(searchItem);
+								}
+							}
 						});
-
 	  				});
   				}
 			});
@@ -552,7 +559,9 @@
 
 	  		$(document).on("input",".firebase-search-friends",function(e) {
 				var dInput = this.value,
-					modalId = $(this).closest(".modal").find(".firebase-search-chatfriends-results").attr("id");
+					modal = $(this).closest(".modal"),
+					chatId = modal.find(".firebase-search-friends").attr("data-chatid"),
+					modalId = modal.find(".firebase-search-chatfriends-results").attr("id");
 					type = $(this).attr('data-type'),
 					listId = $('#js-invite-friends').attr('data-list');
 
@@ -567,7 +576,7 @@
 				if(dInput.trim() != '' && typeof listId != 'undefined' && listId != '') {
 					searchFriends(dInput, modalId, listId);
 				}else if(dInput.trim() != '') {
-					searchChatFriends(dInput, modalId);
+					searchChatFriends(dInput, modalId, chatId);
 				}
 	  		});
 

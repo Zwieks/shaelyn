@@ -202,6 +202,51 @@ ShaelynChat.prototype.loadChatAttendees = function(groupId, count, totalNum, act
   });
 };
 
+ShaelynChat.prototype.addChatUsers = function(friends, chatId) {
+  const userId = firebase.auth().currentUser.uid;
+  const ref = firebase.database().ref();
+  const chatAttendeesRef = ref.child('ChatAttendees').child(chatId);
+  const userChatRef = ref.child('UsersChat');
+  const users = ref.child('Users');
+  const chat = ref.child('BetaChat').child(chatId);
+  const listAttendees = ref.child('listAttendees').child(chatId);
+  const UsersLists = ref.child('UsersLists');
+
+  let  inList = false;
+  let timestamp = firebase.database.ServerValue.TIMESTAMP;
+
+  chat.once('value', chatSnap => {
+    if(chatSnap.val().type == "list") {
+      inList = true;
+    }
+  }).then(function() {
+    friends.forEach(function(user) {
+      users.child(user).once('value', userSnap => {}).then(snap => {
+        chatAttendeesRef.child(user).update({
+          notification: true,
+          notseen: 0,
+          time: timestamp,
+          token: snap.val().device_token
+        });
+      }).then(function() {
+        userChatRef.child(user).child(chatId).update({
+          seen: false,
+          time: timestamp
+        });
+
+        if(inList === true) {
+          UsersLists.child(user).child(chatId).set(true);
+
+          listAttendees.child(user).set(true);
+        }
+
+        // We load currently existing chat messages.
+        ShaelynChat.updateAllUsersChatTime(chatId);
+      });
+    });
+  });
+};
+
 //Add chat user to temporary selected friendslist
 ShaelynChat.prototype.addSelectedFriend = function(friendId, modal) {
   const ref = firebase.database().ref();
@@ -423,7 +468,7 @@ ShaelynChat.prototype.seenCheck = function(active_groupId, messageId) {
     snap.forEach(function(userInGroupSnap) {
       userChatActive.child(userInGroupSnap.key).once('value', userActiveSnap => {
         if(userActiveSnap.val() != null) {
-          ref.child('C').child(userInGroupSnap.key).child(active_groupId).remove();
+          ref.child('ChatNotSeenMessages').child(userInGroupSnap.key).child(active_groupId).remove();
         }else {
           ref.child('ChatNotSeenMessages').child(userInGroupSnap.key).child(active_groupId).child(messageId).set(true);
         }

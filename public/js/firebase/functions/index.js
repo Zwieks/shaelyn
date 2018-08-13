@@ -83,6 +83,55 @@ exports.decreaseListItemsCount = functions.database.ref('/listItems/{list_id}/{l
 });
 
 // Sends a notifications to all users when a new message is posted.
+exports.sendNotificationAddUserList = functions.database.ref('/listAttendees/{listId}/{user}').onCreate((snapshot, context) => {
+	const userId = snapshot.key;
+	const listId = context.params.listId;
+	let tokens = []; // All Device tokens to send a notification to.
+	const payload = {
+		notification: {
+			click_action: `https://shaelyn.io`,
+		}
+	};
+
+	return admin.database().ref('UserSettings').child(userId).once('value').then((userSettingsInfo) => {
+		if(userSettingsInfo.val().notifications !== true) {
+			return false;
+		}
+		return null;
+	}).then(function() {
+		return admin.database().ref('lists').child(listId).once('value').then((listInfo) => {
+			var text = "You've been added to list "+listInfo.val().name;
+			payload.notification.body = text ? (text.length <= 100 ? text : text.substring(0, 97) + '...') : '';
+
+			return null;
+		}).then(function() {
+			//Get the user info
+			return admin.database().ref('Users').child(userId).once('value').then((userInfo) => {
+				payload.notification.icon = '/img/logo-3d.png'
+				payload.notification.title = "Hi there!"
+
+				if(userInfo.val().device_token !== "") {
+					tokens.push(userInfo.val().device_token);
+				}
+
+				// Send notifications to all tokens.
+				if (tokens.length) {
+		      		return admin.messaging().sendToDevice(tokens, payload);
+		      	}else {
+		      		return null;
+		      	}
+
+			}).then((response) => {
+				return cleanupTokens(response, listId, tokens);
+			}).then(() => {
+				console.log('Notifications have been sent and tokens cleaned up.');
+				return null;
+			});
+		});
+	});
+});
+
+// Sends a notifications to all users when a new message is posted.
 exports.sendNotificationNewChat = functions.database.ref('/BetaChat/{groupId}').onCreate((snapshot, context) => {
 	const userId = snapshot.val().chatOwner;
 	const groupId = context.params.groupId;
