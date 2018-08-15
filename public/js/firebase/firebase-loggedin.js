@@ -646,6 +646,17 @@
 			  		updates[field+fieldid+itemid+'/changedBy'] = uid;
 			  	}
 
+			  	if(field == "lists") {
+			  		listsRef.child(fieldid).once('value', snap => {
+			  			if(snap.val().chat && snap.val().chat === true) {
+			  				const postRef = ChatsRef.child(fieldid)
+						    postRef.update({ 
+						      name: content
+						    });
+			  			}
+			  		});	
+			  	}
+
 			  	updates[field+fieldid+itemid+'/'+item] = content;
 
 			  	return ref.update(updates);

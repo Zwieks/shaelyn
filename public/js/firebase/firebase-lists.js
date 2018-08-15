@@ -264,11 +264,19 @@
 	function writeNewFriendsInvite(inviteUserId, uId, listId) {
 	  	// Write the new post's data simultaneously in the posts list and the user's post list.
 	  	var updates = {};
+	  	var friends = [];
 
-		updates['UsersLists/'+ inviteUserId +'/'+ listId] = true;
-		updates['listAttendees/'+ listId +'/'+ inviteUserId] = true;
+	  	firebase.database().ref().child('lists').child(listId).once('value', ListsSnap => { 
+	  		if(ListsSnap.val().chat && ListsSnap.val().chat != false) {
+	  			friends.push(inviteUserId);
+	  			ShaelynChat.addChatUsers(friends, listId);
+	  		}else {
+				updates['UsersLists/'+ inviteUserId +'/'+ listId] = true;
+				updates['listAttendees/'+ listId +'/'+ inviteUserId] = true;
 
-		return firebase.database().ref().update(updates);		
+				return firebase.database().ref().update(updates);	  			
+	  		}
+	  	});
 	}
 
 	function writeNewUserInvite(inviteUserId, uId) {

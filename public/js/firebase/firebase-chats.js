@@ -62,8 +62,9 @@ ShaelynChat.prototype.playSound = function(groupId){
 
 //Create Chat Windows for the group or single chat
 ShaelynChat.prototype.loadChatWindows = function(groupId, groupsnap, count, totalNum, activeGroupId) {
+  const ref = firebase.database().ref();
   const chat_meta = document.getElementById('firebase-chat-meta');
-  
+  const chat = ref.child('BetaChat').child(groupsnap.key);
   var parent = this.chat_window_wrapper;
   var meta = HTMLcreateChatMeta(groupsnap.key, groupsnap, count, totalNum, activeGroupId);
   var initCheck = true;
@@ -91,6 +92,18 @@ ShaelynChat.prototype.loadChatWindows = function(groupId, groupsnap, count, tota
         }
     }).mCustomScrollbar("scrollTo","bottom",{scrollInertia:0});
   }
+
+  chat.on('value', snap => {
+    //Update Chatnaem
+    var meta = HTMLcreateChatMeta(snap.key, snap, count, totalNum, activeGroupId);
+    $.fn.updateOrPrependHTML("chat-meta-"+snap.key, meta, chat_meta);
+
+    //Update Groupname
+    var group = HTMLcreateGroupTitle(snap);
+    if($("#chattitle-"+snap.key).length) {
+      $.fn.updateOrPrependHTML("chattitle-"+snap.key, group, null);    
+    }
+  });
 };
 
 //Creates the chat overview with all the user groups or individual chats

@@ -401,6 +401,15 @@ function HTMLcreateNoChat() {
 	return HTML_no_chat_wrapper;
 }
 
+function HTMLcreateGroupTitle(snap) {
+	var HTML_chat_group_overview_title = document.createElement("span");
+		HTML_chat_group_overview_title.className = "card-title";
+		HTML_chat_group_overview_title.setAttribute("id", "chattitle-"+snap.key);
+		HTML_chat_group_overview_title.appendChild(document.createTextNode(snap.val().name));
+
+	return HTML_chat_group_overview_title;
+}
+
 function HTMLcreateGroup(key, snap, count, totalNum, activeGroupId, NotSeen, groupId) {
 	var HTML_chat_group_overview_wrapper = document.createElement("div");
 		if(activeGroupId == false && totalNum > 1) {
@@ -442,6 +451,7 @@ function HTMLcreateGroup(key, snap, count, totalNum, activeGroupId, NotSeen, gro
 
 	var HTML_chat_group_overview_title = document.createElement("span");
 		HTML_chat_group_overview_title.className = "card-title";
+		HTML_chat_group_overview_title.setAttribute("id", "chattitle-"+key);
 		HTML_chat_group_overview_title.appendChild(document.createTextNode(snap.name));	
 
 	var HTML_chat_group_overview_description = document.createElement("span");
