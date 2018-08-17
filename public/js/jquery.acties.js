@@ -75,7 +75,21 @@ function setCaretPosition(ctrl, pos)
 	}
 }
  
+$.fn.resizableInput = function(el, factor) {
+	if (el) {
+	  var int = Number(factor) || 7.7;
+	  
+	  function resize() {
+	  	el.style.width = ((el.value.length+1) * int) + 'px';
+	  }
+	  resize();
+	}
+};
 
+$(document).on('input', '.resizable',function(e) {
+	var id = $(this).attr("id");
+	$.fn.resizableInput(document.getElementById(id),9);
+});
 /*
 ** Returns the caret (cursor) position of the specified text field.
 ** Return value range is 0-oField.value.length.

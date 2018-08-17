@@ -240,7 +240,7 @@
   					});	
 
 	  				var list_overview_item = HTMLcreateListOverviewItem(snap, ownerImage),
-	  					focusCheck = checkFocus(),
+	  					focusCheck = $.fn.checkFocus(),
 	  					show = false;
 
 	  				//HTML for the main title of the list
@@ -350,7 +350,7 @@
 						return user;
 					});
 
-					var focusCheck = checkFocus();
+					var focusCheck = $.fn.checkFocus();
 					var item = HTMLcreateListItem(listId, snap, focusCheck, user, active_remove);
 
 					//Set the focus position of the cursor
@@ -423,7 +423,7 @@
   		});
   	}
 
-  	function checkFocus() {
+  	$.fn.checkFocus = function() {
   		var elements = document.querySelectorAll('[focus]');
   		
   		[].forEach.call(elements, function(element) {
@@ -599,6 +599,7 @@
 					itemid = $(this).attr('itd'),
 					fieldid = $(this).attr('sub'),
 					owner = $(this).attr('own'),
+					id = $(this).attr('id'),
 					value = $(this).attr('value'),
 					changer = false,
 					dInput = this.value;
@@ -607,7 +608,7 @@
 					dInput = $(this).text();
 				}
 
-			    UpdateField(field, user.uid, fieldid, owner, dInput, item, itemid, changer);
+			    UpdateField(field, user.uid, fieldid, owner, dInput, item, itemid, changer, id);
 	  		});
 
 			$(document).on("change",".firebase-set-checkbox",function(e) {
@@ -616,13 +617,14 @@
 					itemid = $(this).attr('itd'),
 					fieldid = $(this).attr('sub'),
 					owner = $(this).attr('own'),
+					id = $(this).attr('id'),
 					changer = true,
 					dInput = $(this).prop('checked');
 
-			    UpdateField(field, user.uid, fieldid, owner, dInput, item, itemid, changer);
+			    UpdateField(field, user.uid, fieldid, owner, dInput, item, itemid, changer, id);
 			});
 
-			function UpdateField(field, uid, fieldid, owner, content, item, itemid, changer) {
+			function UpdateField(field, uid, fieldid, owner, content, item, itemid, changer, id) {
 			  	// Write the new post's data.
 			  	var updates = {};
 
@@ -657,9 +659,16 @@
 			  		});	
 			  	}
 
-			  	updates[field+fieldid+itemid+'/'+item] = content;
+			  	if(field != "chat") {
+			  		updates[field+fieldid+itemid+'/'+item] = content;
 
-			  	return ref.update(updates);
+			  		return ref.update(updates);
+			  	}else if(field == "chat" && id.includes("mainchattitle")) {
+			  		const postRef = ChatsRef.child(fieldid)
+				    postRef.update({ 
+				      name: content
+				    });
+			  	}
 			}
 	  	}
 	});

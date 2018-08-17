@@ -66,7 +66,7 @@ ShaelynChat.prototype.loadChatWindows = function(groupId, groupsnap, count, tota
   const chat_meta = document.getElementById('firebase-chat-meta');
   const chat = ref.child('BetaChat').child(groupsnap.key);
   var parent = this.chat_window_wrapper;
-  var meta = HTMLcreateChatMeta(groupsnap.key, groupsnap, count, totalNum, activeGroupId);
+  var meta = HTMLcreateChatMeta(groupsnap.key, groupsnap, count, totalNum, activeGroupId, null);
   var initCheck = true;
   $.fn.updateOrPrependHTML("chat-meta-"+groupId, meta, chat_meta);
 
@@ -80,7 +80,8 @@ ShaelynChat.prototype.loadChatWindows = function(groupId, groupsnap, count, tota
     var chat_window = HTMLcreateChatWindow(groupsnap.key, groupsnap, count, totalNum, activeGroupId);
     $.fn.updateOrPrependHTML("chat-window-"+groupId, chat_window, parent);
   }
-
+  
+  $.fn.resizableInput(document.getElementById("mainchattitle-"+groupsnap.key),11);
   //Check the window width
   if ($(window).width()>768 && initCheck == true) {
     //Init the scrollbar
@@ -95,14 +96,31 @@ ShaelynChat.prototype.loadChatWindows = function(groupId, groupsnap, count, tota
 
   chat.on('value', snap => {
     //Update Chatnaem
-    var meta = HTMLcreateChatMeta(snap.key, snap, count, totalNum, activeGroupId);
-    $.fn.updateOrPrependHTML("chat-meta-"+snap.key, meta, chat_meta);
+    var focusCheck = $.fn.checkFocus(),
+        meta = HTMLcreateChatMeta(snap.key, snap, count, totalNum, activeGroupId, focusCheck);
+
+    //Set the focus position of the cursor
+    if(focusCheck != '') {
+      var contentEditable = doGetCaretPosition(document.querySelectorAll('[uni='+focusCheck+']')[0]);
+
+      //Set the cursor position
+      if(contentEditable != 0) {
+        $.fn.updateOrPrependHTML("chat-meta-"+snap.key, meta, chat_meta);
+        setCaretPosition(document.querySelectorAll('[uni='+focusCheck+']')[0],contentEditable); 
+      }
+
+
+    }else {
+      $.fn.updateOrPrependHTML("chat-meta-"+snap.key, meta, chat_meta);
+    }
 
     //Update Groupname
     var group = HTMLcreateGroupTitle(snap);
     if($("#chattitle-"+snap.key).length) {
       $.fn.updateOrPrependHTML("chattitle-"+snap.key, group, null);    
     }
+
+    $.fn.resizableInput(document.getElementById("mainchattitle-"+snap.key),11);
   });
 };
 

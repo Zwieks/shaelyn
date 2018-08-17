@@ -44,7 +44,7 @@ function HTMLcreateChatMetaEmpty() {
 	return HTML_chat_title_wrapper;
 }
 
-function HTMLcreateChatMeta(key, snap, count, totalNum, activeGroupId) {
+function HTMLcreateChatMeta(key, snap, count, totalNum, activeGroupId, focus) {
 	var HTML_chat_title_wrapper = document.createElement("div");
 		HTML_chat_title_wrapper.setAttribute("id", "chat-meta-"+snap.key);
 
@@ -62,9 +62,32 @@ function HTMLcreateChatMeta(key, snap, count, totalNum, activeGroupId) {
 			}	
 		}
 
-	var HTML_chat_title = document.createElement("h3");
-		HTML_chat_title.className = "item-title";
-		HTML_chat_title.appendChild(document.createTextNode(snap.val().name));
+		if(snap.val().type == "list") {
+			var HTML_chat_title = document.createElement("h3");
+		    	HTML_chat_title.className = "item-title";
+				HTML_chat_title.appendChild(document.createTextNode(snap.val().name));
+		}else {
+			var HTML_chat_title = document.createElement("input");
+		    	HTML_chat_title.type = "text";
+		    	HTML_chat_title.className = "firebase-set resizable";
+		    	HTML_chat_title.setAttribute("value", snap.val().name);
+		    	HTML_chat_title.setAttribute("id", "mainchattitle-"+snap.key);
+		    	HTML_chat_title.setAttribute("field", "chat");
+		    	HTML_chat_title.setAttribute("sub", snap.key);
+		    	HTML_chat_title.setAttribute("uni", "mainchattitle-"+snap.key);
+		    	
+		    	if(focus == "mainchattitle-"+snap.key) {
+					HTML_chat_title.setAttribute("focus", true);
+				}else{
+					HTML_chat_title.setAttribute("focus", false);
+				}
+
+		    var HTML_chat_title_label = document.createElement("label");
+		    	HTML_chat_title_label.setAttribute("for", "mainchattitle-"+snap.key);
+		    	HTML_chat_title_label.className = "item-title";
+
+		    HTML_chat_title_wrapper.appendChild(HTML_chat_title_label);
+		}
 
 		HTML_chat_title_wrapper.appendChild(HTML_chat_title);
 
