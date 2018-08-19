@@ -9604,9 +9604,6 @@ form ol {
   width: 4rem;
   height: 4rem;
 }
-.chat-friends .card .card-description {
-  display: none;
-}
 .chat-options-wrapper {
   -webkit-transition: 0.15s ease-out;
   transition: 0.15s ease-out;

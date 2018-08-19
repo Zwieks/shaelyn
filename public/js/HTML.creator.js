@@ -433,7 +433,7 @@ function HTMLcreateGroupTitle(snap) {
 	return HTML_chat_group_overview_title;
 }
 
-function HTMLcreateGroup(key, snap, count, totalNum, activeGroupId, NotSeen, groupId) {
+function HTMLcreateGroup(key, snap, count, totalNum, activeGroupId, NotSeen, groupId, lastMessage) {
 	var HTML_chat_group_overview_wrapper = document.createElement("div");
 		if(activeGroupId == false && totalNum > 1) {
 			if(count != totalNum) {
@@ -479,7 +479,15 @@ function HTMLcreateGroup(key, snap, count, totalNum, activeGroupId, NotSeen, gro
 
 	var HTML_chat_group_overview_description = document.createElement("span");
 		HTML_chat_group_overview_description.className = "card-description";
-		HTML_chat_group_overview_description.appendChild(document.createTextNode(snap.description));	
+		//HTML_chat_group_overview_description.appendChild(document.createTextNode(snap.description));	
+
+
+	for (var keyMessage in lastMessage) {
+	    if (lastMessage.hasOwnProperty(keyMessage)) {
+			HTML_chat_group_overview_description.appendChild(document.createTextNode(lastMessage[keyMessage].message));		        
+	    }
+	}	
+
 
 	var HTML_chat_group_overview_indicator = document.createElement("div");
 		HTML_chat_group_overview_indicator.className = "card-indicator chat-number-indicator";

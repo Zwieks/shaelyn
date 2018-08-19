@@ -131,6 +131,7 @@ ShaelynChat.prototype.loadGroups = function(groupId, groupsnap, count, totalNum,
   const chatAttendeesRef = ref.child('ChatAttendees').child(groupId);
   const userChatActive = ref.child('ChatActive').child(groupId);
   const ChatNotSeenMessages =  ref.child('ChatNotSeenMessages').child(userId).child(groupId);
+  const ChatMessages =  ref.child('ChatMessages').child(groupId);
 
   //const chatAttendeeRef = chatAttendeesRef.child(userId);
   var setChatGroup = function(data) {
@@ -149,8 +150,10 @@ ShaelynChat.prototype.loadGroups = function(groupId, groupsnap, count, totalNum,
             notseen = 0;
           }
 
-          var group = HTMLcreateGroup(groupsnap.key, groupsnap.val(), count, totalNum, activeGroupId, notseen, groupId);
-          $.fn.updateOrPrependHTML("chat-"+groupId, group, this.chat_list_wrapper);
+          ChatMessages.limitToLast(1).once('value', ChatMessagesSnap => { 
+            var group = HTMLcreateGroup(groupsnap.key, groupsnap.val(), count, totalNum, activeGroupId, notseen, groupId, ChatMessagesSnap.val());
+            $.fn.updateOrPrependHTML("chat-"+groupId, group, this.chat_list_wrapper);
+          });
         });
 
       });
@@ -159,6 +162,16 @@ ShaelynChat.prototype.loadGroups = function(groupId, groupsnap, count, totalNum,
 
   //TRIGGERD WHEN CHATATTENDEES --> GROUPID IS TRIGGERED
   var setChatGroupChanged = function(data) {
+    ChatMessages.limitToLast(1).once('value', ChatMessagesSnap => { 
+      var lastMessage = ChatMessagesSnap.val();
+
+      for (var keyMessage in lastMessage) {
+          if (lastMessage.hasOwnProperty(keyMessage)) {
+            $("#chat-"+groupId).find(".card-description").text(lastMessage[keyMessage].message);         
+          }
+      }          
+    });
+
     var date = new Date($.now());
     if($('#chat-'+groupId).length) {
       document.getElementById('chat-'+groupId).removeAttribute("style");
