@@ -65,6 +65,8 @@ ShaelynChat.prototype.loadChatWindows = function(groupId, groupsnap, count, tota
   const ref = firebase.database().ref();
   const chat_meta = document.getElementById('firebase-chat-meta');
   const chat = ref.child('BetaChat').child(groupsnap.key);
+  const ChatMessages =  ref.child('ChatMessages').child(groupsnap.key);
+
   var parent = this.chat_window_wrapper;
   var meta = HTMLcreateChatMeta(groupsnap.key, groupsnap, count, totalNum, activeGroupId, null);
   var initCheck = true;
@@ -118,7 +120,7 @@ ShaelynChat.prototype.loadChatWindows = function(groupId, groupsnap, count, tota
     var group = HTMLcreateGroupTitle(snap);
     if($("#chattitle-"+snap.key).length) {
       $.fn.updateOrPrependHTML("chattitle-"+snap.key, group, null);    
-    }
+    };
 
     $.fn.resizableInput(document.getElementById("mainchattitle-"+snap.key),11);
   });
@@ -150,24 +152,29 @@ ShaelynChat.prototype.loadGroups = function(groupId, groupsnap, count, totalNum,
             notseen = 0;
           }
 
-          ChatMessages.limitToLast(1).once('value', ChatMessagesSnap => { 
-            var group = HTMLcreateGroup(groupsnap.key, groupsnap.val(), count, totalNum, activeGroupId, notseen, groupId, ChatMessagesSnap.val());
-            $.fn.updateOrPrependHTML("chat-"+groupId, group, this.chat_list_wrapper);
-          });
+          var group = HTMLcreateGroup(groupsnap.key, groupsnap.val(), count, totalNum, activeGroupId, notseen, groupId);
+          $.fn.updateOrPrependHTML("chat-"+groupId, group, this.chat_list_wrapper);
         });
-
       });
     });
   }.bind(this);
 
   //TRIGGERD WHEN CHATATTENDEES --> GROUPID IS TRIGGERED
   var setChatGroupChanged = function(data) {
-    ChatMessages.limitToLast(1).once('value', ChatMessagesSnap => { 
+    ChatMessages.limitToLast(1).once('value', ChatMessagesSnap => {
       var lastMessage = ChatMessagesSnap.val();
-
       for (var keyMessage in lastMessage) {
           if (lastMessage.hasOwnProperty(keyMessage)) {
-            $("#chat-"+groupId).find(".card-description").text(lastMessage[keyMessage].message);         
+            var message = lastMessage[keyMessage].message;
+            
+            if(typeof message == "undefined") {
+              message = i18n.firebase.chat.sendimage;
+            }
+
+            var groupMessage = HTMLcreateGroupMessage(lastMessage);
+            if($("#chatgroupmessage-"+groupId).length) {
+              $.fn.updateOrPrependHTML("chatgroupmessage-"+groupId, groupMessage, null);    
+            }
           }
       }          
     });
@@ -182,6 +189,7 @@ ShaelynChat.prototype.loadGroups = function(groupId, groupsnap, count, totalNum,
       if (!$('#chat-'+groupId).hasClass('active') || document.hidden) {
           ShaelynChat.playSound(groupId);
       }
+
       if(!$('#chat-'+groupId).hasClass('active')) {
         $('#chat-'+groupId).find('.card-indicator-number').text(data.val().notseen);
         $('#chat-'+groupId).find('.chat-number-indicator').addClass('show');
@@ -375,6 +383,7 @@ ShaelynChat.prototype.init = function() {
   const ref = firebase.database().ref();
   const chat = ref.child('BetaChat');
   const chatAttendeesRef = ref.child('ChatAttendees');
+  const ChatMessages =  ref.child('ChatMessages');
   const userChatActive = ref.child('ChatActive');
 
   let activeGroupId = "";
@@ -444,6 +453,17 @@ ShaelynChat.prototype.init = function() {
                 $('#firebase-chat-conversations').addClass('loaded');
               }, 500);
             }
+
+            //This code be used for preview an image on the group overview
+            ChatMessages.child(snaper.key).limitToLast(1).once('value', ChatMessagesSnap => {
+              var groupMessage = HTMLcreateGroupMessage(ChatMessagesSnap.val());
+              setTimeout(function(){
+                if($("#chatgroupmessage-"+snaper.key).length) {
+                  $.fn.updateOrPrependHTML("chatgroupmessage-"+snaper.key, groupMessage, null);    
+                }
+              }, 2000);
+            });
+
             count++;
           }); 
         })
@@ -688,7 +708,7 @@ ShaelynChat.prototype.updateUserChatTimestamp = function(active_groupId) {
 };
 
 // Sets the URL of the given img element with the URL of the image stored in Firebase Storage.
-ShaelynChat.prototype.setImageUrl = function(snap, imageUri, imgElement) {
+ShaelynChat.prototype.setImageUrl = function(snap, imageUri, imgElement, groupId) {
   // If the image is a Firebase Storage URI we fetch the URL.
   if (imageUri.startsWith('gs://')) {
     imgElement.src = ShaelynChat.LOADING_IMAGE_URL; // Display a loading image first.
@@ -697,7 +717,13 @@ ShaelynChat.prototype.setImageUrl = function(snap, imageUri, imgElement) {
 
       if ( $('#chat-message-'+snap.key).length ) {
         $('#chat-message-'+snap.key).find('.chat-image').attr('src',metadata.downloadURLs[0]);
-      }  
+        
+        if($("#chat-"+groupId+" .preview-image").length) {
+          $("#chat-"+groupId).find(".preview-image").attr("src", metadata.downloadURLs[0]);
+        }
+      }
+
+
     });
   } else {
     imgElement.src = imageUri;
@@ -756,12 +782,16 @@ ShaelynChat.prototype.saveImageMessage = function(event) {
         })
       });
 
+      //Check if the message is already seen by other users
+      ShaelynChat.seenCheck(active_groupId, key);
+
       // Upload the image to Firebase Storage.
       var filePath = userId + '/' + active_groupId + '/' + data.key + '/' + file.name;
       return this.storage.ref(filePath).put(file).then(function(snapshot) {
 
         // Get the file's Storage URI and update the chat message placeholder.
         var fullPath = snapshot.metadata.fullPath;
+        
         return data.update({
           imageLocation: this.storage.ref(fullPath).toString(),
           imageUrl: snapshot.downloadURL

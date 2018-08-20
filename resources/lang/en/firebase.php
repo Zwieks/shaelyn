@@ -20,6 +20,7 @@ return [
         'nochattitle' => 'Such an empty space..',
         'nochattext' => 'Start a chat now!',
         'nochatalt' => "Let's go!",
+        'sendimage' => 'Check this image!',
 
         'dialog' => [
             'notification' => 'If you don’t want a notification of this chat, just click on the button below',

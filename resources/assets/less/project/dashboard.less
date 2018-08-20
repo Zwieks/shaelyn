@@ -64,6 +64,7 @@
 
 	label {
 		margin-bottom: @spacing/2;
+		height: 3rem;
 	}
 
 	.item-title {
@@ -79,6 +80,18 @@
 
 	    @media @bp-MobileL {
 	    	margin-bottom: 0;
+	    }
+
+	    .edit {
+	    	position: absolute;
+    		top: -0.6rem;
+    		right: -0.2rem;
+	    	width: 1.5rem;
+	    	height: 1.5rem;
+	    	background-size: contain;
+	    	background-repeat: no-repeat;
+	    	background-image: url('/img/pencil.svg');
+
 	    }
 
 	    &:before {
@@ -640,10 +653,6 @@
 				height: 4rem;
 			}
 		}
-
-		.card-description {
-			//display: none;
-		}
 	}
 }
 
@@ -809,6 +818,10 @@
 
 .chat-meta {
 	height: @spacing*2.1;
+
+	label {
+		padding-left: 3.5rem !important;
+	}
 
 	.title-wrapper {
 		display: none;

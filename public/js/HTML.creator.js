@@ -86,6 +86,10 @@ function HTMLcreateChatMeta(key, snap, count, totalNum, activeGroupId, focus) {
 		    	HTML_chat_title_label.setAttribute("for", "mainchattitle-"+snap.key);
 		    	HTML_chat_title_label.className = "item-title";
 
+		    var HTML_edit_sign = document.createElement("div");
+		    	HTML_edit_sign.className = "edit";
+
+		   	HTML_chat_title_label.appendChild(HTML_edit_sign);
 		    HTML_chat_title_wrapper.appendChild(HTML_chat_title_label);
 		}
 
@@ -263,7 +267,7 @@ function HTMLcreateChatMessage(groupId, listId, userid, snap, userData) {
 			    $("#chat-window-"+groupId).mCustomScrollbar("scrollTo", "bottom",{scrollInertia:0});
 		    }.bind(this));
 
-	    ShaelynChat.setImageUrl(snap, snap.val().imageLocation, HTML_chat_image);
+	    ShaelynChat.setImageUrl(snap, snap.val().imageLocation, HTML_chat_image, groupId);
 		HTML_chat_image_wrapper.appendChild(HTML_chat_image);
 		HTML_chat_window.appendChild(HTML_chat_message_userinfo);	
 		HTML_chat_window.appendChild(HTML_chat_image_wrapper);
@@ -433,7 +437,33 @@ function HTMLcreateGroupTitle(snap) {
 	return HTML_chat_group_overview_title;
 }
 
-function HTMLcreateGroup(key, snap, count, totalNum, activeGroupId, NotSeen, groupId, lastMessage) {
+function HTMLcreateGroupMessage(lastMessage) {
+	var HTML_chat_group_overview_description = document.createElement("span");
+		HTML_chat_group_overview_description.className = "card-description";
+
+	for (var keyMessage in lastMessage) {
+	    if (lastMessage.hasOwnProperty(keyMessage)) {
+	    	var message = lastMessage[keyMessage].message;
+	    		HTML_chat_group_overview_description.setAttribute("id", "chatgroupmessage-"+keyMessage);
+            if(typeof message == "undefined") {
+              message = i18n.firebase.chat.sendimage;
+              	var HTML_chat_group_image_preview = document.createElement("img");
+              		HTML_chat_group_image_preview.className = "preview-image";
+					HTML_chat_group_image_preview.setAttribute("src", lastMessage[keyMessage].imageUrl);
+					HTML_chat_group_image_preview.setAttribute("title", "Chat options");
+					HTML_chat_group_image_preview.setAttribute("alt", "Chat options");
+					
+				HTML_chat_group_overview_description.appendChild(HTML_chat_group_image_preview);     
+            }
+
+			HTML_chat_group_overview_description.appendChild(document.createTextNode(message));
+	    }
+	}
+
+	return HTML_chat_group_overview_description;
+}
+
+function HTMLcreateGroup(key, snap, count, totalNum, activeGroupId, NotSeen, groupId) {
 	var HTML_chat_group_overview_wrapper = document.createElement("div");
 		if(activeGroupId == false && totalNum > 1) {
 			if(count != totalNum) {
@@ -479,15 +509,7 @@ function HTMLcreateGroup(key, snap, count, totalNum, activeGroupId, NotSeen, gro
 
 	var HTML_chat_group_overview_description = document.createElement("span");
 		HTML_chat_group_overview_description.className = "card-description";
-		//HTML_chat_group_overview_description.appendChild(document.createTextNode(snap.description));	
-
-
-	for (var keyMessage in lastMessage) {
-	    if (lastMessage.hasOwnProperty(keyMessage)) {
-			HTML_chat_group_overview_description.appendChild(document.createTextNode(lastMessage[keyMessage].message));		        
-	    }
-	}	
-
+	   	HTML_chat_group_overview_description.setAttribute("id", "chatgroupmessage-"+key);
 
 	var HTML_chat_group_overview_indicator = document.createElement("div");
 		HTML_chat_group_overview_indicator.className = "card-indicator chat-number-indicator";

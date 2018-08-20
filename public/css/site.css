@@ -8535,11 +8535,26 @@ form ol {
   color: #d8d8d8;
 }
 .card .card-description {
+  display: -webkit-box;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: -ms-flex;
+  display: flex;
+  -moz-align-items: center;
+  -ms-align-items: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   font-style: italic;
-  font-size: 1.2rem;
+  font-size: 1rem;
+}
+.card .preview-image {
+  max-width: 2.5rem;
+  max-height: 2.5rem;
+  margin-right: 0.8rem;
 }
 .card .card-indicator {
   position: relative;
@@ -9011,6 +9026,7 @@ form ol {
 }
 .dashboard-wrapper label {
   margin-bottom: 1.2rem;
+  height: 3rem;
 }
 .dashboard-wrapper .item-title {
   -webkit-align-self: center;
@@ -9030,6 +9046,16 @@ form ol {
   .dashboard-wrapper .item-title {
     margin-bottom: 0;
   }
+}
+.dashboard-wrapper .item-title .edit {
+  position: absolute;
+  top: -0.6rem;
+  right: -0.2rem;
+  width: 1.5rem;
+  height: 1.5rem;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-image: url('/img/pencil.svg');
 }
 .dashboard-wrapper .item-title:before {
   -webkit-transform: translateY(-50%);
@@ -9784,6 +9810,9 @@ form ol {
 }
 .chat-meta {
   height: 5.04rem;
+}
+.chat-meta label {
+  padding-left: 3.5rem !important;
 }
 .chat-meta .title-wrapper {
   display: none;
