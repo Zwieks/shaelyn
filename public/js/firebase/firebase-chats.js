@@ -347,7 +347,14 @@ ShaelynChat.prototype.loadMessages = function(groupId, groupsnap) {
 
     setTimeout(function(){
       //$("#chat-window-"+groupId).mCustomScrollbar("update");
-      $("#chat-window-"+groupId).mCustomScrollbar("scrollTo", "bottom",{scrollInertia:0});
+      if ($(window).width() <= 768) {
+        setTimeout(function(){
+          $("#firebase-chat-conversations").find('.active').scrollTop(10000000);
+        }, 500);
+      }else {
+        $("#chat-window-"+groupId).mCustomScrollbar("scrollTo", "bottom",{scrollInertia:0});
+      }
+
     }, 0);
 
   }.bind(this);

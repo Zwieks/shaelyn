@@ -8556,6 +8556,12 @@ form ol {
   max-height: 2.5rem;
   margin-right: 0.8rem;
 }
+.card .preview-text {
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-style: normal;
+}
 .card .card-indicator {
   position: relative;
   width: 2.4rem;
@@ -9011,6 +9017,12 @@ form ol {
   background: #ebebeb;
   padding: 1.2rem;
 }
+@media screen and (max-width: 640px) {
+  .dashboard-wrapper input.chat-message-input {
+    width: 100%;
+    max-width: 100%;
+  }
+}
 .dashboard-wrapper input.resizable {
   -moz-flex-grow: 0;
   -ms-flex-grow: 0;
@@ -9187,7 +9199,7 @@ form ol {
 }
 .dashboard-wrapper .detail {
   display: none;
-  height: calc(100% - 8rem);
+  height: calc(100% - 11.04rem);
 }
 @media screen and (max-width: 640px) {
   .dashboard-wrapper .detail {
@@ -9726,7 +9738,7 @@ form ol {
     -webkit-box-direction: normal;
             flex-direction: row;
     height: 100%;
-    padding: 1.2rem 2.4rem;
+    padding: 1.2rem 4.8rem 1.2rem 2.4rem;
   }
 }
 .chat-controls {
@@ -9784,6 +9796,12 @@ form ol {
   -webkit-transition-delay: 0s;
   transition-delay: 0s;
 }
+@media screen and (max-width: 640px) {
+  .chat-conversation .loaded {
+    height: calc(100% - 10.7rem);
+    margin-bottom: 1.2rem;
+  }
+}
 .chat-conversation .loaded.hide {
   -webkit-animation: fade-out 0.5s;
   animation: fade-out 0.5s;
@@ -9805,6 +9823,12 @@ form ol {
 .chat-attendees .detail-members {
   display: none;
 }
+@media screen and (max-width: 640px) {
+  .chat-attendees .detail-members {
+    top: 0;
+    right: -4rem;
+  }
+}
 .chat-attendees .detail-members.active {
   display: block;
 }
@@ -9816,6 +9840,11 @@ form ol {
 }
 .chat-meta .title-wrapper {
   display: none;
+}
+@media screen and (max-width: 640px) {
+  .chat-meta .title-wrapper {
+    margin: 0;
+  }
 }
 .chat-meta .title-wrapper.active {
   display: -webkit-box;
@@ -9886,8 +9915,9 @@ form ol {
         -ms-flex-pack: end;
             justify-content: flex-end;
     margin: 1.2rem 0;
-    padding: 0;
+    padding: 0 1.2rem 0;
     overflow-y: auto;
+    height: 100%;
   }
   .chat-window.active {
     display: block;
@@ -9915,6 +9945,14 @@ form ol {
 }
 .chat-message-wrapper {
   height: 6rem;
+}
+@media screen and (max-width: 640px) {
+  .chat-message-wrapper {
+    width: calc(100% + 4.8rem);
+    height: auto;
+    z-index: 0;
+    background: #fff;
+  }
 }
 .chat-message-options {
   display: -webkit-box;
@@ -10005,6 +10043,17 @@ form ol {
   background: #fff;
   position: relative;
   padding-right: 3.6rem;
+}
+@media screen and (max-width: 640px) {
+  .chat-message .message-wrapper {
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    background: #f5f5f5;
+  }
+  .chat-message .message-wrapper:before,
+  .chat-message .message-wrapper:after {
+    border-color: #f5f5f5 transparent transparent transparent;
+  }
 }
 .chat-message .message-time {
   position: absolute;

@@ -438,7 +438,7 @@ function HTMLcreateGroupTitle(snap) {
 }
 
 function HTMLcreateGroupMessage(lastMessage) {
-	var HTML_chat_group_overview_description = document.createElement("span");
+	var HTML_chat_group_overview_description = document.createElement("div");
 		HTML_chat_group_overview_description.className = "card-description";
 
 	for (var keyMessage in lastMessage) {
@@ -453,10 +453,14 @@ function HTMLcreateGroupMessage(lastMessage) {
 					HTML_chat_group_image_preview.setAttribute("title", "Chat options");
 					HTML_chat_group_image_preview.setAttribute("alt", "Chat options");
 					
-				HTML_chat_group_overview_description.appendChild(HTML_chat_group_image_preview);     
+				//HTML_chat_group_overview_description_text.appendChild(HTML_chat_group_image_preview);     
+            	HTML_chat_group_overview_description.appendChild(HTML_chat_group_image_preview);
             }
+            var HTML_chat_group_overview_description_text = document.createElement("span");
+            	HTML_chat_group_overview_description_text.appendChild(document.createTextNode(message));
+            	HTML_chat_group_overview_description_text.className = "preview-text";
 
-			HTML_chat_group_overview_description.appendChild(document.createTextNode(message));
+			HTML_chat_group_overview_description.appendChild(HTML_chat_group_overview_description_text);
 	    }
 	}
 

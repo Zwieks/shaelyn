@@ -49,6 +49,11 @@
 			height: @spacing*2;
 			background: @ligtestGrey;
 			padding: @spacing/2;
+
+			@media @bp-MobileL {
+			    width: 100%;
+			    max-width: 100%;
+			}
 		}
 
 		&.resizable {
@@ -215,7 +220,7 @@
 
 	.detail {
 		display: none;
-		height: calc(100% ~'-' 8rem);
+		height: calc(100% ~'-' @spacing*4.6);
 
 		@media @bp-MobileL {
 			display: block;
@@ -754,7 +759,7 @@
 	@media @bp-MobileL {
 		.flex-direction();
 		height: 100%;
-		padding: @spacing/2 @spacing;
+		padding: @spacing/2 @spacing*2 @spacing/2 @spacing;
 	}
 }
 
@@ -790,6 +795,11 @@
 		.animation(fade-in 0.5s);
 		.transition-delay(0s);
 
+		@media @bp-MobileL {
+			height: calc(100% ~'-' 10.7rem);
+			margin-bottom: @spacing/2;
+		}
+
 		&.hide {
 			.animation(fade-out 0.5s);
 			.transition-delay(0s);
@@ -810,6 +820,11 @@
 	.detail-members {
 		display: none;
 
+		@media @bp-MobileL {
+		    top: 0;
+		    right: -4rem;
+		}
+
 		&.active {
 			display: block;
 		}
@@ -825,6 +840,10 @@
 
 	.title-wrapper {
 		display: none;
+
+		@media @bp-MobileL {
+			margin: 0;
+		}
 
 		&.active {
 			.displayflex;
@@ -866,8 +885,9 @@
 		.flex-direction(column);
 		.justify-content(flex-end);
 		margin: @spacing/2 0;
-		padding: 0;
+		padding: 0 @spacing/2 0;
 		overflow-y: auto;
+		height: 100%;
 
 		&.active {
 		    display: block;
@@ -886,6 +906,13 @@
 
 .chat-message-wrapper {
 	height: @spacing*2.5;
+
+	@media @bp-MobileL {
+		width: calc(100% ~'+' @spacing*2);
+		height: auto;
+		z-index: 0;
+		background: @white;
+	}
 }
 
 .chat-message-options {
@@ -943,7 +970,17 @@
 		position: relative;
 		padding-right: @spacing*1.5;
 
-		&:extend(.arrow-down-border-left all);		
+		&:extend(.arrow-down-border-left all);
+
+		@media @bp-MobileL {
+			.box-shadow(none);
+			background: mix(#fff, @lighterGrey, 75%);
+
+			&:before,
+			&:after {
+				border-color: mix(#fff, @lighterGrey, 75%) transparent transparent transparent;
+			}
+		}
 	}
 
 	.message-time {
