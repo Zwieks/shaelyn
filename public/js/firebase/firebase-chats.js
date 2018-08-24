@@ -60,6 +60,25 @@ ShaelynChat.prototype.playSound = function(groupId){
   });  
 }
 
+ShaelynChat.prototype.openChatOverviewMobile = function(object) {
+  var parent = object.parent();
+  
+  object.addClass("hide");
+
+  parent.find(".chat-conversation").addClass("hide");
+  parent.find(".chat-wrapper").addClass("groups");
+  parent.find(".chat-controls").addClass("active");
+};
+
+//Switch chat on mobile device
+ShaelynChat.prototype.switchChatMobile = function() {
+  $('.js-chat-back').removeClass("hide");
+
+  $(".chat-conversation").removeClass("hide");
+  $(".chat-wrapper").removeClass("groups");
+  $(".chat-controls").removeClass("active");
+};
+
 //Create Chat Windows for the group or single chat
 ShaelynChat.prototype.loadChatWindows = function(groupId, groupsnap, count, totalNum, activeGroupId) {
   const ref = firebase.database().ref();
@@ -1083,6 +1102,14 @@ ShaelynChat.prototype.updateChatSetting = function(type, value) {
     }
   });
 };
+
+  /**
+    BACK TO LIST OVERVIEW
+  **/
+  // Returns the user back to the overview of all lists
+  $(document).on("click",".js-chat-back",function() {
+    ShaelynChat.openChatOverviewMobile($(this));
+  });
 
 window.addEventListener('load' , function() {
   window.ShaelynChat = new ShaelynChat();

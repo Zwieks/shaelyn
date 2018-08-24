@@ -529,6 +529,10 @@
     width: auto;
     height: auto;
     max-width: calc(100vh ~'-' @spacing*4);
+
+    @media @bp-MobileL {
+      max-width: 100%;
+    }
   }
 
   .image-wrapper {

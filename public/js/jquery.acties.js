@@ -42,6 +42,7 @@ function getRandomColor() {
 }
 
 function getInitials(name) {
+	
 	var initials = name.match(/\b\w/g) || [];
 
 	//Japanese range
@@ -312,7 +313,6 @@ $(document).on("click",".js-create-chat", function() {
 	ShaelynChat.createNewChat(listId, "", null);
 });
 
-
 $(document).on("click",".js-chat-options-back", function(e) {
 	e.preventDefault();
 	$('#firebase-chat-options').removeClass('show');
@@ -352,6 +352,11 @@ $(document).on("click",".js-switch-chat",function(){
 	var chatGroupId = $(this).attr('id').replace('chat-', ''),
 		old_reference = $(this).parent().find('.active').attr('id').replace('chat-', ''),
 		new_reference = $(this).attr('id').replace('chat-', '');
+
+	//STUFF FOR MOBILE
+	if ($(window).width()<768) {
+		ShaelynChat.switchChatMobile();
+	};
 
 	if($(event.target).attr('class') == 'indicator-image') {
 		$('#firebase-chat-options').addClass('show');
@@ -590,3 +595,27 @@ function logout() {
 	  // An error happened.
 	});
 }
+
+//Check if element contains scrollbar
+$.fn.hasScrollBar = function() {
+    return this.get(0).scrollHeight > this.get(0).clientHeight;
+}
+
+//MOBILE
+if ($(window).width() <= 768) {
+	$(document).on("focus",".chat-message-input", function(evt){
+		$(".page-website-wrapper").css("position","fixed");
+		$(".page-website-wrapper").css("left","0");
+		$(".page-website-wrapper").css("right","0");
+		$(".page-website-wrapper").css("bottom","0");
+
+		setTimeout(function(){
+			$('.chat-window').scrollTop(10000000);
+        }, 500);
+	});
+
+	$(document).on("blur",".chat-message-input", function(evt){
+		$(".page-website-wrapper").css("position","relative");
+		$(".owl-dots").css("position","relative");
+	});
+};

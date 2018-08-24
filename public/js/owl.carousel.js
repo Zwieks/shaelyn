@@ -845,7 +845,7 @@
 
 		this._drag.stage.current = stage;
 
-		//this.animate(stage.x);
+		this.animate(stage.x);
 	};
 
 	/**
@@ -936,7 +936,6 @@
 	 * @param {Number} coordinate - The coordinate in pixels.
 	 */
 	Owl.prototype.animate = function(coordinate) {
-	 	$.support.transition = true;
 		var animate = this.speed() > 0;
 
 		this.is('animating') && this.onTransitionEnd();

@@ -94,89 +94,89 @@
 	cursor: grab;
 }
 
-.owl-theme {
-	.owl-nav {
-		display: none;
-	}
 
-	.owl-controls {
-		.order(1);
-		width: 100%;
-		height: @spacing*2;
-  		text-align: center;
-  		background: @darkGreen;
-        -webkit-tap-highlight-color: transparent;
+.owl-nav {
+	display: none;
+}
 
-        .owl-nav [class*='owl-'] {
+
+.owl-dots {
+	.displayflex;
+	.flex-wrap(wrap);
+	.order(1);
+
+	padding: 0 @spacing/2;
+	width: 100%;
+	height: @spacing*2;
+	text-align: center;
+	background: @darkGreen;
+    -webkit-tap-highlight-color: transparent;
+
+    .owl-nav [class*='owl-'] {
+	  	color: white;
+	  	font-size: 14px;
+	  	margin: 5px;
+	  	padding: 4px 7px;
+	  	background: #d6d6d6;
+	  	display: inline-block;
+	  	cursor: pointer;
+	    -webkit-border-radius: 3px;
+	    -moz-border-radius: 3px;
+	  	border-radius: 3px;
+
+	  	&:hover {
+		  	background: #869791;
 		  	color: white;
-		  	font-size: 14px;
-		  	margin: 5px;
-		  	padding: 4px 7px;
-		  	background: #d6d6d6;
-		  	display: inline-block;
-		  	cursor: pointer;
-		    -webkit-border-radius: 3px;
-		    -moz-border-radius: 3px;
-		  	border-radius: 3px;
+		  	text-decoration: none;		  		
+	  	}
 
-		  	&:hover {
-			  	background: #869791;
-			  	color: white;
-			  	text-decoration: none;		  		
-		  	}
-
-		  	.disabled {
-			  	opacity: 0.5;
-			  	scursor: default;
-			}
+	  	.disabled {
+		  	opacity: 0.5;
+		  	scursor: default;
 		}
 	}
-	.owl-dots {
+
+	.owl-dot {
 		.displayflex;
-		.flex-wrap(wrap);
-		padding: 0 @spacing/2;
+		.align-items(center);
+		.justify-content(center);
+
+		width: 100%/3;
+		text-align: center;
 		height: 100%;
+		position: relative;
+		background: @darkGreen;
+		margin: 0;
 
-		.owl-dot {
-			.displayflex;
-			.align-items(center);
-			.justify-content(center);
+		&:before {
+			.transition(0.3s);
+			content: "";
+			position: absolute;
+			bottom: 0;
+			width: 0;
+			height: 0.2rem;
+			opacity: 0;
+			visibility: hidden;
+			background: @salmon;
+		}
 
-  			width: 100%/3;
-  			text-align: center;
-  			height: 100%;
-  			position: relative;
+			span {
+				.transition;
+				color: @white;
+				text-align: center;
+				font-size: @smallerHeadingSize;
+				font-weight: bold;
+				position: relative;
+				display: block;
+				text-transform: capitalize;
+		}
 
+		&.active {
 			&:before {
-				.transition(0.3s);
-				content: "";
-				position: absolute;
-				bottom: 0;
-				width: 0;
-				height: 0.2rem;
-				opacity: 0;
-				visibility: hidden;
-				background: @salmon;
-			}
-
-  			span {
-  				.transition;
-  				color: @white;
-  				text-align: center;
-  				font-size: @smallerHeadingSize;
-  				font-weight: bold;
-  				position: relative;
-  				display: block;
-  				text-transform: capitalize;
-			}
-
-			&.active {
-				&:before {
-					width: 100%;
-					opacity: 1;
-					visibility: visible;
-				}				
-			}
+				width: 100%;
+				opacity: 1;
+				visibility: visible;
+			}				
 		}
 	}
 }

@@ -9036,6 +9036,11 @@ form ol {
   font-size: 2.1rem;
   line-height: normal;
 }
+@media screen and (max-width: 640px) {
+  .dashboard-wrapper input.resizable {
+    margin-bottom: 0;
+  }
+}
 .dashboard-wrapper label {
   margin-bottom: 1.2rem;
   height: 3rem;
@@ -9154,6 +9159,13 @@ form ol {
 .dashboard-wrapper .item-wrapper.mylists .item-title:before {
   background-image: url('/img/lists.svg');
 }
+@media screen and (max-width: 640px) {
+  .dashboard-wrapper .item-wrapper.chats .back {
+    display: block;
+    top: 1.2rem;
+    left: 2.4rem;
+  }
+}
 .dashboard-wrapper .item-wrapper.chats .item-title:before {
   background-image: url('/img/chat.svg');
 }
@@ -9194,7 +9206,7 @@ form ol {
   .dashboard-wrapper .content {
     overflow-y: auto;
     padding: 0 2.4rem;
-    height: calc(100vh - 25.92rem);
+    height: calc(100vh - 21.12rem);
   }
 }
 .dashboard-wrapper .detail {
@@ -9274,6 +9286,9 @@ form ol {
     top: 1.8rem;
   }
 }
+.dashboard-wrapper .icon.back.hide {
+  display: none;
+}
 .dashboard-wrapper .title-wrapper {
   display: -webkit-box;
   display: -moz-flex;
@@ -9298,6 +9313,7 @@ form ol {
 }
 @media screen and (max-width: 640px) {
   .dashboard-wrapper .title-wrapper {
+    display: none;
     height: 3.6rem;
     margin: 0 2.4rem 1.2rem;
     padding: 0 0 1.2rem;
@@ -9385,6 +9401,7 @@ form ol {
   .dashboard-wrapper .details .title-wrapper {
     height: 5.28rem;
     margin-right: 4.8rem;
+    display: block;
   }
 }
 .dashboard-wrapper .details .title-wrapper > div {
@@ -9570,6 +9587,8 @@ form ol {
 @media screen and (max-width: 640px) {
   .dashboard-wrapper .btn-group-list {
     height: 5.28rem;
+    margin-left: 0;
+    margin-right: 0;
   }
 }
 .dashboard-wrapper .btn-group-list .icon {
@@ -9611,6 +9630,7 @@ form ol {
     visibility: hidden;
     opacity: 0;
     padding: 0;
+    height: calc(100% - 6.4rem);
   }
 }
 .chat-friends.content.hide {
@@ -9738,7 +9758,10 @@ form ol {
     -webkit-box-direction: normal;
             flex-direction: row;
     height: 100%;
-    padding: 1.2rem 4.8rem 1.2rem 2.4rem;
+    padding: 0.8rem 4.8rem 1.2rem 2.4rem;
+  }
+  .chat-wrapper.groups {
+    padding: 1.2rem 1.2rem 0;
   }
 }
 .chat-controls {
@@ -9750,6 +9773,31 @@ form ol {
 @media screen and (max-width: 640px) {
   .chat-controls {
     display: none;
+    opacity: 0;
+    visibility: hidden;
+    min-width: 100%;
+    background: transparent;
+  }
+}
+.chat-controls.active {
+  -webkit-transition: 0.15s ease-out;
+  transition: 0.15s ease-out;
+  display: block;
+  opacity: 1;
+  visibility: visible;
+  left: 0;
+}
+.chat-controls.active .chat-friends {
+  -webkit-transition: 0.15s ease-out;
+  transition: 0.15s ease-out;
+  display: block;
+  visibility: visible;
+  opacity: 1;
+}
+@media screen and (max-width: 640px) {
+  .chat-controls .btn-group-list {
+    margin-left: -1.2rem;
+    margin-right: -1.2rem;
   }
 }
 .user-chats-wrapper {
@@ -9784,11 +9832,20 @@ form ol {
           flex-grow: 1;
   padding: 1.2rem 2.4rem;
   position: relative;
+  opacity: 1;
+  visibility: visible;
 }
 @media screen and (max-width: 640px) {
   .chat-conversation {
     padding: 0;
   }
+}
+.chat-conversation.hide {
+  -webkit-transition: 0.15s ease-out;
+  transition: 0.15s ease-out;
+  left: 0;
+  opacity: 0;
+  visibility: hidden;
 }
 .chat-conversation .loaded {
   -webkit-animation: fade-in 0.5s;
@@ -9798,7 +9855,7 @@ form ol {
 }
 @media screen and (max-width: 640px) {
   .chat-conversation .loaded {
-    height: calc(100% - 10.7rem);
+    height: calc(100% - 11.6rem);
     margin-bottom: 1.2rem;
   }
 }
@@ -9844,6 +9901,11 @@ form ol {
 @media screen and (max-width: 640px) {
   .chat-meta .title-wrapper {
     margin: 0;
+    padding-left: 3.6rem;
+    padding-right: 0.6rem;
+    padding-bottom: 0.6rem;
+    width: 100%;
+    height: auto;
   }
 }
 .chat-meta .title-wrapper.active {
@@ -9915,7 +9977,7 @@ form ol {
         -ms-flex-pack: end;
             justify-content: flex-end;
     margin: 1.2rem 0;
-    padding: 0 1.2rem 0;
+    padding: 0 1.2rem 0 0;
     overflow-y: auto;
     height: 100%;
   }
@@ -10463,22 +10525,30 @@ form ol {
   cursor: -ms-grab;
   cursor: grab;
 }
-.owl-theme .owl-nav {
+.owl-nav {
   display: none;
 }
-.owl-theme .owl-controls {
+.owl-dots {
+  display: -webkit-box;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: -ms-flex;
+  display: flex;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
   -webkit-box-ordinal-group: 1;
   -ms-flex-order: 1;
   -moz-order: 1;
   -ms-order: 1;
   order: 1;
+  padding: 0 1.2rem;
   width: 100%;
   height: 4.8rem;
   text-align: center;
   background: #101f2e;
   -webkit-tap-highlight-color: transparent;
 }
-.owl-theme .owl-controls .owl-nav [class*='owl-'] {
+.owl-dots .owl-nav [class*='owl-'] {
   color: white;
   font-size: 14px;
   margin: 5px;
@@ -10488,27 +10558,16 @@ form ol {
   cursor: pointer;
   border-radius: 3px;
 }
-.owl-theme .owl-controls .owl-nav [class*='owl-']:hover {
+.owl-dots .owl-nav [class*='owl-']:hover {
   background: #869791;
   color: white;
   text-decoration: none;
 }
-.owl-theme .owl-controls .owl-nav [class*='owl-'] .disabled {
+.owl-dots .owl-nav [class*='owl-'] .disabled {
   opacity: 0.5;
   scursor: default;
 }
-.owl-theme .owl-dots {
-  display: -webkit-box;
-  display: -moz-flex;
-  display: -ms-flexbox;
-  display: -ms-flex;
-  display: flex;
-  -ms-flex-wrap: wrap;
-  flex-wrap: wrap;
-  padding: 0 1.2rem;
-  height: 100%;
-}
-.owl-theme .owl-dots .owl-dot {
+.owl-dots .owl-dot {
   display: -webkit-box;
   display: -moz-flex;
   display: -ms-flexbox;
@@ -10528,8 +10587,10 @@ form ol {
   text-align: center;
   height: 100%;
   position: relative;
+  background: #101f2e;
+  margin: 0;
 }
-.owl-theme .owl-dots .owl-dot:before {
+.owl-dots .owl-dot:before {
   -webkit-transition: 0.3s;
   transition: 0.3s;
   content: "";
@@ -10541,7 +10602,7 @@ form ol {
   visibility: hidden;
   background: #f44336;
 }
-.owl-theme .owl-dots .owl-dot span {
+.owl-dots .owl-dot span {
   -webkit-transition: 0.15s ease-out;
   transition: 0.15s ease-out;
   color: #fff;
@@ -10552,7 +10613,7 @@ form ol {
   display: block;
   text-transform: capitalize;
 }
-.owl-theme .owl-dots .owl-dot.active:before {
+.owl-dots .owl-dot.active:before {
   width: 100%;
   opacity: 1;
   visibility: visible;
@@ -12228,6 +12289,11 @@ form ol {
   width: auto;
   height: auto;
   max-width: calc(100vh - 9.6rem);
+}
+@media screen and (max-width: 640px) {
+  #modal-chat-image img {
+    max-width: 100%;
+  }
 }
 #modal-chat-image .image-wrapper {
   margin: 0;
