@@ -613,10 +613,6 @@
 					height: 1.9rem;
 				}
 			}
-
-			&.chat {
-
-			}
 	    }	
 	}
 }
@@ -695,6 +691,10 @@
 	background: #f7f7f7;
 	z-index: 1;
 
+	@media @bp-MobileL {
+		background: @white;
+	}
+
 	&.show {
 		opacity: 1;
 		visibility: visible;
@@ -703,11 +703,21 @@
 
 	.back {
 		display: block;
+
+		@media @bp-MobileL {
+			top: 0.3rem!important;
+			left: @spacing/2!important;
+		}
 	}
 
 	.title-wrapper {
 		margin-top: @spacing/2;
 		margin-bottom: 0;
+
+		@media @bp-MobileL {
+			margin: 0 @spacing/2;
+			height: @spacing*2;
+		}
 	}
 }
 
@@ -719,6 +729,10 @@
 .chat-options-list {
 	margin: 0;
 	padding: 0 @spacing @spacing @spacing;
+
+	@media @bp-MobileL {
+		padding: 0 @spacing/2;
+	}
 
 	.card {
     	padding: @spacing/2;

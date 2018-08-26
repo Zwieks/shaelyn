@@ -1,11 +1,11 @@
 <!-- {{$debugpath}} -->
 <div class="item-wrapper {{$size}} chats">
 	<div class="item">
-		<div class="icon back js-chat-back">
+		<div class="icon back js-chat-back  @if(Agent::isMobile() )hide @endif">
 			<img src="{{ asset('img/back.svg') }}" alt="Back" />
 		</div>
-		<div class="chat-wrapper">
-			<div class="chat-controls">
+		<div class="chat-wrapper @if(Agent::isMobile() )groups @endif">
+			<div class="chat-controls @if(Agent::isMobile() )active @endif">
 				<div class="chat-friends content" id="firebase-chat-friends">
 					<div id="firebase-chatgroups" class="user-chats-wrapper"></div>
 				</div>
@@ -45,8 +45,10 @@
 					</div>	
 				</div>	
 			</div>	
-			<div class="chat-conversation">
-				<div id="dialog-chat-wrapper" class="js-item-dialog close-dialog"></div>	
+			<div class="chat-conversation @if(Agent::isMobile() )hide @endif">
+				@if(!Agent::isMobile() )
+					<div id="dialog-chat-wrapper" class="js-item-dialog close-dialog"></div>	
+				@endif
 
 				<div id="firebase-chat-attendees" class="chat-attendees"></div>
 				<div id="firebase-chat-meta" class="chat-meta"></div>

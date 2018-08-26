@@ -317,6 +317,7 @@ $(document).on("click",".js-chat-options-back", function(e) {
 	e.preventDefault();
 	$('#firebase-chat-options').removeClass('show');
 	$("#dialog-chat-wrapper").removeClass('active');
+	$("#firebase-chat-options .title-wrapper").removeClass("active");	
 	$("#firebase-chat-attendees").show();
 	return false;
 });
@@ -353,19 +354,31 @@ $(document).on("click",".js-switch-chat",function(){
 		old_reference = $(this).parent().find('.active').attr('id').replace('chat-', ''),
 		new_reference = $(this).attr('id').replace('chat-', '');
 
-	//STUFF FOR MOBILE
-	if ($(window).width()<768) {
-		ShaelynChat.switchChatMobile();
-	};
-
 	if($(event.target).attr('class') == 'indicator-image') {
 		$('#firebase-chat-options').addClass('show');
 
 		var chat_title = $(this).parent().find('.card-title').text(),
 			image = $(this).parent().find('.avatar').attr("src");
 
-		ShaelynChat.getChatOptionsTitle(chat_title, image);		
+		if ($(window).width() <= 768) {
+			if($("#chat-meta-"+new_reference).text() != "") {
+				chat_title = $("#chat-meta-"+new_reference).text();
+			}else {
+				chat_title = $("#mainchattitle-"+new_reference).val();
+			}
+
+			ShaelynChat.getChatOptionsTitle(chat_title, image);
+			$("#firebase-chat-options .title-wrapper").addClass("active");	
+			return false;
+        }else {
+        	ShaelynChat.getChatOptionsTitle(null, image);
+        }
 	}
+
+		//STUFF FOR MOBILE
+	if ($(window).width()<768) {
+		ShaelynChat.switchChatMobile();
+	};
 
 	// Update user last active group and remove the old one,
 	// What this does is setting the timestamp or an active string
@@ -400,6 +413,11 @@ $(document).on("click",".js-switch-chat",function(){
 
 	setTimeout(function(){
 		$('#firebase-chat-conversations').removeClass('hide');
+
+		if ($(window).width() <= 768) {
+			$('.chat-window').scrollTop(10000000);
+        };
+
 	}, 100);
 });
 

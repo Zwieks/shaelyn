@@ -6142,6 +6142,18 @@ form ol {
   width: calc(100%);
   height: calc(100%);
 }
+@media screen and (max-width: 640px) {
+  #dialog-chat-wrapper {
+    -webkit-transform: translate(0);
+    transform: translate(0);
+    position: fixed;
+    z-index: 99999;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
+}
 #dialog-chat-wrapper img {
   margin-bottom: 2.4rem;
 }
@@ -8446,6 +8458,37 @@ form ol {
   cursor: pointer;
   display: block;
 }
+@media screen and (max-width: 640px) {
+  .card-wrapper.chat:hover .card-indicator.info,
+  .card-wrapper.chat:focus .card-indicator.info {
+    display: -webkit-box;
+    display: -moz-flex;
+    display: -ms-flexbox;
+    display: -ms-flex;
+    display: flex;
+  }
+}
+@media screen and (max-width: 640px) {
+  .card-wrapper.chat .card-indicator.info {
+    display: -webkit-box;
+    display: -moz-flex;
+    display: -ms-flexbox;
+    display: -ms-flex;
+    display: flex;
+    -moz-justify-content: flex-end;
+    -ms-justify-content: flex-end;
+    -webkit-box-pack: end;
+        -ms-flex-pack: end;
+            justify-content: flex-end;
+    height: 100%;
+    opacity: 1;
+    visibility: visible;
+    cursor: pointer;
+    margin-right: 0;
+    width: 4.8rem;
+    height: 3.6rem;
+  }
+}
 .card-wrapper.chat .card-content-wrapper {
   width: calc(100% - 6rem - 2.4rem);
   max-width: 100%;
@@ -8591,6 +8634,12 @@ form ol {
 .card .card-indicator .indicator-image {
   width: 2rem;
 }
+@media screen and (max-width: 640px) {
+  .card .card-indicator .indicator-image {
+    min-width: 4rem;
+    padding-left: 2rem;
+  }
+}
 .card .card-indicator.chat-number-indicator {
   position: absolute;
   left: 3.7rem;
@@ -8624,6 +8673,14 @@ form ol {
   opacity: 0;
   display: block;
   margin: 0 0.6rem;
+}
+.card .card-indicator-info {
+  display: -webkit-box;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: -ms-flex;
+  display: flex;
+  height: 100%;
 }
 .card .card-indicator-wrapper {
   display: -webkit-box;
@@ -8671,6 +8728,11 @@ form ol {
   display: inline-block;
   min-width: 4rem;
 }
+@media screen and (max-width: 640px) {
+  .card .card-meta {
+    margin-top: 0;
+  }
+}
 .card .card-meta:last-child {
   margin-right: 0;
 }
@@ -8712,6 +8774,12 @@ form ol {
 .card.list .card-description {
   font-style: normal;
   padding-top: 0.3rem;
+}
+@media screen and (max-width: 640px) {
+  .card.list .card-description {
+    padding-top: 0;
+    min-height: 2.4rem;
+  }
 }
 .card.list .card-indicator {
   width: 3.5rem;
@@ -9676,6 +9744,11 @@ form ol {
   background: #f7f7f7;
   z-index: 1;
 }
+@media screen and (max-width: 640px) {
+  .chat-options-wrapper {
+    background: #fff;
+  }
+}
 .chat-options-wrapper.show {
   opacity: 1;
   visibility: visible;
@@ -9684,9 +9757,21 @@ form ol {
 .chat-options-wrapper .back {
   display: block;
 }
+@media screen and (max-width: 640px) {
+  .chat-options-wrapper .back {
+    top: 0.3rem!important;
+    left: 1.2rem !important;
+  }
+}
 .chat-options-wrapper .title-wrapper {
   margin-top: 1.2rem;
   margin-bottom: 0;
+}
+@media screen and (max-width: 640px) {
+  .chat-options-wrapper .title-wrapper {
+    margin: 0 1.2rem;
+    height: 4.8rem;
+  }
 }
 .chat-options {
   display: -webkit-box;
@@ -9699,6 +9784,11 @@ form ol {
 .chat-options-list {
   margin: 0;
   padding: 0 2.4rem 2.4rem 2.4rem;
+}
+@media screen and (max-width: 640px) {
+  .chat-options-list {
+    padding: 0 1.2rem;
+  }
 }
 .chat-options-list .card {
   padding: 1.2rem;

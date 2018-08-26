@@ -17,7 +17,7 @@
         <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
         <link rel="manifest" href="/manifest.json">
         <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#8240f7">
-        <meta name="theme-color" content="#ff0000">
+        <meta name="theme-color" content="#101f2e">
 
         <title>@yield('title')</title>
     </head>
@@ -73,6 +73,10 @@
 
         @hasSection('pageloader')
             @yield('pageloader')
-        @endif  
+        @endif
+
+        @if(Agent::isMobile() )
+            <div id="dialog-chat-wrapper" class="js-item-dialog close-dialog"></div>    
+        @endif
     </body>
 </html>

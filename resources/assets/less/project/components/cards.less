@@ -43,6 +43,26 @@
     				visibility: visible;
     				cursor: pointer;
     				display: block;
+
+    				@media @bp-MobileL {
+    					.displayflex;
+    				}
+    			}
+    		}
+    	}
+
+    	@media @bp-MobileL {
+    		.card-indicator {
+    			&.info {
+    				.displayflex;
+    				.justify-content(flex-end);
+    				height: 100%;
+    				opacity: 1;
+    				visibility: visible;
+    				cursor: pointer;
+    				margin-right: 0;
+    				width: @spacing*2;
+    				height: @spacing*1.5;
     			}
     		}
     	}
@@ -178,6 +198,11 @@
 
 		.indicator-image {
 			width: 2rem;
+
+			@media @bp-MobileL {
+				min-width: 4rem;
+				padding-left: 2rem;
+			}
 		}
 
 		&.chat-number-indicator {
@@ -205,6 +230,11 @@
 			display: block;
 			    margin: 0 @spacing/4;
 		}
+	}
+
+	.card-indicator-info {
+		.displayflex;
+		height: 100%;
 	}
 
 	.card-indicator-wrapper {
@@ -249,6 +279,10 @@
 		display: inline-block;
 		min-width: 4rem;
 
+		@media @bp-MobileL {
+			margin-top: 0;
+		};
+
 		&:last-child {
 			margin-right: 0;
 		}
@@ -291,6 +325,11 @@
 		.card-description {
 			font-style: normal;
 			padding-top: 0.3rem;
+
+			@media @bp-MobileL {
+				padding-top: 0;
+				min-height: @spacing;
+			}
 		}
 
 		.card-indicator {

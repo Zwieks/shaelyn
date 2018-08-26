@@ -221,7 +221,10 @@ ShaelynChat.prototype.loadGroups = function(groupId, groupsnap, count, totalNum,
 };
 
 ShaelynChat.prototype.getChatOptionsTitle = function(chatTitle, image) {
-  //$('#js-chat-title').text(chatTitle);
+  if(chatTitle != null) {
+    $('#js-chat-title').text(chatTitle);
+  }
+  
   $('#js-chat-title:before').css('background-image',image);
 };  
 

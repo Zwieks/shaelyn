@@ -529,7 +529,13 @@ function HTMLcreateGroup(key, snap, count, totalNum, activeGroupId, NotSeen, gro
 
 	var HTML_chat_group_overview_indicator_image = document.createElement("img");
 		HTML_chat_group_overview_indicator_image.className = "indicator-image";
-		HTML_chat_group_overview_indicator_image.setAttribute("src", "/img/chat-info.svg");
+
+		if ($(window).width() <= 768) {
+			HTML_chat_group_overview_indicator_image.setAttribute("src", "/img/menu.svg");
+		}else {
+			HTML_chat_group_overview_indicator_image.setAttribute("src", "/img/chat-info.svg");
+		}
+
 		HTML_chat_group_overview_indicator_image.setAttribute("title", "Chat options");
 		HTML_chat_group_overview_indicator_image.setAttribute("alt", "Chat options");
 
